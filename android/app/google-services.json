@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "705960357183",
+    "project_id": "chatakbox-69779",
+    "storage_bucket": "chatakbox-69779.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:705960357183:android:82769a3d06220b7b3c378a",
+        "android_client_info": {
+          "package_name": "com.chatakbox.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "705960357183-q8l5roo89r89bdn61d70g1q4vjc8jb5l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chatakbox.app",
+            "certificate_hash": "f467cbaa5d6e3eac88e9138307a725354930ce5d"
+          }
+        },
+        {
+          "client_id": "705960357183-1fe7spdr2uon618osd9u8mq4787kgic9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQk7ETrAt2mxFoDi1LUfUDsbXsOUa7TOI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "705960357183-1fe7spdr2uon618osd9u8mq4787kgic9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

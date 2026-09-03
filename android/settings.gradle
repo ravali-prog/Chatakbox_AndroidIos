@@ -1,0 +1,55 @@
+//dependencyResolutionManagement {
+//    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+//    repositories {
+//        google()
+//        mavenCentral()
+//        jcenter() // Warning: this repository is going to shut down soon
+//        // maven{ url 'https://maven.singular.net/' }      //COMMENTED ON 12-11-25
+//    }
+//}
+//
+//rootProject.name = 'Ott_client'
+//apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
+//include ':app'
+//includeBuild('../node_modules/@react-native/gradle-plugin')
+//
+///*
+//dependencyResolutionManagement {
+//     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+//     repositories {
+//          google()
+//          mavenCentral()
+//          maven{ url 'https://maven.singular.net/' }
+//     }
+//} */
+//
+
+
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    includeBuild('../node_modules/@react-native/gradle-plugin')}
+
+
+plugins {
+    id("com.facebook.react.settings")
+}
+
+extensions.configure(com.facebook.react.ReactSettingsExtension) { ex ->
+    ex.autolinkLibrariesFromCommand()
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.PREFER_PROJECT)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.name = 'Ott_client'
+
+include ':app'

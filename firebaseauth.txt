@@ -1,0 +1,23 @@
+https://instamobile.io/mobile-development/firebase-phone-authentication-react-native/
+
+https://fir-ui-demo-84a6c.firebaseapp.com/
+
+
+
+https://stackoverflow.com/questions/76631452/firebase-phone-auth-auth-missing-client-identifier-error-on-release-aab-andro
+
+https://stackoverflow.com/questions/76064632/firebase-phone-authentication-issues-missing-client-identifier-error-when-using/76095409#76095409
+
+https://firebase.google.com/docs/auth/android/phone-auth#enable-app-verification
+
+
+https://rnfirebase.io/app-check/usage --- mainnn one 
+
+
+https://github.com/firebase/flutterfire/issues/11117 ------ checkkkkkk
+
+
+https://www.youtube.com/watch?v=DEV372Kof0g&ab_channel=Firebase
+
+
+https://medium.com/@vibhavguria07/level-up-your-app-security-implementing-firebase-app-check-in-react-native-9c7409d56504

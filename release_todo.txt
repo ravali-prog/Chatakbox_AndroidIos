@@ -1,0 +1,86 @@
+
+10 - Deeplink handling - use url params from the deeplink navigate to a page  
+11 - auth token handling
+12 - logout handling
+
+
+15-  clean up dialogs ui in registration page 
+16-  clean up dialogs ui in diff places as well 
+17 - 238 error code when device is logged out 
+18 - implement token mechanusum in TV 
+19 -  test google play live billing
+20 - test razor pay live billing
+21 - analytics 
+22 - implement encryptiion and decryption 
+
+24 - firebase push notification 
+25 - https://www.npmjs.com/package/react-native-play-install-referrer
+
+
+done : 
+4 - caching of series - implemenetd 
+1 - who is watching last element cutting
+2 - home whos is watching last element cutting
+3 - likes , wishlist in details page (updating the local variable as well)
+App upgrade in phone done 
+14 - refresh home continue when watch history is edited 
+13 . wishlist no data ui change
+9 - video player dialogs proper text need to displayed
+5 - srt file testing in video player 
+7 - firebase email 
+6 - firebase phone - have to check from play store
+23 - razorpay timeout - ask Sai
+
+
+
+
+
+
+for App update implement as below
+-----------------------------
+
+upgrade =  0/1/2  
+ 2 mandate
+dlink =  url 
+
+1 -> upgrade 0 - no upgrade
+
+---------------
+
+https://blog.logrocket.com/optimize-react-native-performance/
+
+Firebase payload : 
+
+content promote : 
+type: series , seriedid = id
+type: video , clipid = id
+
+
+
+
+-----------------
+
+ 
+1) App upgrad efeature in TV
+
+2) Logout crash issue in TV 
+
+3) Analytics in TV 
+
+4) TV App manifest file 📄 AndroidManifest 2.xml
+have to check with our App manifest file
+
+5) token logout testing in TVlogout
+
+6) singular integration in MObile
+
+7) App install referrer in mobile 
+
+8) firebase push notification with extra param testing in mobile
+
+9) encryption and decryption in mobile and TV 
+
+10) Navnit content flow 
+
+11) pass firebase token to Sai
+

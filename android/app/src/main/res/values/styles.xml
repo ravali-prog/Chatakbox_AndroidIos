@@ -1,0 +1,43 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:editTextBackground">@drawable/rn_edit_text_material</item>
+        <item name="android:windowBackground">@drawable/background_dummy</item>
+    </style>
+
+
+    <style name="TrackSelectionDialogThemeOverlay" parent="ThemeOverlay.AppCompat.Dialog.Alert">
+        <item name="windowNoTitle">true</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+<style name="DarkTrackSelectionDialog" parent="ThemeOverlay.AppCompat.Dialog.Alert">
+    <item name="windowNoTitle">true</item>
+
+    <item name="android:windowBackground">#E7000000</item>
+
+    <!-- Add these -->
+    <item name="android:windowIsFloating">false</item>
+    <item name="android:windowFullscreen">true</item>
+
+    <item name="android:backgroundDimEnabled">true</item>
+    <item name="android:backgroundDimAmount">0.7</item>
+</style>
+
+ <style name="MyTrackSelectionViewStyle">
+    <item name="colorControlActivated">#FF7A00</item>
+    <item name="android:textColor">#FFFFFF</item>
+    <item name="colorControlNormal">#FFFFFF</item>  
+</style>
+
+
+
+
+    <color name="red">#FF7A00</color> 
+     <color name="focusColor">#891206</color>
+    <color name="byDefaultButtoncolor">#818080</color>
+
+</resources>

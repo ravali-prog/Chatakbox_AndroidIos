@@ -1,0 +1,654 @@
+[
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_pictures_pic_02.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_pictures_pic_02.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_38.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_38.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_76.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_76.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_pictures_headerlogo_nobg.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_pictures_headerlogo_nobg.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/mipmap-xxxhdpi_ic_launcher_foreground.webp.flat",
+        "source": "com.chatakbox.app-main-74:/mipmap-xxxhdpi/ic_launcher_foreground.webp"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_61.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_61.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_08.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_08.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_avatars_sm_kids.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_avatars_sm_kids.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-xhdpi_node_modules_reactnavigation_elements_lib_module_assets_clearicon.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-xhdpi/node_modules_reactnavigation_elements_lib_module_assets_clearicon.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "com.chatakbox.app-main-74:/mipmap-hdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_53.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_53.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_15.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_15.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_res_11.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_res_11.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_avatars_sm_av_sm_03.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_avatars_sm_av_sm_03.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/mipmap-xhdpi_ic_launcher_adaptive_back.png.flat",
+        "source": "com.chatakbox.app-main-74:/mipmap-xhdpi/ic_launcher_adaptive_back.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-xxhdpi_node_modules_reactnavigation_elements_lib_module_assets_clearicon.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-xxhdpi/node_modules_reactnavigation_elements_lib_module_assets_clearicon.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_62.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_62.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-xxhdpi_node_modules_reactnavigation_elements_lib_module_assets_backicon.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-xxhdpi/node_modules_reactnavigation_elements_lib_module_assets_backicon.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_39.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_39.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sharearrow.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sharearrow.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_07.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_07.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_37.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_37.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable_focus_highlight.xml.flat",
+        "source": "com.chatakbox.app-main-74:/drawable/focus_highlight.xml"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_24.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_24.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-xxxhdpi_node_modules_reactnavigation_elements_lib_module_assets_closeicon.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-xxxhdpi/node_modules_reactnavigation_elements_lib_module_assets_closeicon.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable_rn_edit_text_material.xml.flat",
+        "source": "com.chatakbox.app-main-74:/drawable/rn_edit_text_material.xml"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/layout_player_controls.xml.flat",
+        "source": "com.chatakbox.app-main-74:/layout/player_controls.xml"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_node_modules_reactnativeratings_dist_images_airbnbstarselected.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/node_modules_reactnativeratings_dist_images_airbnbstarselected.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/mipmap-xhdpi_ic_launcher_foreground.webp.flat",
+        "source": "com.chatakbox.app-main-74:/mipmap-xhdpi/ic_launcher_foreground.webp"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/mipmap-hdpi_ic_launcher_adaptive_back.png.flat",
+        "source": "com.chatakbox.app-main-74:/mipmap-hdpi/ic_launcher_adaptive_back.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_node_modules_reactnavigation_elements_lib_module_assets_searchicon.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/node_modules_reactnavigation_elements_lib_module_assets_searchicon.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_75.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_75.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/layout_activity_main.xml.flat",
+        "source": "com.chatakbox.app-main-74:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_node_modules_reactnativeratings_dist_images_rocket.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/node_modules_reactnativeratings_dist_images_rocket.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_node_modules_reactnativeratings_dist_images_star.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/node_modules_reactnativeratings_dist_images_star.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_84.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_84.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_res_05.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_res_05.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_01.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_01.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_14.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_14.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_avatars_sm_av_sm_04.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_avatars_sm_av_sm_04.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_17.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_17.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_46.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_46.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_res_02.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_res_02.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-xxxhdpi_node_modules_reactnavigation_elements_lib_module_assets_backicon.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-xxxhdpi/node_modules_reactnavigation_elements_lib_module_assets_backicon.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_06.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_06.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_74.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_74.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_pictures_loginbackground.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_pictures_loginbackground.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_44.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_44.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "com.chatakbox.app-main-74:/mipmap-xxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_avatars_sm_av_sm_01.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_avatars_sm_av_sm_01.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_36.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_36.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "com.chatakbox.app-main-74:/mipmap-xxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_10.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_10.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/mipmap-hdpi_ic_launcher_adaptive_fore.png.flat",
+        "source": "com.chatakbox.app-main-74:/mipmap-hdpi/ic_launcher_adaptive_fore.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_82.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_82.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable_gear.png.flat",
+        "source": "com.chatakbox.app-main-74:/drawable/gear.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-xxhdpi_node_modules_reactnavigation_elements_lib_module_assets_searchicon.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-xxhdpi/node_modules_reactnavigation_elements_lib_module_assets_searchicon.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable_button_default.xml.flat",
+        "source": "com.chatakbox.app-main-74:/drawable/button_default.xml"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable_forwardd.xml.flat",
+        "source": "com.chatakbox.app-main-74:/drawable/forwardd.xml"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/mipmap-xxxhdpi_ic_launcher_adaptive_back.png.flat",
+        "source": "com.chatakbox.app-main-74:/mipmap-xxxhdpi/ic_launcher_adaptive_back.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_21.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_21.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "com.chatakbox.app-main-74:/mipmap-anydpi-v26/ic_launcher_round.xml"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_node_modules_reactnativeratings_dist_images_heart.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/node_modules_reactnativeratings_dist_images_heart.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_47.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_47.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_51.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_51.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable_background_dummy.xml.flat",
+        "source": "com.chatakbox.app-main-74:/drawable/background_dummy.xml"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_77.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_77.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_pictures_pic_08.jpg.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_pictures_pic_08.jpg"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_res_14.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_res_14.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_13.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_13.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_85.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_85.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/mipmap-xhdpi_ic_launcher_adaptive_fore.png.flat",
+        "source": "com.chatakbox.app-main-74:/mipmap-xhdpi/ic_launcher_adaptive_fore.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/mipmap-xxhdpi_ic_launcher_foreground.webp.flat",
+        "source": "com.chatakbox.app-main-74:/mipmap-xxhdpi/ic_launcher_foreground.webp"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/layout_exo_track_selection_view.xml.flat",
+        "source": "com.chatakbox.app-main-74:/layout/exo_track_selection_view.xml"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "com.chatakbox.app-main-74:/mipmap-xhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_node_modules_reactnavigation_elements_lib_module_assets_backiconmask.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/node_modules_reactnavigation_elements_lib_module_assets_backiconmask.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable_mutenw.png.flat",
+        "source": "com.chatakbox.app-main-74:/drawable/mutenw.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_09.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_09.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/mipmap-hdpi_ic_launcher_foreground.webp.flat",
+        "source": "com.chatakbox.app-main-74:/mipmap-hdpi/ic_launcher_foreground.webp"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_03.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_03.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_pictures_pic_06.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_pictures_pic_06.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_node_modules_reactnavigation_elements_lib_module_assets_clearicon.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/node_modules_reactnavigation_elements_lib_module_assets_clearicon.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_67.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_67.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_54.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_54.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_pictures_loginscreentext.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_pictures_loginscreentext.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_pictures_pic_03.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_pictures_pic_03.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "com.chatakbox.app-main-74:/mipmap-xhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_node_modules_reactnavigation_elements_lib_module_assets_backicon.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/node_modules_reactnavigation_elements_lib_module_assets_backicon.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "com.chatakbox.app-main-74:/mipmap-mdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_res_15.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_res_15.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_node_modules_reactnativeratings_dist_images_bell.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/node_modules_reactnativeratings_dist_images_bell.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/mipmap-mdpi_ic_launcher_adaptive_fore.png.flat",
+        "source": "com.chatakbox.app-main-74:/mipmap-mdpi/ic_launcher_adaptive_fore.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_57.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_57.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_19.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_19.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_12.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_12.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable_focus_highlight_color.xml.flat",
+        "source": "com.chatakbox.app-main-74:/drawable/focus_highlight_color.xml"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_pictures_logonobackground.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_pictures_logonobackground.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_50.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_50.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_49.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_49.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_avatars_sm_av_sm_06.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_avatars_sm_av_sm_06.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-xxxhdpi_node_modules_reactnavigation_elements_lib_module_assets_clearicon.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-xxxhdpi/node_modules_reactnavigation_elements_lib_module_assets_clearicon.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "com.chatakbox.app-main-74:/mipmap-mdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/mipmap-xxxhdpi_ic_launcher_adaptive_fore.png.flat",
+        "source": "com.chatakbox.app-main-74:/mipmap-xxxhdpi/ic_launcher_adaptive_fore.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/layout_track_selection_dialog.xml.flat",
+        "source": "com.chatakbox.app-main-74:/layout/track_selection_dialog.xml"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/mipmap-mdpi_ic_launcher_foreground.webp.flat",
+        "source": "com.chatakbox.app-main-74:/mipmap-mdpi/ic_launcher_foreground.webp"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_79.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_79.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_64.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_64.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_res_08.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_res_08.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_26.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_26.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_11.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_11.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable_play.xml.flat",
+        "source": "com.chatakbox.app-main-74:/drawable/play.xml"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-xxxhdpi_node_modules_reactnavigation_elements_lib_module_assets_searchicon.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-xxxhdpi/node_modules_reactnavigation_elements_lib_module_assets_searchicon.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_avatars_sm_av_sm_07.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_avatars_sm_av_sm_07.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_56.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_56.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-xhdpi_node_modules_reactnavigation_elements_lib_module_assets_closeicon.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-xhdpi/node_modules_reactnavigation_elements_lib_module_assets_closeicon.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_81.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_81.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_pictures_pic_05.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_pictures_pic_05.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_node_modules_reactnativeratings_dist_images_airbnbstar.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/node_modules_reactnativeratings_dist_images_airbnbstar.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "com.chatakbox.app-main-74:/mipmap-hdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_node_modules_reactnavigation_elements_lib_module_assets_closeicon.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/node_modules_reactnavigation_elements_lib_module_assets_closeicon.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-xxhdpi_node_modules_reactnavigation_elements_lib_module_assets_closeicon.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-xxhdpi/node_modules_reactnavigation_elements_lib_module_assets_closeicon.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable_button_background.xml.flat",
+        "source": "com.chatakbox.app-main-74:/drawable/button_background.xml"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "com.chatakbox.app-main-74:/mipmap-xxxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable_back.xml.flat",
+        "source": "com.chatakbox.app-main-74:/drawable/back.xml"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_27.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_27.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable_unmutenw.png.flat",
+        "source": "com.chatakbox.app-main-74:/drawable/unmutenw.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_episode.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_episode.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_65.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_65.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_33.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_33.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/mipmap-mdpi_ic_launcher_adaptive_back.png.flat",
+        "source": "com.chatakbox.app-main-74:/mipmap-mdpi/ic_launcher_adaptive_back.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable_quality.xml.flat",
+        "source": "com.chatakbox.app-main-74:/drawable/quality.xml"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_25.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_25.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable_pause.xml.flat",
+        "source": "com.chatakbox.app-main-74:/drawable/pause.xml"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_res_13.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_res_13.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_55.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_55.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_63.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_63.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_02.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_02.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/mipmap-xxhdpi_ic_launcher_adaptive_back.png.flat",
+        "source": "com.chatakbox.app-main-74:/mipmap-xxhdpi/ic_launcher_adaptive_back.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.chatakbox.app-main-74:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable_button_focused.xml.flat",
+        "source": "com.chatakbox.app-main-74:/drawable/button_focused.xml"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/mipmap-xxhdpi_ic_launcher_adaptive_fore.png.flat",
+        "source": "com.chatakbox.app-main-74:/mipmap-xxhdpi/ic_launcher_adaptive_fore.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_pictures_pic_04.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_pictures_pic_04.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_18.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_18.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_32.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_32.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_58.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_58.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_40.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_40.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_res_16.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_res_16.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_pictures_pic_07.jpg.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_pictures_pic_07.jpg"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-xhdpi_node_modules_reactnavigation_elements_lib_module_assets_searchicon.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-xhdpi/node_modules_reactnavigation_elements_lib_module_assets_searchicon.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_83.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_83.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_35.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_35.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_70.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_70.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_28.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_28.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_48.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_48.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_avatars_sm_av_sm_05.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_avatars_sm_av_sm_05.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "com.chatakbox.app-main-74:/mipmap-xxxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-xhdpi_node_modules_reactnavigation_elements_lib_module_assets_backicon.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-xhdpi/node_modules_reactnavigation_elements_lib_module_assets_backicon.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_86.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_86.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_pictures_logo.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_pictures_logo.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_symbols_sym_60.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_symbols_sym_60.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable_backward.xml.flat",
+        "source": "com.chatakbox.app-main-74:/drawable/backward.xml"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_app_assets_avatars_sm_av_sm_02.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/app_assets_avatars_sm_av_sm_02.png"
+    },
+    {
+        "merged": "com.chatakbox.app-release-73:/drawable-mdpi_node_modules_reactnativepaper_src_assets_backchevron.png.flat",
+        "source": "com.chatakbox.app-res-67:/drawable-mdpi/node_modules_reactnativepaper_src_assets_backchevron.png"
+    }
+]

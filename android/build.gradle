@@ -1,0 +1,56 @@
+buildscript {
+    ext {
+        buildToolsVersion = "35.0.0"
+        minSdkVersion = 24
+        compileSdkVersion = 36
+        targetSdkVersion = 36
+        ndkVersion = "28.0.13004108"
+        kotlinVersion = "1.9.25"
+        googlePlayServicesAuthVersion = "20.7.0"
+
+        // iap 
+        androidXAnnotation = "1.1.0"
+        androidXBrowser = "1.0.0"
+    }
+    repositories {
+        google()
+        mavenCentral()
+        // maven { url 'https://maven.singular.net/' }        //COMENTED ON 12-11-25
+    }
+    dependencies {
+//        classpath("com.android.tools.build:gradle")
+//        classpath("com.facebook.react:react-native-gradle-plugin")
+//        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
+//        classpath 'com.google.gms:google-services:4.4.0'
+        classpath("com.android.tools.build:gradle:8.9.1")
+
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.25")
+        classpath("com.google.gms:google-services:4.4.0")
+
+    }
+}
+
+plugins {
+    id("com.facebook.react.rootproject")
+}
+
+allprojects {
+    configurations.all {
+        resolutionStrategy {
+//            force "org.jetbrains.kotlin:kotlin-stdlib:1.8.0"
+//            force "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0"
+//            force "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0"
+//            force "org.jetbrains.kotlin:kotlin-stdlib-common:1.8.0"
+            force "org.jetbrains.kotlin:kotlin-stdlib:1.9.25"
+            force "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.25"
+            force "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.25"
+            force "org.jetbrains.kotlin:kotlin-stdlib-common:1.9.25"
+            force "com.google.android.gms:play-services-cast-framework:21.4.0"
+        }
+    }
+}
+
+
+//apply plugin: "com.facebook.react.rootproject"
+//apply plugin: 'com.google.gms.google-services'
+
