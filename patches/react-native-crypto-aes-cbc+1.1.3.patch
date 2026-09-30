@@ -1,0 +1,29 @@
+diff --git a/node_modules/react-native-crypto-aes-cbc/ios/Constants.swift b/node_modules/react-native-crypto-aes-cbc/ios/Constants.swift
+index 9de648e..6177d18 100644
+--- a/node_modules/react-native-crypto-aes-cbc/ios/Constants.swift
++++ b/node_modules/react-native-crypto-aes-cbc/ios/Constants.swift
+@@ -31,7 +31,8 @@ struct Constants {
+         return ""
+     }
+     static func decryptBase64(data: String,key:String,iv:String,padding:String) -> String {
+-        let decodedData = Data(base64Encoded: data)!.bytes
++        // Avoid Data.bytes — ambiguous between CryptoSwift and Foundation on newer Xcode
++        let decodedData = [UInt8](Data(base64Encoded: data)!)
+         let decrypted: [UInt8] = try! AES(key: toBase64(data:key), iv: toBase64(data:iv), padding: padding == "128" ? Padding.pkcs5 : Padding.pkcs7 ).decrypt(decodedData)
+         let result = String(bytes: decrypted, encoding: String.Encoding.utf8)!
+         return result
+@@ -46,12 +47,12 @@ struct Constants {
+         return data.sha256()
+     }
+     static func Hmac256(data: String,key:String,hashingAlgorithm:String) -> String {
+-        let result = try! HMAC(key: key, variant: .sha256).authenticate(data.bytes)
++        let result = try! HMAC(key: key, variant: .sha256).authenticate(Array(data.utf8))
+         let encryptedData = Data(result)
+         return encryptedData.toHexString()
+     }
+     static func Hmac256Base64(data: String,key:String,hashingAlgorithm:String) -> String {
+-        let result = try! HMAC(key: key, variant: .sha256).authenticate(data.bytes)
++        let result = try! HMAC(key: key, variant: .sha256).authenticate(Array(data.utf8))
+         let encryptedData = Data(result)
+         return encryptedData.base64EncodedString()
+     }

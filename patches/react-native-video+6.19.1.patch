@@ -1,0 +1,19 @@
+diff --git a/node_modules/react-native-video/ios/Video/Features/RCTPlayerOperations.swift b/node_modules/react-native-video/ios/Video/Features/RCTPlayerOperations.swift
+index 9f639d6..94ec3c8 100644
+--- a/node_modules/react-native-video/ios/Video/Features/RCTPlayerOperations.swift
++++ b/node_modules/react-native-video/ios/Video/Features/RCTPlayerOperations.swift
+@@ -102,7 +102,13 @@ enum RCTPlayerOperations {
+                 if type == "language" {
+                     optionValue = currentOption.extendedLanguageTag
+                 } else {
+-                    optionValue = currentOption.commonMetadata.map(\.value)[0] as? String
++                    // commonMetadata can be empty for some HLS audio tracks — avoid [0] crash
++                    let values = currentOption.commonMetadata.map(\.value)
++                    if values.count > 0 {
++                        optionValue = values[0] as? String
++                    } else {
++                        optionValue = currentOption.displayName
++                    }
+                 }
+                 if value == optionValue {
+                     mediaOption = currentOption

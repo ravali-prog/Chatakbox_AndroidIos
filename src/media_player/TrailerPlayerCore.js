@@ -10,7 +10,8 @@ import {
   Dimensions,
   StyleSheet,
   StatusBar,
-  Pressable
+  Pressable,
+  Platform,
 } from 'react-native';
 import SystemNavigationBar from 'react-native-system-navigation-bar';
 import { useNavigation } from '@react-navigation/native';
@@ -22,7 +23,7 @@ import ModalDropdown from 'react-native-modal-dropdown';
 import { handleNavigation, handleTrailerVideoPlay } from '../app_config/AppConstants';
 import { colors } from '../theming/colors';
 
-const TrailerPlayer = ({ showfullscreenicon, videoUrl, posterUrl, onfullscreenclick }) => {
+const TrailerPlayer = ({ showfullscreenicon, videoUrl, posterUrl, onfullscreenclick, forcePaused }) => {
 
 
   const windowWidth = Dimensions.get('window').width;
@@ -71,12 +72,19 @@ const TrailerPlayer = ({ showfullscreenicon, videoUrl, posterUrl, onfullscreencl
   }, [])
 
   useEffect(() => {
-    // Initialize selectedVideoTrack with the first available video track
+    if (forcePaused) {
+      setPaused(true);
+    }
+  }, [forcePaused]);
+
+  useEffect(() => {
     if (audioTracks.length > 0) {
-      setSelectedAudioOption({
-        type: 'title',
-        value: audioTracks[0].title,
-      });
+      const track = audioTracks[0];
+      setSelectedAudioOption(
+        track.title
+          ? {type: 'title', value: track.title}
+          : {type: 'index', value: '0'},
+      );
     }
   }, [audioTracks]);
 
@@ -198,7 +206,7 @@ const TrailerPlayer = ({ showfullscreenicon, videoUrl, posterUrl, onfullscreencl
           posterResizeMode='cover'
           poster={posterUrl}
           key={videoComponentKey}
-          paused={paused}
+          paused={forcePaused ? true : paused}
           source={{
             uri: videoUrl,
             // uri:'https://live-par-1-abr-cdn.livepush.io/live/bigbuckbunnyclip/AppConstants.m3u8',
@@ -373,12 +381,13 @@ const TrailerPlayer = ({ showfullscreenicon, videoUrl, posterUrl, onfullscreencl
                     maximumValue={progress.seekableDuration}
                     minimumTrackTintColor={colors.action_secondary}
                     maximumTrackTintColor="white"
-                    thumbTintColor={colors.action_primary}
+                    // iOS stretches the default thumb; use a round image. tint breaks thumbImage on iOS.
+                    {...(Platform.OS === 'ios'
+                      ? { thumbImage: require('../../app_assets/slider_thumb.png') }
+                      : { thumbTintColor: colors.action_primary })}
                     onValueChange={(x) => {
                       ref.current.seek(x);
                     }}
-                    
-
                     value={progress.currentTime || 0} />
                 )}
                 <Text style={{ color: 'white',right:10,}}>

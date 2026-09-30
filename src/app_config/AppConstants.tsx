@@ -5,7 +5,7 @@ import { Config } from "../data_models/AppConfigTypes";
 import { useNavigation } from "@react-navigation/native";
 import { UserProfile, UserprofileData } from "../data_models/UserProfileTypes";
 import { UserPrivilage } from "../data_models/UserPrivilegeTypes";
-import { Platform } from "react-native";
+import { NativeModules, Platform } from "react-native";
 import { CountryCode, device, setCountryCode } from "./DeviceInfo"; 
 import { CONST_ALL_PROFILES, CONST_SELECTED_PROFILE, getData, getSelectedProfile, storeData } from "../persistence/AsyncStorage";
 //import {DeviceEventEmitter} from "react-native"
@@ -495,6 +495,67 @@ const customerUsageAction = (attr_content_type: string, title: string) => {
   };
 
 
+
+/**
+ * Android uses a native ExoPlayer activity (ActivityStarter).
+ * iOS has no ActivityStarter module — open the RN videoplayer with the resolved URL.
+ */
+export const openResolvedVideoPlayer = (
+  navobj: any,
+  options: {
+    videourl: string;
+    title: string;
+    dwnid: string | number;
+    resume?: string | number;
+    subtitleArray?: string;
+    clipDetails?: any;
+    seriesDetails?: any;
+  }
+) => {
+  const {
+    videourl,
+    title,
+    dwnid,
+    resume = 0,
+    subtitleArray = "",
+    clipDetails,
+    seriesDetails,
+  } = options;
+
+  if (Platform.OS === "android") {
+    const { ActivityStarter } = NativeModules;
+    if (ActivityStarter?.navigateToVideo) {
+      const analyticsBase =
+        (configData &&
+          configData.data &&
+          configData.data.config &&
+          configData.data.config.videoanalytics) ||
+        "";
+      ActivityStarter.navigateToVideo(
+        videourl,
+        title,
+        String(dwnid),
+        String(resume),
+        subtitleArray,
+        analyticsBase + "?"
+      );
+      return;
+    }
+  }
+
+  // Android uses ActivityStarter above. iOS opens RN videoplayer;
+  // orientation is locked once inside VideoPlayerFullscreen.
+  navobj.navigate("videoplayer", {
+    intent: {
+      clipDetails,
+      seriesDetails,
+      resolvedUrl: videourl,
+      dwnid: String(dwnid),
+      title,
+      resume,
+    },
+  });
+};
 
 export const handleVideoPlay = (navobj: any, params: any, seriesdetails: any) => {
 

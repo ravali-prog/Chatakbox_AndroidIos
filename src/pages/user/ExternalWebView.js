@@ -5,7 +5,8 @@ import {
   Text,
   View,
   TouchableOpacity,
-  Image
+  Image,
+  Linking
 } from 'react-native';
 import {WebView} from 'react-native-webview';
 import { useNavigation } from '@react-navigation/native';
@@ -13,15 +14,19 @@ import { useNavigation } from '@react-navigation/native';
 const OttWebView = ({route}) => {
 
   const navigation = useNavigation();
-  const [url, seturl] = useState("");
-  const [title, setTitle] = useState("");
+  const intent = route?.params?.intent;
+  const [url, seturl] = useState(
+    typeof intent?.url === 'string' ? intent.url : ''
+  );
+  const [title, setTitle] = useState(intent?.title || '');
 
-  const {intent} = route.params;
-  
-    
   useEffect(() => {
-    seturl(intent.url)
-    setTitle(intent.title)
+    if (intent?.url) {
+      seturl(intent.url);
+    }
+    if (intent?.title) {
+      setTitle(intent.title);
+    }
   }, [route]);
 
   function onMessage(data) {
@@ -51,15 +56,30 @@ const OttWebView = ({route}) => {
           />
         </TouchableOpacity>
       </View>
-      <WebView
-        ref={webviewRef}
-        scalesPageToFit={false}
-        mixedContentMode="compatibility"
-        onMessage={onMessage}
-
-        source={{uri:url}}
-
-      />
+      {!!url && (
+        <WebView
+          ref={webviewRef}
+          scalesPageToFit={false}
+          mixedContentMode="compatibility"
+          sharedCookiesEnabled={true}
+          thirdPartyCookiesEnabled={true}
+          originWhitelist={['*']}
+          onMessage={onMessage}
+          onShouldStartLoadWithRequest={(request) => {
+            const requestUrl = request.url || '';
+            if (
+              requestUrl.startsWith('http://') ||
+              requestUrl.startsWith('https://') ||
+              requestUrl.startsWith('about:')
+            ) {
+              return true;
+            }
+            Linking.openURL(requestUrl).catch(() => {});
+            return false;
+          }}
+          source={{uri: url}}
+        />
+      )}
     </SafeAreaView>
   );
 };

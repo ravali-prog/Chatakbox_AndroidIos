@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, FlatList, Dimensions, NativeModules, Modal,  } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, FlatList, Dimensions, NativeModules, Modal, Platform } from 'react-native';
 import DetailLayout from '../../ui_components/widgets/DetailLayout';
 import TrailerPlayer from '../../media_player/TrailerPlayerCore';
 import { useNavigation } from '@react-navigation/native';
+import Orientation from 'react-native-orientation-locker';
 import { Clip, List } from '../../data_models/ContentDataTypes';
 import ModalComponent from '../../data_models/ModalComponentData';
-import { APP_NAME, USER_UUID, cacheData, handleTrailerVideoPlay, handleVideoPlay, selectedUserProfile, useractivityDetails, handleVideoPlayAsync, configData, setCurrentPlayingVideo , LogData, LogError, LOCAL_EVENTS} from '../../app_config/AppConstants';
+import { APP_NAME, USER_UUID, cacheData, handleTrailerVideoPlay, handleVideoPlay, selectedUserProfile, useractivityDetails, handleVideoPlayAsync, configData, setCurrentPlayingVideo , LogData, LogError, LOCAL_EVENTS, openResolvedVideoPlayer} from '../../app_config/AppConstants';
 import {  getSeriesDetails, doUserAction, createShareLink } from '../../state_mgmt/AppCommonSlice';
 import Share from 'react-native-share';
 import SeasonData from '../../data_models/SeasonData';
@@ -97,6 +98,7 @@ const SeriesViewerAlt = ({ route }: any) => {
   const handlePlayPress = () => {
     try {
       setShowVideoLoading(true);
+      setPauseInlineTrailer(true);
       setCurrentPlayingVideo(currentPLayingVideo);
       var resume = 0;
   
@@ -131,14 +133,15 @@ const SeriesViewerAlt = ({ route }: any) => {
               setShowVideoLoading(false);
     
               if (resp && resp.videourl) {
-                ActivityStarter.navigateToVideo(
-                  resp.videourl,
-                  resp.title,
-                  resp.dwnid + '',
-                  resume + '',
+                openResolvedVideoPlayer(navigation, {
+                  videourl: resp.videourl,
+                  title: resp.title,
+                  dwnid: resp.dwnid,
+                  resume,
                   subtitleArray,
-                  configData.data.config.videoanalytics + '?',
-                );
+                  clipDetails: currentPLayingVideo,
+                  seriesDetails: seriesdetails,
+                });
               } else {
                 LogError("SeriesDetails2 handlePlayPress handleVideoPlayAsync else error",resp)
               }
@@ -165,6 +168,38 @@ const SeriesViewerAlt = ({ route }: any) => {
 
 
   const [videoUrl, setVideoUrl] = useState("");
+  const [pauseInlineTrailer, setPauseInlineTrailer] = useState(false);
+
+  useEffect(() => {
+    let resizeTimer = null;
+    const unsub = navigation.addListener('focus', () => {
+      setPauseInlineTrailer(false);
+      // After leaving the landscape player, iOS can leave a stuck landscape layout.
+      if (Platform.OS === 'ios') {
+        try {
+          Orientation.lockToPortrait();
+        } catch (e) {}
+        const w = Dimensions.get('window').width;
+        setitemWidth(w);
+        setitemHeight((w * 9) / 16);
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          try {
+            Orientation.lockToPortrait();
+          } catch (e) {}
+          const w2 = Dimensions.get('window').width;
+          setitemWidth(w2);
+          setitemHeight((w2 * 9) / 16);
+        }, 250);
+      }
+    });
+    return () => {
+      unsub();
+      if (resizeTimer) {
+        clearTimeout(resizeTimer);
+      }
+    };
+  }, [navigation]);
 
   const maxVisibleCast = 2;
   const [showAllCast, setShowAllCast] = useState(false);
@@ -887,6 +922,7 @@ const SeriesViewerAlt = ({ route }: any) => {
           posterUrl = {thumbnail}
           showfullscreenicon={true}
           videoUrl={videoUrl}
+          forcePaused={pauseInlineTrailer}
         />
         )
     } else  if (thumbnail != "" &&  thumbnail != null){
@@ -1070,6 +1106,7 @@ const SeriesViewerAlt = ({ route }: any) => {
 function handleVideoPlayInternal(param){
   try {
     setShowVideoLoading(true)
+    setPauseInlineTrailer(true)
     setCurrentPlayingVideo(param)
     var  resume = 0
   
@@ -1095,7 +1132,15 @@ function handleVideoPlayInternal(param){
         setShowVideoLoading(false)
      
         if (resp && resp.videourl){
-          ActivityStarter.navigateToVideo(resp.videourl, resp.title, resp.dwnid+"", resume+"", subtitleArray, configData.data.config.videoanalytics+"?");
+          openResolvedVideoPlayer(navigation, {
+            videourl: resp.videourl,
+            title: resp.title,
+            dwnid: resp.dwnid,
+            resume,
+            subtitleArray,
+            clipDetails: param,
+            seriesDetails: seriesdetails,
+          });
         } else {
           LogError("SeriesDetails2 handleVideoPlayInternal handleVideoPlayAsync else error inside",resp)
         }

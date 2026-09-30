@@ -12,6 +12,8 @@ import {
   Modal,
   StyleSheet,
   Pressable,
+  useWindowDimensions,
+  Platform,
 } from 'react-native';
 import SystemNavigationBar from 'react-native-system-navigation-bar';
 import { useNavigation } from '@react-navigation/native';
@@ -39,12 +41,11 @@ let sessionID = ""
 //let lastResumeTime = ""
 
 const TrailerPlayerLandscape = ({ showfullscreenicon, mediaUrl, videoTitle, downloadID, resume, subtitlesParam, player }) => {
-  const windowWidth = Dimensions.get('window').width;
-  const windowheight = Dimensions.get('window').height;
-  const [clicked, setClicked] = useState(false);
+  const { width: windowWidth, height: windowheight } = useWindowDimensions();
+  const [clicked, setClicked] = useState(player === 'videoplayer');
   const [paused, setPaused] = useState(false);
   const [progress, setProgress] = useState(null);
-  const [fullScreen, setFullScreen] = useState(false);
+  const [fullScreen, setFullScreen] = useState(player === 'videoplayer');
   const [showSettings, setShowSettings] = useState(false);
   const [videoTracks, setVideoTracks] = useState([]);
   const [audioTracks, setAudioTracks] = useState([]);
@@ -94,28 +95,25 @@ const TrailerPlayerLandscape = ({ showfullscreenicon, mediaUrl, videoTitle, down
     VideoEventLink = configData.data.config.videoanalytics + "?" //"http://192.168.1.16/tt.php?" //
     const d = new Date();
     sessionID = d.valueOf();
-    if (fullScreen) {
-      SystemNavigationBar.navigationShow()
-      StatusBar.setHidden(false)
-      Orientation.lockToPortrait();
-    } else {
-      SystemNavigationBar.navigationHide();
-      StatusBar.setHidden(true)
-      Orientation.lockToLandscape();
-    }
-    setFullScreen(!fullScreen);
 
-    // startAnalyticsTimer()
+    // Fullscreen main player: stay landscape; do not toggle orientation (parent owns lock)
+    if (player === 'videoplayer') {
+      SystemNavigationBar.navigationHide();
+      StatusBar.setHidden(true);
+      setFullScreen(true);
+    } else {
+      // Trailer landscape screen only — do not flip portrait/landscape here on mount
+      SystemNavigationBar.navigationHide();
+      StatusBar.setHidden(true);
+      setFullScreen(true);
+    }
 
     return () => {
-
       clearInterval(totalWatchedTime);
       progressRef = null
       maxWatchedTime = 0;
       elapsedTime = 0;
     };
-
-
   }, []);
 
 
@@ -145,12 +143,14 @@ const TrailerPlayerLandscape = ({ showfullscreenicon, mediaUrl, videoTitle, down
   }, [videoTracks]);
 
   useEffect(() => {
-    // Initialize selectedVideoTrack with the first available video track
+    // Prefer index on iOS — many HLS audio tracks have empty titles and crash native title matching
     if (audioTracks.length > 0) {
-      setSelectedAudioOption({
-        type: 'title',
-        value: audioTracks[0].title,
-      });
+      const track = audioTracks[0];
+      setSelectedAudioOption(
+        track.title
+          ? {type: 'title', value: track.title}
+          : {type: 'index', value: '0'},
+      );
     }
   }, [audioTracks]);
 
@@ -209,9 +209,8 @@ const TrailerPlayerLandscape = ({ showfullscreenicon, mediaUrl, videoTitle, down
 
 
   const onBuffer = (buffer) => {
-    //if ( buffer.isBuffering) 
-    {
-      setisBuffering(buffer.isBuffering)
+    if (buffer && typeof buffer.isBuffering === 'boolean') {
+      setisBuffering(buffer.isBuffering);
     }
   }
 
@@ -219,17 +218,21 @@ const TrailerPlayerLandscape = ({ showfullscreenicon, mediaUrl, videoTitle, down
   const onLoad = (data) => {
 
     try {
+      // iOS often never sends onBuffer(false); clear overlay once media metadata is ready
+      setisBuffering(false);
 
       const tracks = data.audioTracks || [];
       setAudioTracks(tracks);
       const videoTracks = data.videoTracks || [];
       setVideoTracks(videoTracks);
 
-      if (audioTracks.length > 0) {
-        setSelectedAudioOption({
-          type: 'title',
-          value: audioTracks[0].title,
-        });
+      if (tracks.length > 0) {
+        const track = tracks[0];
+        setSelectedAudioOption(
+          track.title
+            ? {type: 'title', value: track.title}
+            : {type: 'index', value: '0'},
+        );
       }
 
       if (videoTracks.length > 0) {
@@ -244,6 +247,7 @@ const TrailerPlayerLandscape = ({ showfullscreenicon, mediaUrl, videoTitle, down
         ref.current.seek(resume);
       }
     } catch (error) {
+      setisBuffering(false);
       LogError("videoplayer : ", error)
     }
 
@@ -252,6 +256,10 @@ const TrailerPlayerLandscape = ({ showfullscreenicon, mediaUrl, videoTitle, down
 
 
   const onProgress = (progress) => {
+    // Safety net: if frames are advancing, hide stuck buffering UI (common on iOS HLS)
+    if (progress?.currentTime > 0) {
+      setisBuffering(false);
+    }
 
     setCurrentPlaybackPosition(progress.currentTime);
     progressRef = progress
@@ -263,10 +271,9 @@ const TrailerPlayerLandscape = ({ showfullscreenicon, mediaUrl, videoTitle, down
 
     if (audioTracks.length > index) {
       const selectedTrack = audioTracks[index];
-      const selectedAudioTrack = {
-        type: 'title',
-        value: selectedTrack.title,
-      };
+      const selectedAudioTrack = selectedTrack.title
+        ? {type: 'title', value: selectedTrack.title}
+        : {type: 'index', value: String(index)};
       setSelectedAudioOption(selectedAudioTrack);
       setModalVisible(true);
       setLastSelectedOption(value); // Set lastSelectedOption here
@@ -413,6 +420,20 @@ const TrailerPlayerLandscape = ({ showfullscreenicon, mediaUrl, videoTitle, down
   }
 };
 
+  const handleBackPress = () => {
+    try {
+      // Lock portrait before pop; VideoPlayerFullscreen also retries on beforeRemove/blur.
+      Orientation.lockToPortrait();
+      StatusBar.setHidden(false);
+      SystemNavigationBar.navigationShow();
+    } catch (e) {}
+    if (navigation.canGoBack && navigation.canGoBack()) {
+      navigation.goBack();
+    } else {
+      navigation.navigate('HomeScreen');
+    }
+  };
+
 
   ///
 
@@ -421,20 +442,15 @@ const TrailerPlayerLandscape = ({ showfullscreenicon, mediaUrl, videoTitle, down
 
     <View style={{ flex: 1, backgroundColor: '#111111' }}>
 
-      <TouchableOpacity
-        activeOpacity={1}
-
-        style={{ width: '100%', height: fullScreen ? '100%' : 200 }}
-        // style={{ width: '100%', height: '100%'}}
-        onPress={() => {
-          setClicked(true);
-          toggleControls();
-        }}>
+      <View
+        style={{ width: '100%', height: fullScreen ? '100%' : 200, flex: fullScreen ? 1 : undefined }}
+        >
 
 
         {videoLoaded &&
           <Video
             onLoadStart={(obj) => {
+              setisBuffering(true);
               fireVideoEvents("loadstart")
             }}
             key={videoComponentKey}
@@ -449,21 +465,28 @@ const TrailerPlayerLandscape = ({ showfullscreenicon, mediaUrl, videoTitle, down
             selectedAudioTrack={selectedAudioOption}
             selectedVideoTrack={selectedVideoTrack}
             onLoad={onLoad}
+            onReadyForDisplay={() => setisBuffering(false)}
 
             onEnd={onEnd}
             onVideoTracks={(dataa) => {
             }}
-            onError={(error) => onError(error)}
+            onError={(error) => {
+              setisBuffering(false);
+              onError(error);
+            }}
             onBuffer={(buffer) => onBuffer(buffer)}
             style={{ width: '100%', height: fullScreen ? windowheight : 200 }}
             resizeMode={resizeMode}
             useTextureView={true}
           />
         }
-                <Pressable
-  style={StyleSheet.absoluteFill}
-  onPress={handlePress}
-/>
+        {/* Only capture taps to toggle controls when chrome is hidden — avoids blocking back on iOS */}
+        {!(clicked && progress && controlsVisible) && (
+          <Pressable
+            style={StyleSheet.absoluteFill}
+            onPress={handlePress}
+          />
+        )}
         <View
           style={{
             width: '100%',
@@ -472,7 +495,9 @@ const TrailerPlayerLandscape = ({ showfullscreenicon, mediaUrl, videoTitle, down
             //  backgroundColor: 'rgba(0,0,0,.5)',
             justifyContent: 'center',
             alignItems: 'center',
-          }}>
+          }}
+          pointerEvents="box-none"
+          >
 
           {isBuffering && <Loader />}
 
@@ -481,12 +506,8 @@ const TrailerPlayerLandscape = ({ showfullscreenicon, mediaUrl, videoTitle, down
         {clicked && progress && controlsVisible && (
           <>
 
-            <TouchableOpacity
-              activeOpacity={1}
-              onPress={() => {
-                toggleControls();
-              }}
-
+            <View
+              pointerEvents="box-none"
               style={{
                 width: '100%',
                 height: '100%',
@@ -494,12 +515,14 @@ const TrailerPlayerLandscape = ({ showfullscreenicon, mediaUrl, videoTitle, down
                 backgroundColor: 'rgba(0,0,0,.5)',
                 justifyContent: 'center',
                 alignItems: 'center',
+                zIndex: 20,
               }}>
 
+              <Pressable style={StyleSheet.absoluteFill} onPress={toggleControls} />
 
               {/*  <Progress.Circle size={50} indeterminate={true} borderWidth={4} style={{position:"absolute", marginLeft: 40,} } /> */}
 
-              <View style={{ flexDirection: 'row' }}>
+              <View style={{ flexDirection: 'row', zIndex: 21 }}>
                 <TouchableOpacity
                   onPress={() => {
                     ref.current.seek(parseInt(progress.currentTime) - 10);
@@ -561,22 +584,27 @@ const TrailerPlayerLandscape = ({ showfullscreenicon, mediaUrl, videoTitle, down
                   bottom: 0,
                   paddingLeft: 20,
                   paddingRight: 20,
-                  alignItems: 'center'
+                  alignItems: 'center',
+                  zIndex: 21,
                 }}>
                 <Text style={{ color: 'white' }}>
                   {progress && format(progress.currentTime)}
                 </Text>
                 {progress && (
                   <Slider
-                    style={{ width: '80%', height: 40 }}
+                    style={{
+                      flex: 1,
+                      height: Platform.OS === 'ios' ? 40 : 40,
+                      marginHorizontal: 8,
+                    }}
                     minimumValue={0}
-                    maximumValue={progress.seekableDuration}
-
-
+                    maximumValue={progress.seekableDuration || 0}
                     minimumTrackTintColor="red"
                     maximumTrackTintColor="white"
-                    thumbTintColor="red"
-
+                    // iOS stretches the default thumb; use a round image. tint breaks thumbImage on iOS.
+                    {...(Platform.OS === 'ios'
+                      ? { thumbImage: require('../../app_assets/slider_thumb.png') }
+                      : { thumbTintColor: 'red' })}
                     onValueChange={(x) => {
                       ref.current.seek(x);
                     }}
@@ -596,18 +624,20 @@ const TrailerPlayerLandscape = ({ showfullscreenicon, mediaUrl, videoTitle, down
                   top: 10,
                   paddingLeft: 20,
                   paddingRight: 20,
-                  alignItems: 'center'
+                  alignItems: 'center',
+                  zIndex: 30,
                 }}>
-                <TouchableOpacity onPress={() => {
-
-                  navigation.goBack();
-                }}>
+                <TouchableOpacity
+                  hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
+                  onPress={handleBackPress}
+                >
                   <Image source={require('../../app_assets/res_11.png')}
                     style={{ width: 24, height: 24, tintColor: 'white' }} />
 
                 </TouchableOpacity>
               </View>
               <View
+                pointerEvents="none"
                 style={{
                   width: '100%',
                   flexDirection: 'row',
@@ -619,7 +649,7 @@ const TrailerPlayerLandscape = ({ showfullscreenicon, mediaUrl, videoTitle, down
                   alignItems: 'center'
                 }}
               ><Text style={{ color: '#fff', fontSize: 15, }}>{videoTitle}</Text></View>
-            </TouchableOpacity>
+            </View>
             {player !== "trailer" && (
               <View
                 style={{
@@ -631,6 +661,7 @@ const TrailerPlayerLandscape = ({ showfullscreenicon, mediaUrl, videoTitle, down
                   paddingLeft: 20,
                   paddingRight: 20,
                   alignItems: 'center',
+                  zIndex: 30,
                 }}>
                 <TouchableOpacity onPress={() =>
                   setShowSettings(!showSettings)}>
@@ -643,6 +674,25 @@ const TrailerPlayerLandscape = ({ showfullscreenicon, mediaUrl, videoTitle, down
             )}
 
           </>
+        )}
+
+        {/* Always-available back for videoplayer if controls chrome isn't up yet */}
+        {player === 'videoplayer' && !(clicked && progress && controlsVisible) && (
+          <View
+            style={{
+              position: 'absolute',
+              top: 10,
+              left: 20,
+              zIndex: 40,
+            }}>
+            <TouchableOpacity
+              hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
+              onPress={handleBackPress}
+            >
+              <Image source={require('../../app_assets/res_11.png')}
+                style={{ width: 24, height: 24, tintColor: 'white' }} />
+            </TouchableOpacity>
+          </View>
         )}
 
         {modalVisible &&
@@ -849,7 +899,7 @@ const TrailerPlayerLandscape = ({ showfullscreenicon, mediaUrl, videoTitle, down
           </TouchableWithoutFeedback>
         )}
 
-      </TouchableOpacity>
+      </View>
 
     </View>
   );

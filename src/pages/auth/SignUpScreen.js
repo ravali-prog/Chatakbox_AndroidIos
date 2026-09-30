@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, BackHandler, TextInput, Keyboard, ImageBackground, StatusBar, Platform } from "react-native";
 import { Input, Button, SocialIcon, Image, Icon } from "react-native-elements";
-import { AppleButton, appleAuth } from "@invertase/react-native-apple-authentication";
+import { appleAuth } from "@invertase/react-native-apple-authentication";
 import CountryPicker from "../../ui_components/overlays/CountrySelector";
 import { TouchableOpacity } from "react-native";
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
@@ -251,7 +251,7 @@ const SignUpScreen = () => {
 
       GoogleSignin.configure({
         webClientId: '705960357183-1fe7spdr2uon618osd9u8mq4787kgic9.apps.googleusercontent.com',
-
+        iosClientId: '705960357183-obcoa3tr5kbqtoh20hhp72lijs04shpd.apps.googleusercontent.com',
         offlineAccess: true,
       });
       const evenid = EventRegister.addEventListener(LOCAL_EVENTS.EVENT_EMAIL_REGISTRATION, (resp) => {
@@ -1289,16 +1289,24 @@ const handleBackPress = () => {
       {Platform.OS === "ios" && (
         <>
           <View style={styles.gapForAppleSignIn} />
-          <View style={styles.appleSignInWrapper}>
-            <AppleButton
-              buttonStyle={AppleButton.Style.WHITE}
-              buttonType={AppleButton.Type.SIGN_IN}
-              style={{ width: "100%", height: 45 }}
-              onPress={() => {
-                onAppleButtonPress();
-              }}
-            />
-          </View>
+          <TouchableOpacity
+            activeOpacity={0.9}
+            style={styles.googleSignIn}
+            onPress={onAppleButtonPress}
+          >
+            <View style={signInContainer}>
+              <Icon
+                name="apple"
+                type="font-awesome"
+                size={22}
+                color="#000"
+                containerStyle={{ marginRight: 20 }}
+              />
+              <Text style={styles.googleSignInText}>
+                Continue With Apple
+              </Text>
+            </View>
+          </TouchableOpacity>
         </>
       )}
 

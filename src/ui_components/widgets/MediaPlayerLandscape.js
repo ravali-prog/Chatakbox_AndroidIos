@@ -205,7 +205,7 @@ const anchorPointY = 0;
             setProgress(x);
           }}
           selectedAudioTrack={{
-            type: 'title',
+            type: 'index',
             value: selectedAudioOption,
           }}
 

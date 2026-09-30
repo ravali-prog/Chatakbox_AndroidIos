@@ -1,0 +1,40 @@
+diff --git a/node_modules/react-native-gesture-handler/apple/RNGestureHandler.mm b/node_modules/react-native-gesture-handler/apple/RNGestureHandler.mm
+index b79554f..999054d 100644
+--- a/node_modules/react-native-gesture-handler/apple/RNGestureHandler.mm
++++ b/node_modules/react-native-gesture-handler/apple/RNGestureHandler.mm
+@@ -13,6 +13,7 @@
+ #ifdef RCT_NEW_ARCH_ENABLED
+ #import <React/RCTParagraphComponentView.h>
+ #import <React/RCTScrollViewComponentView.h>
++#import <React/RCTViewComponentView.h>
+ #else
+ #import <React/RCTScrollView.h>
+ #endif
+@@ -491,9 +492,11 @@ + (RNGestureHandler *)findGestureHandlerByRecognizer:(UIGestureRecognizer *)reco
+       }
+     }
+ 
++#ifdef RCT_NEW_ARCH_ENABLED
+     if ([view isKindOfClass:[RCTViewComponentView class]]) {
+       return nil;
+     }
++#endif // RCT_NEW_ARCH_ENABLED
+ 
+     view = view.superview;
+   }
+diff --git a/node_modules/react-native-gesture-handler/apple/RNGestureHandlerManager.mm b/node_modules/react-native-gesture-handler/apple/RNGestureHandlerManager.mm
+index d9799b3..47c0534 100644
+--- a/node_modules/react-native-gesture-handler/apple/RNGestureHandlerManager.mm
++++ b/node_modules/react-native-gesture-handler/apple/RNGestureHandlerManager.mm
+@@ -465,4 +465,11 @@ - (void)sendEventForDeviceEvent:(RNGestureHandlerStateChange *)event
+   [_eventDispatcher sendDeviceEventWithName:@"onGestureHandlerStateChange" body:body];
+ }
+ 
++- (void)sendEventForDirectEvent:(RNGestureHandlerStateChange *)event
++{
++  // Delivers the event to JS as a direct event (old architecture).
++  // Restored: present in RNGH <=2.28, missing in 2.32.0 while call sites remain.
++  [_eventDispatcher sendEvent:event];
++}
++
+ @end

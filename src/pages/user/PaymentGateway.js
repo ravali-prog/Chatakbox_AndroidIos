@@ -123,6 +123,21 @@ const PayWall = ({ route }) => {
     }
   }, [route]);
 
+  const resolvePaywallUri = (payload) => {
+    if (typeof payload === 'string' && /^https?:\/\//i.test(payload.trim())) {
+      return payload.trim();
+    }
+    if (payload && typeof payload === 'object') {
+      const candidates = [payload.paywall, payload.url, payload.paywallurl];
+      for (const candidate of candidates) {
+        if (typeof candidate === 'string' && /^https?:\/\//i.test(candidate.trim())) {
+          return candidate.trim();
+        }
+      }
+    }
+    return '';
+  };
+
   const getPaywallUrl = () => {
     if (route.params) {
       const { intent } = route.params;
@@ -133,17 +148,27 @@ const PayWall = ({ route }) => {
 
         setTitle(intent.title)
         setSource(intent.source)
+        setshowLoading(true)
         const resp = getPaymentConfig(intent.url, USER_UUID, intent.contentgroup)
         // const paywallurl = resp.data.data.paywallurl
         if (resp) {
           resp.then(x => {
             try {
-              seturl(x)
+              const resolved = resolvePaywallUri(x);
+              if (resolved) {
+                seturl(resolved);
+              } else {
+                setshowLoading(false)
+                LogError("Paywall getPaywallUrl invalid paywall uri", x);
+              }
               // setTxnHistory(true)
             } catch (error) {
+              setshowLoading(false)
               LogError("Paywall getPaywallUrl getPaymentConfig catch",error)          
             }
           })
+        } else {
+          setshowLoading(false)
         }
 
       }
@@ -742,64 +767,77 @@ navigation.replace("HomeScreen")
           </View>
         </View>
       </Modal>
-      {txnHistory && (
+      {txnHistory && !!url && (
         <WebView
           ref={webviewRef}
           scalesPageToFit={false}
           mixedContentMode="compatibility"
           setSupportMultipleWindows={false} 
           domStorageEnabled={true}
+          sharedCookiesEnabled={true}
+          thirdPartyCookiesEnabled={true}
+          allowsInlineMediaPlayback={true}
           onMessage={onMessage}
           startInLoadingState={true}
           originWhitelist={['*']} 
 onShouldStartLoadWithRequest={(request) => {
-  const url = request.url;
-  if (Platform.OS === 'android') {
-    if (url.startsWith('intent://') || url.startsWith('upi://')) {
-      let fallbackUrl = null;
+  const requestUrl = request.url || '';
 
-      try {
-        const match = url.match(/S\.browser_fallback_url=([^;]+)/);
-        if (match && match[1]) {
-          fallbackUrl = decodeURIComponent(match[1]);
+  if (Platform.OS === 'android' && (requestUrl.startsWith('intent://') || requestUrl.startsWith('upi://'))) {
+    let fallbackUrl = null;
+
+    try {
+      const match = requestUrl.match(/S\.browser_fallback_url=([^;]+)/);
+      if (match && match[1]) {
+        fallbackUrl = decodeURIComponent(match[1]);
+      }
+    } catch (e) {
+    }
+
+    // Reset before each attempt
+    appWasOpenedRef.current = false;
+
+    try {
+      SendIntentAndroid.openChromeIntent(requestUrl);
+    } catch (e) {
+    }
+
+    if (fallbackUrl) {
+      const sub = AppState.addEventListener('change', (nextState) => {
+        if (nextState === 'background' || nextState === 'inactive') {
+          appWasOpenedRef.current = true;
+          sub.remove();
         }
-      } catch (e) {
-      }
+      });
 
-      // Reset before each attempt
-      appWasOpenedRef.current = false;
-
-      try {
-        SendIntentAndroid.openChromeIntent(url);
-      } catch (e) {
-      }
-
-      if (fallbackUrl) {
-        const sub = AppState.addEventListener('change', (nextState) => {
-          if (nextState === 'background' || nextState === 'inactive') {
-            appWasOpenedRef.current = true;
-            sub.remove();
+      setTimeout(() => {
+        sub.remove();
+        if (!appWasOpenedRef.current) {
+          if (webviewRef.current) {
+            webviewRef.current.injectJavaScript(`
+              window.location.href = "${fallbackUrl}";
+              true;
+            `);
           }
-        });
-
-   setTimeout(() => {
-  sub.remove();
-  if (!appWasOpenedRef.current) {
-    if (webviewRef.current) {
-      webviewRef.current.injectJavaScript(`
-        window.location.href = "${fallbackUrl}";
-        true;
-      `);
+        }
+      }, 5000);
     }
-  }
-}, 5000);
-      }
 
-      return false;
-    }
+    return false;
   }
 
-  return true;
+  // Allow normal web / blank loads through the WebView
+  if (
+    requestUrl.startsWith('http://') ||
+    requestUrl.startsWith('https://') ||
+    requestUrl.startsWith('about:')
+  ) {
+    return true;
+  }
+
+  // Custom schemes (upi://, phonepe://, etc.) fail with NSURLErrorDomain on iOS if left in WKWebView
+  Linking.openURL(requestUrl).catch(() => {});
+  return false;
 }}
           onLoadStart={()=>{
             setshowLoading(true) 
@@ -820,8 +858,10 @@ onShouldStartLoadWithRequest={(request) => {
           }}
 
           javaScriptEnabled
-          onError={(error) => {
+          onError={(syntheticEvent) => {
             setshowLoading(false)
+            const { nativeEvent } = syntheticEvent || {};
+            LogError("Paywall WebView onError", nativeEvent || syntheticEvent)
           }}
 
           source={{ uri: url }}

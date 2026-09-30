@@ -9,11 +9,13 @@ import {
   FlatList,
   Dimensions,
   NativeModules,
-  Modal
+  Modal,
+  Platform,
 } from "react-native";
 import DetailLayout from "../../ui_components/widgets/DetailLayout";
 import TrailerPlayer from "../../media_player/TrailerPlayerCore";
 import { useNavigation } from "@react-navigation/native";
+import Orientation from "react-native-orientation-locker";
 import { Clip, List } from "../../data_models/ContentDataTypes";
 import ModalComponent from "../../data_models/ModalComponentData";
 import {
@@ -29,6 +31,7 @@ import {
   setCurrentPlayingVideo,
   LOCAL_EVENTS,
   LogError,
+  openResolvedVideoPlayer,
 
 } from "../../app_config/AppConstants";
 import {
@@ -56,6 +59,38 @@ import { colors } from "../../theming/colors";
 const PlaylistViewer = ({ route }: any) => {
   const navigation = useNavigation();
   const [videoUrl, setVideoUrl] = useState("");
+  const [pauseInlineTrailer, setPauseInlineTrailer] = useState(false);
+
+  useEffect(() => {
+    let resizeTimer = null;
+    const unsub = navigation.addListener('focus', () => {
+      setPauseInlineTrailer(false);
+      // After leaving the landscape player, iOS can leave a stuck landscape layout.
+      if (Platform.OS === 'ios') {
+        try {
+          Orientation.lockToPortrait();
+        } catch (e) {}
+        const w = Dimensions.get('window').width;
+        setitemWidth(w);
+        setitemHeight((w * 9) / 16);
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          try {
+            Orientation.lockToPortrait();
+          } catch (e) {}
+          const w2 = Dimensions.get('window').width;
+          setitemWidth(w2);
+          setitemHeight((w2 * 9) / 16);
+        }, 250);
+      }
+    });
+    return () => {
+      unsub();
+      if (resizeTimer) {
+        clearTimeout(resizeTimer);
+      }
+    };
+  }, [navigation]);
   const [thumnail, setthumnail] = useState("");
   const [title, settitle] = useState("");
   const [videoGenre, setVideoGenre] = useState("");
@@ -153,6 +188,7 @@ const PlaylistViewer = ({ route }: any) => {
   const handlePlayPress = () => {
     try {
       setShowVideoLoading(true)
+      setPauseInlineTrailer(true)
       setCurrentPlayingVideo(currentClip);
       var resume = 0;
   
@@ -177,14 +213,15 @@ const PlaylistViewer = ({ route }: any) => {
               setShowVideoLoading(false)
   
               if (resp && resp.videourl) {
-                ActivityStarter.navigateToVideo(
-                  resp.videourl,
-                  resp.title,
-                  resp.dwnid + "",
-                  resume + "",
+                openResolvedVideoPlayer(navigation, {
+                  videourl: resp.videourl,
+                  title: resp.title,
+                  dwnid: resp.dwnid,
+                  resume,
                   subtitleArray,
-                  configData.data.config.videoanalytics + "?"
-                );
+                  clipDetails: currentClip,
+                  seriesDetails: null,
+                });
               } else {
               }
             } catch (error) {
@@ -814,6 +851,7 @@ const PlaylistViewer = ({ route }: any) => {
           posterUrl={thumnail}
           showfullscreenicon={true}
           videoUrl={videoUrl}
+          forcePaused={pauseInlineTrailer}
         />
       );
     } else if (thumnail != "" && thumnail != null) {
