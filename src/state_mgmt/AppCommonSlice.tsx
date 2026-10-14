@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { API_KEY, API_URL, CONFIG_URL, CUSTOMER_SESSION_URL, ERROR_CODES, ERROR_MESSAGES, LogData, USER_UUID, VIDEO_EVENTS_URL, setUserPrivilages, updateSelectedProfile } from '../app_config/AppConstants';
+import { API_KEY, API_URL, CONFIG_URL, CUSTOMER_SESSION_URL, ERROR_CODES, ERROR_MESSAGES, LogData, PAUSE_ANALYTICS, USER_UUID, VIDEO_EVENTS_URL, setUserPrivilages, updateSelectedProfile } from '../app_config/AppConstants';
 import axios from 'axios';
 import { device } from '../app_config/DeviceInfo';
 import { Config } from '../data_models/AppConfigTypes';
@@ -534,6 +534,9 @@ export const createShareLink = async (id: string, type: string, name: string) =>
 // };
 
 export const fireVideoTracking = async (url: string) => {
+  if (PAUSE_ANALYTICS) {
+    return;
+  }
   const res = await axios.post(url);
   return res.data;
 };
@@ -574,6 +577,9 @@ export const deactivatePlan = async (url: string) => {
 };
 
 export const customerUsage = async (datetime: string, uuid: string, VideoType: string, VideoName: string, sessionId: string) => {
+  if (PAUSE_ANALYTICS) {
+    return;
+  }
   try {
     const payload = { eventType: "CUSTOMER_USAGE", channel: "APP", productID: "101", device: device, datetime, user: uuid, itemTags: VideoType, itemName: VideoName, sessionId: sessionId }
     const res = await axios.post(VIDEO_EVENTS_URL, payload);
@@ -585,6 +591,9 @@ export const customerUsage = async (datetime: string, uuid: string, VideoType: s
 };
 
 export const customerSession = async (datetime: string, uuid: string, sessionId: string) => {
+  if (PAUSE_ANALYTICS) {
+    return;
+  }
   try {
     const payload = { eventType: "CUSTOMER_SESSION", channel: "APP", productID: "101", device: device, datetime, user: uuid, sessionId: sessionId }
     const res = await axios.post(CUSTOMER_SESSION_URL, payload);

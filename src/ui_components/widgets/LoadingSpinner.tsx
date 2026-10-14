@@ -1,7 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import { View, Animated, StyleSheet, Text } from 'react-native';
 
-const DOT_COLORS = ['#e50914', '#e87c16', '#ffffff', '#e87c16', '#e50914'];
+// const DOT_COLORS = ['#e50914', '#e87c16', '#ffffff', '#e87c16', '#e50914'];
+const DOT_COLORS = ['#ff0000', '#c70d0d', '#ffffff', '#c70d0d', '#e50914'];
+
 
 const Dot = ({ color, delay }: { color: string; delay: number }) => {
   const translateY = useRef(new Animated.Value(0)).current;

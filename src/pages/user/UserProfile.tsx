@@ -347,11 +347,11 @@ const Profile = () => {
       icon: require('../../../app_assets/symbols/sym_79.png'),
       screen: 'Wishlist',
     },
-    // {
-    //   title: 'Activate TV',
-    //   icon: require('../../../app_assets/symbols/sym_01.png'),
-    //   screen: 'TvActivation',
-    // },
+    {
+      title: 'Activate TV',
+      icon: require('../../../app_assets/symbols/sym_01.png'),
+      screen: 'TvActivation',
+    },
     {
       title: 'Notifications',
       icon: require('../../../app_assets/symbols/sym_57.png'),

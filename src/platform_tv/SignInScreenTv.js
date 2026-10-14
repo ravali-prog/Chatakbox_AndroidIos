@@ -54,8 +54,11 @@ const LoginScreenTv = () => {
         <View style={styles.contentContainer}>
           <View style={styles.instructionsContainer}>
             <View style={styles.intructionGroup}>
-              <Text style={styles.instructionsText}>
+              {/* <Text style={styles.instructionsText}>
                 Login to your account on Chatak Box app or website
+              </Text> */}
+                 <Text style={styles.instructionsText}>
+                Login to your account on Chanajor app or website
               </Text>
               <Text style={styles.instructionsText}>
                 https://...........................
@@ -65,8 +68,11 @@ const LoginScreenTv = () => {
               <Text style={styles.instructionsText}>
                 Go to authentic section from the Account.
               </Text>
-              <Text style={styles.instructionsText}>
+              {/* <Text style={styles.instructionsText}>
                 Open Chatak Box App-Account-Activate TV
+              </Text> */}
+                <Text style={styles.instructionsText}>
+                Open Chanajor App-Account-Activate TV
               </Text>
             </View>
             <View style={styles.intructionGroup}>

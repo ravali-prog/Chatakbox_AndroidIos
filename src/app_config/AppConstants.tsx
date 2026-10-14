@@ -28,13 +28,14 @@ export const global_content_group = ["c2c"];
 
 export { images, icons, COLORS, FONT, SIZES, SHADOWS };
 
-// export const CONFIG_URL = "https://chatakbox.com/vbs/web/v3/proxy.php";
-export const CONFIG_URL = "https://api.chatakbox.com/web/v3/proxy.php";
+// export const CONFIG_URL = "https://api.chatakbox.com/web/v3/proxy.php";
+export const CONFIG_URL = "https://api2.chatakbox.com/web/v3/proxy.php";
 export var API_URL = "";
 export var LOCALE_URL = "";
 export var USER_UUID = "";
 export var VIDEO_ANALYTICS = "";
-export var APP_NAME = "Chatak Box";
+// export var APP_NAME = "Chatak Box";
+export var APP_NAME = "Chana Jor";
 export var API_GOOGLE_SUB_SYNC = "";
 export var API_IOS_SUB_SYNC = "";
 export var FB_APP_ID = "";
@@ -68,6 +69,9 @@ export var currDeeplinkParam = null;
 
 export const API_MODE: 'A' | 'B' = 'A'; 
 export var TOKEN_EXPIRY = false;
+
+/** While true, video analytics calls to analytics/index.php are not sent. */
+export const PAUSE_ANALYTICS = true;
 
 export function setCurrDeeplinkParam(param: any) {
     try {

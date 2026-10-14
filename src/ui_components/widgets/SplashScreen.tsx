@@ -7,7 +7,7 @@ const SplashImage = () => {
   return (
     <View style={styles.nodata}>
       <Image 
-      source={require('../../../app_assets/pictures/logo.png')}
+      source={require('../../../app_assets/pictures/chanajor_logo512.jpg')}
       style={{
         width:150,
         height:150,

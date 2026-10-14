@@ -170,7 +170,7 @@ function App() {
 
   const settvconfig = () => {
     try {
-      axios.defaults.timeout = 5000;
+      axios.defaults.timeout = 7000;
       axios.defaults.headers.common["Content-Type"] = "application/json";
       axios.defaults.headers.common["X-App-Key"] = APP_KEY;
       if (isTvPlatform()) {
@@ -291,6 +291,7 @@ function App() {
 
     axios.interceptors.request.use(
       (request) => {
+        (request as any).meta = { start: Date.now() };
         if (userProfiles?.token) {
           request.headers["Authorization"] = "Bearer " + userProfiles.token;
         }
@@ -337,6 +338,27 @@ function App() {
       },
     );
 
+    const logDevPayload = (label: string, payload: unknown) => {
+      if (!__DEV__) {
+        return;
+      }
+      let text = "";
+      try {
+        text =
+          typeof payload === "string" ? payload : JSON.stringify(payload, null, 2);
+      } catch (error) {
+        text = String(payload);
+      }
+      const chunkSize = 3500;
+      const parts = Math.max(1, Math.ceil(text.length / chunkSize));
+      for (let i = 0; i < parts; i++) {
+        console.log(
+          `${label} [${i + 1}/${parts}]`,
+          text.slice(i * chunkSize, (i + 1) * chunkSize),
+        );
+      }
+    };
+
     axios.interceptors.response.use(
       (response) => {
         if (API_MODE === "B" && response.data?.data) {
@@ -365,25 +387,24 @@ function App() {
           }
         } catch (error) {}
 
-        if (__DEV__) {
-          console.log(
-            "<=== RESPONSE ===",
-            JSON.stringify(
-              {
-                url: response.config?.url,
-                status: response.status,
-                data: response.data,
-              },
-              null,
-              2,
-            ),
-          );
-        }
+        const started = (response.config as any)?.meta?.start;
+        logDevPayload("<=== RESPONSE ===", {
+          url: response.config?.url,
+          status: response.status,
+          durationMs: started ? Date.now() - started : undefined,
+          data: response.data,
+        });
         return response;
       },
       (error) => {
-        if (__DEV__) {
-        }
+        const started = error?.config?.meta?.start;
+        logDevPayload("<=== RESPONSE ERROR ===", {
+          url: error?.config?.url,
+          status: error?.response?.status,
+          durationMs: started ? Date.now() - started : undefined,
+          message: error?.message,
+          data: error?.response?.data,
+        });
         return Promise.reject(error);
       },
     );

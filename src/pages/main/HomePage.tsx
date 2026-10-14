@@ -233,7 +233,7 @@ const handleSubmit = async () => {
         
       },
 
-      tabBarActiveTintColor: '#FF7A00',
+      tabBarActiveTintColor: '#ff0000',
       tabBarInactiveTintColor: 'white', 
       
     }}>

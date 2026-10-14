@@ -129,7 +129,13 @@ const TvActivation = () => {
       </View>
       <View style={styles.centerContent}>
         <View style={styles.logoContainer}>
-          <Image source={require('../../../app_assets/pictures/headerLogo_nobg.png')} />
+          <Image source={require('../../../app_assets/pictures/logo_home.png')}
+            style={{
+            resizeMode: "contain",
+            width: 200,
+          }}
+          
+          />
         </View>
         <View style={styles.textContainer}>
           <Text style={styles.otpText}>Enter TV code here</Text>
@@ -226,7 +232,7 @@ const styles = StyleSheet.create({
   },
 
   otpText: {
-    fontSize: 28,
+    fontSize: 20,
     fontWeight: '800',
     color: '#FFFFFF',
     textAlign: 'center',

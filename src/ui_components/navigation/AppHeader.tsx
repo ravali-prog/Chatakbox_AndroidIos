@@ -47,7 +47,8 @@ function HomeHeader() {
     <View style={styles.linearGradient}>
       <View style={styles.parent}>
         <Image
-          source={require("../../../app_assets/pictures/headerLogo_nobg.png")}
+          // source={require("../../../app_assets/pictures/headerLogo_nobg.png")}
+          source={require("../../../app_assets/pictures/logo_home_150.png")}
           style={{
             resizeMode: "contain",
             width: 140,
@@ -60,7 +61,7 @@ function HomeHeader() {
             }}
             style={{
               position: "absolute",
-              right: 48,
+              right: 60,
             }}
           >
             <LinearGradient
