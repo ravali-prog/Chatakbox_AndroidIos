@@ -252,7 +252,8 @@ export default function HomeWhosWatching() {
                                                       intent: {
                                                           url: configData.data.config.paywallurl, title: "Subscription",
                                                           // contentgroup: ["c3c"],
-                                                          contentgroup: ["c2c"],
+                                                          // contentgroup: ["c2c"],
+                                                          contentgroup: global_content_group,
                                                                 source : "App"
                                                           // , onPaymentCallbackfunc:onPaymentCallback 
                                                       }

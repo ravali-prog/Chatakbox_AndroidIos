@@ -28,7 +28,7 @@
 </style>
 
  <style name="MyTrackSelectionViewStyle">
-    <item name="colorControlActivated">#FF7A00</item>
+    <item name="colorControlActivated">#FF0000</item>
     <item name="android:textColor">#FFFFFF</item>
     <item name="colorControlNormal">#FFFFFF</item>  
 </style>
@@ -36,7 +36,7 @@
 
 
 
-    <color name="red">#FF7A00</color> 
+    <color name="red">#FF0000</color> 
      <color name="focusColor">#891206</color>
     <color name="byDefaultButtoncolor">#818080</color>
 

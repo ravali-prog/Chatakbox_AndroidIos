@@ -1,5 +1,4 @@
 <resources>
-    <!-- <string name="app_name">Chatak Box</string> -->
     <string name="app_name">Chana Jor</string>
 
 
@@ -12,6 +11,4 @@
 
        <string name="facebook_app_id">000</string>
    <string name="facebook_client_token">DUMMY</string>
-  <!-- (If you’ll use Facebook Login) -->
-  <!-- <string name="fb_login_protocol_scheme">fbYOUR_APP_ID</string> -->
 </resources>

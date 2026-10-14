@@ -11,7 +11,7 @@ module.exports = {
     android: {
       sourceDir: './android',
       appName: 'app',
-      packageName: 'com.chatakbox.app'
+      packageName: 'com.chanajor.ott'
     },
     ios: {
       automaticPodsInstallation: true

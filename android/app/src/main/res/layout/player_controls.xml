@@ -129,8 +129,8 @@
             android:layout_height="wrap_content"
             android:layout_toStartOf="@+id/totalTimeTextView"
             android:layout_toEndOf="@+id/currentTimeTextView"
-            android:progressTint="#FF3830"
-            android:thumbTint="#FF7A00"
+            android:progressTint="#c70d0d"
+            android:thumbTint="#ff0000"
             android:progressBackgroundTint="#FFFFFF"
             android:padding="8dp" />
         <TextView

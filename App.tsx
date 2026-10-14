@@ -1,5 +1,5 @@
 import "react-native-get-random-values";
-import { NavigationContainer } from "@react-navigation/native";
+import { createNavigationContainerRef, NavigationContainer } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import {
   Linking,
@@ -132,6 +132,7 @@ import { colors } from "./src/theming/colors";
 // import { Settings } from 'react-native-fbsdk-next';
 
 const Stack = createNativeStackNavigator();
+const navigationRef = createNavigationContainerRef();
 
 // monthly_sub , quarterly_sub , yearly_sub
 
@@ -147,6 +148,11 @@ function App() {
   const [sessionId, setSessionId] = useState("");
   const { FacebookInfo } = NativeModules;
   const { FbEvents } = NativeModules;
+
+  const [currentRoute, setCurrentRoute] = useState("");
+
+const isFullscreenTrailer =
+  Platform.OS === "android" && currentRoute === "trailervideoplayer";
 
   // const dispatch = useDispatch<any>();
   // const config = useSelector((state : any  )=> state.config);
@@ -338,27 +344,6 @@ function App() {
       },
     );
 
-    const logDevPayload = (label: string, payload: unknown) => {
-      if (!__DEV__) {
-        return;
-      }
-      let text = "";
-      try {
-        text =
-          typeof payload === "string" ? payload : JSON.stringify(payload, null, 2);
-      } catch (error) {
-        text = String(payload);
-      }
-      const chunkSize = 3500;
-      const parts = Math.max(1, Math.ceil(text.length / chunkSize));
-      for (let i = 0; i < parts; i++) {
-        console.log(
-          `${label} [${i + 1}/${parts}]`,
-          text.slice(i * chunkSize, (i + 1) * chunkSize),
-        );
-      }
-    };
-
     axios.interceptors.response.use(
       (response) => {
         if (API_MODE === "B" && response.data?.data) {
@@ -387,24 +372,43 @@ function App() {
           }
         } catch (error) {}
 
-        const started = (response.config as any)?.meta?.start;
-        logDevPayload("<=== RESPONSE ===", {
-          url: response.config?.url,
-          status: response.status,
-          durationMs: started ? Date.now() - started : undefined,
-          data: response.data,
-        });
+        if (__DEV__) {
+          const started = (response.config as any)?.meta?.start;
+          const durationMs = started ? Date.now() - started : undefined;
+          console.log(
+            "<=== RESPONSE ===",
+            JSON.stringify(
+              {
+                url: response.config?.url,
+                status: response.status,
+                durationMs,
+                data: response.data,
+              },
+              null,
+              2,
+            ),
+          );
+        }
         return response;
       },
       (error) => {
-        const started = error?.config?.meta?.start;
-        logDevPayload("<=== RESPONSE ERROR ===", {
-          url: error?.config?.url,
-          status: error?.response?.status,
-          durationMs: started ? Date.now() - started : undefined,
-          message: error?.message,
-          data: error?.response?.data,
-        });
+        if (__DEV__) {
+          const started = error?.config?.meta?.start;
+          const durationMs = started ? Date.now() - started : undefined;
+          console.log(
+            "<=== RESPONSE ERROR ===",
+            JSON.stringify(
+              {
+                url: error?.config?.url,
+                status: error?.response?.status,
+                durationMs,
+                message: error?.message,
+              },
+              null,
+              2,
+            ),
+          );
+        }
         return Promise.reject(error);
       },
     );
@@ -1027,10 +1031,19 @@ function App() {
                   name="reelsplayer"
                   component={ReelsPlayerScreen}
                 />
-                <Stack.Screen
+                {/* <Stack.Screen
                   name="trailervideoplayer"
                   component={LandScapeTrailerplayer}
-                />
+                /> */}
+
+                <Stack.Screen
+  name="trailervideoplayer"
+  component={LandScapeTrailerplayer}
+  options={{
+    animation: "none",
+    contentStyle: { backgroundColor: "#000000" },
+  }}
+/>
 
                 <Stack.Screen
                   name="contentlisting"
@@ -1047,7 +1060,8 @@ function App() {
                       url: configData || "",
                       title: "Subscription",
                       // contentgroup: ["c3c"],
-                      contentgroup: ["c2c"],
+                      // contentgroup: ["c2c"],
+                      contentgroup: global_content_group,
                       source: "App",
                     },
                   }}
@@ -1230,7 +1244,7 @@ const styles = StyleSheet.create({
   modalBtnFull: {
     paddingVertical: 14,
     borderRadius: 8,
-    backgroundColor: "#e50914",
+    backgroundColor: "#ff0000",
     alignItems: "center",
   },
   modalBtnGhost: {

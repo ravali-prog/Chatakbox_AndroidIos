@@ -28,6 +28,7 @@ export interface ConfigClass {
     googlesync:string;
     facebook : FacebookConfig;
     gentokenurl: string;
+     trigger?: Trigger; 
 
 }
 
@@ -52,4 +53,8 @@ export interface Weburls {
 export interface FacebookConfig {
     id : string,
     client_token : string
+}
+
+export interface Trigger {
+    contentgroup: string[];
 }

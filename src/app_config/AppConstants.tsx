@@ -23,8 +23,8 @@ import { StackActions } from '@react-navigation/native';
 
 
 // export const global_content_group = ["c3c"];
-export const global_content_group = ["c2c"];
-
+// export const global_content_group = ["c2c"];
+export var global_content_group: string[] = [];
 
 export { images, icons, COLORS, FONT, SIZES, SHADOWS };
 
@@ -67,11 +67,8 @@ export var currDeeplinkParam = null;
 
 
 
-export const API_MODE: 'A' | 'B' = 'A'; 
+export const API_MODE: 'A' | 'B' = 'B'; 
 export var TOKEN_EXPIRY = false;
-
-/** While true, video analytics calls to analytics/index.php are not sent. */
-export const PAUSE_ANALYTICS = true;
 
 export function setCurrDeeplinkParam(param: any) {
     try {
@@ -168,6 +165,14 @@ export function setConfigData(config: Config) {
     GENTOKEN_URL = config.data.config.gentokenurl;
     CUSTOMER_SESSION_URL = config.data.config.customersession;
     VIDEO_EVENTS_URL = config.data.config.videoanalytics; 
+
+     try {
+        const triggerGroup = config.data.config.trigger?.contentgroup
+        if (Array.isArray(triggerGroup) && triggerGroup.length > 0) {
+            global_content_group = triggerGroup
+        }
+    } catch (error) {
+    }
 
 }
 
@@ -403,49 +408,6 @@ export const handleVideoPlayAsync = async (navobj: any, clipDetails: any, series
 
             try {
 
-                // if (clipDetails && clipDetails.media && clipDetails.media.video && clipDetails.media.video[0] && clipDetails.media.video[0].url) {
-                //     //  const mediaurlrespone  =   getContentToken(USER_UUID , id, selectedUserProfile.profileid,cid )
-
-
-
-                //     const data = { data: { uuid: USER_UUID, id: id, device: device, action: 'getaccesstoken', profileid: selectedUserProfile.profileid, cid } }
-
-                //     const res = await axios.post(API_URL, data);
-                //     const configresp = res.data;
-                //     if (configresp) {
-
-
-
-                //         //  https://aptifun.com/media2/{accesstoken}/{useridentity}/34759463/hls/playlist.m3u8
-
-                //         if (configresp && configresp.data && configresp.data.token) {
-
-                //             var mediaurl = clipDetails.media.video[0].url
-                //             // todo :  need logic for {useridentity} paramter 
-                //             let url = mediaurl.replace("{accesstoken}", configresp.data.token).replace("{useridentity}", USER_UUID);
-
-
-
-                //             customerUsageAction(attr_content_type, title)
-
-
-
-                //             return { "videourl": url, "dwnid": configresp.data.did, "title": title }
-                //             ///    setvideourl (url )
-                //             //   setdownloadid(x.data.did)
-                //             //   setShowLoading(false)
-
-                //         } else {
-                //             //  fail condition
-                //         }
-
-
-                //     } else {
-                //         // fail condition
-                //     }
-                // }
-// const gentokenUrl = `https://cms.chatakbox.com/api-admin/serve/gentoken.php?clientId=2&contentId=${clipDetails.id || id}&uuid=${USER_UUID}&deviceId=${device.id}&profileId=${selectedUserProfile.profileid}`;
-// const gentokenUrl =  'https://cms.chatakbox.com/api-admin/serve/gentoken.php?clientId=2&contentId=97951147&uuid=n13y3-2b6a2-6c40b-95256&deviceId=21b5966407352693&profileId=1339'
 
 let gentokenurl = GENTOKEN_URL;
 gentokenurl = gentokenurl
@@ -659,7 +621,8 @@ export function showPayWall(navobj: any) {
     try {
 
         // const contentgrp = ["c3c"];
-        const contentgrp = ["c2c"];
+        // const contentgrp = ["c2c"];
+        const contentgrp = global_content_group;
 
 
         const evenid = EventRegister.addEventListener(LOCAL_EVENTS.EVENT_SUBSCRIPTION, () => {
@@ -1121,58 +1084,3 @@ export function shouldShowPaywall(): boolean {
   const isInactive = isInActiveUser(global_content_group);
   return !(isSubscribed || isInactive);
 }
- 
-
-
-
-
-
-
-
-
-//"http://139.59.180.162/aptifun/cms/tests/generatejson.php"
-
-
-
-// === REQUEST ===> {
-//   "url": "https://cms.chatakbox.com/api-admin/serve/gentoken.php?clientId=2&contentId=25725932&uuid=b75mj-m76a3-181d1-3ce4c&deviceId=21b5966407352693&profileId=1377",
-//   "method": "get",
-//   "headers": {
-//     "Accept": "application/json, text/plain, */*",
-//     "Content-Type": "application/json",
-//     "X-App-Key": "4ToUgfHmqmzqoirt88RE4xXGSzgdgrb",
-//     "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3ODE2MzQwNzUsImlzcyI6InZicyIsIm5iZiI6MTc4MTYzNDA3NSwiZXhwIjoxNzg5NDEwMDc1LCJpZCI6ImU0YmI2OGZhNGYzOWIyODQ5ZDQxODhlMmVjNWUxMmRkMjhjMjg3MTlhOGQyZTBkZWRiYzkxYTkxNGU1MWU4NjEifQ._Jdsr22i-vq8i1cwMOGkuHa0GYSQTcg71ob1cvKe2UA"
-//   }
-// }
-
-
-
-// == REQUEST ===> {
-//   "url": "https://cms.chatakbox.com/api-admin/serve/gentoken.php?clientId=2&contentId=25725932&uuid=n7hya-rp6a2-2dd9e-3b417&deviceId=21b5966407352693&profileId=1330",
-//   "method": "get",
-//   "headers": {
-//     "Accept": "application/json, text/plain, */*",
-//     "Content-Type": "application/json",
-//     "X-App-Key": "4ToUgfHmqmzqoirt88RE4xXGSzgdgrb",
-//     "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3ODE2MzQxNjQsImlzcyI6InZicyIsIm5iZiI6MTc4MTYzNDE2NCwiZXhwIjoxNzg5NDEwMTY0LCJpZCI6Ijc0MTMxOTU2N2RiZmI0ZGY0NGU5NGE3YThkOTNkYzljZWE2NzBlZTZjNWVmYzliNmVmNWEwYTg0ODAxOGIyNDAifQ.08_fHe_IqxGaWPVuyddgz36bIdBDIlYPHnvguFyDyCQ"
-//   }
-// }
-// App.tsx:340 <=== RESPONSE === {
-//   "url": "https://cms.chatakbox.com/api-admin/serve/gentoken.php?clientId=2&contentId=25725932&uuid=n7hya-rp6a2-2dd9e-3b417&deviceId=21b5966407352693&profileId=1330",
-//   "status": 200,
-//   "data": {
-//     "ok": true,
-//     "token": "eyJ1aWQiOjIsImNpZCI6IjI1NzI1OTMyIiwiZGlkIjozNzAyLCJleHAiOjE3ODE2Mzc3NzN9.BnTZy_YUP0L6CoI3tXP9qDFE6H15V01DYLwIDtURYDo",
-//     "clientId": 2,
-//     "contentId": "25725932",
-//     "did": 3702,
-//     "iAfUserID": 634,
-//     "profileId": 1330,
-//     "deviceId": "21b5966407352693",
-//     "accessToken": "eyJ1aWQiOjIsImNvbnRlbnRJZCI6IjI1NzI1OTMyIiwiZXhwIjoxNzgxNjQ0OTczLCJ1dWlkIjoibjdoeWEtcnA2YTItMmRkOWUtM2I0MTcifQ.gS-kecL7e1EF8fNUq0cr2lzyMNUKY5_1d6jFVRNvKt4",
-//     "expiresAt": "2026-06-16T21:22:53+00:00",
-//     "expiresIn": 10800,
-//     "masterPlaylistUrl": "https://cms.chatakbox.com/api-admin/serve/vdodeliver.php?token=eyJ1aWQiOjIsImNvbnRlbnRJZCI6IjI1NzI1OTMyIiwiZXhwIjoxNzgxNjQ0OTczLCJ1dWlkIjoibjdoeWEtcnA2YTItMmRkOWUtM2I0MTcifQ.gS-kecL7e1EF8fNUq0cr2lzyMNUKY5_1d6jFVRNvKt4&file=playlist.m3u8",
-//     "deliverBaseUrl": "https://cms.chatakbox.com/api-admin/serve/vdodeliver.php?token=eyJ1aWQiOjIsImNvbnRlbnRJZCI6IjI1NzI1OTMyIiwiZXhwIjoxNzgxNjQ0OTczLCJ1dWlkIjoibjdoeWEtcnA2YTItMmRkOWUtM2I0MTcifQ.gS-kecL7e1EF8fNUq0cr2lzyMNUKY5_1d6jFVRNvKt4"
-//   }
-// }

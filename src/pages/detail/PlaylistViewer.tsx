@@ -1003,7 +1003,7 @@ const PlaylistViewer = ({ route }: any) => {
 
   return (
     <View style={styles.container}>
-      {status === "loading" && <LoadingSpinner />}
+      {status === "loading" && <Loader />}
       {status === "failed" && <EmptyState />}
       {status === "successful" && getContent()}
 

@@ -14,6 +14,7 @@ import {
   Pressable,
   useWindowDimensions,
   Platform,
+  ActivityIndicator,
 } from 'react-native';
 import SystemNavigationBar from 'react-native-system-navigation-bar';
 import { useNavigation } from '@react-navigation/native';
@@ -475,8 +476,14 @@ const TrailerPlayerLandscape = ({ showfullscreenicon, mediaUrl, videoTitle, down
               onError(error);
             }}
             onBuffer={(buffer) => onBuffer(buffer)}
-            style={{ width: '100%', height: fullScreen ? windowheight : 200 }}
-            resizeMode={resizeMode}
+            // style={{ width: '100%', height: fullScreen ? windowheight : 200 }}
+            style={
+  Platform.OS === 'android'
+    ? { width: windowWidth, height: windowheight }
+    : { width: '100%', height: fullScreen ? windowheight : 200 }
+}
+            // resizeMode={resizeMode}
+            resizeMode={Platform.OS === 'android' ? 'cover' : resizeMode}
             useTextureView={true}
           />
         }
@@ -499,7 +506,7 @@ const TrailerPlayerLandscape = ({ showfullscreenicon, mediaUrl, videoTitle, down
           pointerEvents="box-none"
           >
 
-          {isBuffering && <Loader />}
+          {isBuffering && <ActivityIndicator size="large" color="#ff0000" backgroundColor="rgba(0, 0, 0, 0)" />}
 
         </View>
 

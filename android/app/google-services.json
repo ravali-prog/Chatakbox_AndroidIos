@@ -1,42 +1,131 @@
 {
   "project_info": {
-    "project_number": "705960357183",
-    "project_id": "chatakbox-69779",
-    "storage_bucket": "chatakbox-69779.firebasestorage.app"
+    "project_number": "1002364051184",
+    "project_id": "chana-jor",
+    "storage_bucket": "chana-jor.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:705960357183:android:82769a3d06220b7b3c378a",
+        "mobilesdk_app_id": "1:1002364051184:android:519af347434c97f701ac35",
         "android_client_info": {
-          "package_name": "com.chatakbox.app"
+          "package_name": "com.chanajor.ott"
         }
       },
       "oauth_client": [
         {
-          "client_id": "705960357183-q8l5roo89r89bdn61d70g1q4vjc8jb5l.apps.googleusercontent.com",
+          "client_id": "1002364051184-940fgqf2abvc2vj830csmenn1a4l5in4.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.chatakbox.app",
-            "certificate_hash": "f467cbaa5d6e3eac88e9138307a725354930ce5d"
+            "package_name": "com.chanajor.ott",
+            "certificate_hash": "d178be3fdb27c0a8ba7037a98c08053d64d68815"
           }
         },
         {
-          "client_id": "705960357183-1fe7spdr2uon618osd9u8mq4787kgic9.apps.googleusercontent.com",
+          "client_id": "1002364051184-j5rfgpneildljresse1vtgb1ff1ob1dj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chanajor.ott",
+            "certificate_hash": "bc2ccf971c9cb5310026618a1fadba213d9a4ac1"
+          }
+        },
+        {
+          "client_id": "1002364051184-op8sl0e0rp479f0751psra3vr17o2b3e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chanajor.ott",
+            "certificate_hash": "412b1f5aba4c5d85a9cb76abe8d541c658b0eb9a"
+          }
+        },
+        {
+          "client_id": "1002364051184-sfvtv834fpfv0oujbi1bpcsor13aard8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chanajor.ott",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "1002364051184-usj3nq7choitgj7ue60d1irfuibbb3ka.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chanajor.ott",
+            "certificate_hash": "dfbc9bfb7f3755f471e0194899f696cb19cdf3a8"
+          }
+        },
+        {
+          "client_id": "1002364051184-qkh8o7fcdv8pp6kbii1oh5hsvu9okjgg.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBQk7ETrAt2mxFoDi1LUfUDsbXsOUa7TOI"
+          "current_key": "AIzaSyCm4LtZaBOjNSrC61PtnQ6EdlGh1C34keU"
+        },
+        {
+          "current_key": "AIzaSyCoXXDBbZ4swD4I7QlJ6gSc1qje1qoNp44"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "705960357183-1fe7spdr2uon618osd9u8mq4787kgic9.apps.googleusercontent.com",
+              "client_id": "1002364051184-qkh8o7fcdv8pp6kbii1oh5hsvu9okjgg.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "1002364051184-8gfll0v5s13ehq8n1llbm4vpiakq6045.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.chanajor.ott"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1002364051184:android:4270a8a33a0b201201ac35",
+        "android_client_info": {
+          "package_name": "com.chanajor.tv"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1002364051184-ftmovs380d985curdvout9ik41s3qn42.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chanajor.tv",
+            "certificate_hash": "bc2ccf971c9cb5310026618a1fadba213d9a4ac1"
+          }
+        },
+        {
+          "client_id": "1002364051184-qkh8o7fcdv8pp6kbii1oh5hsvu9okjgg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCm4LtZaBOjNSrC61PtnQ6EdlGh1C34keU"
+        },
+        {
+          "current_key": "AIzaSyCoXXDBbZ4swD4I7QlJ6gSc1qje1qoNp44"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1002364051184-qkh8o7fcdv8pp6kbii1oh5hsvu9okjgg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1002364051184-8gfll0v5s13ehq8n1llbm4vpiakq6045.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.chanajor.ott"
+              }
             }
           ]
         }

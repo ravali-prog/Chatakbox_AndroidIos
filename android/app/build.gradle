@@ -78,9 +78,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.chatakbox.app"
+    namespace "com.chanajor.ott"
     defaultConfig {
-        applicationId "com.chatakbox.app"
+        applicationId "com.chanajor.ott"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 13
@@ -94,7 +94,33 @@ android {
             useLegacyPackaging false
         }
     }
-    signingConfigs {
+    // signingConfigs {
+    //     debug {
+    //         /*  storeFile file('debug.keystore')
+    //           storePassword 'android'
+    //           keyAlias 'androiddebugkey'
+    //           keyPassword 'android'
+    //           */
+
+    //         //////
+
+    //         storeFile file('chatakbox.keystore')
+    //         storePassword 'chatakbox'
+    //         keyAlias 'chatakbox'
+    //         keyPassword 'chatakbox'
+
+
+    //     }
+    //     release {
+    //         storeFile file('chatakbox.keystore')
+    //         storePassword 'chatakbox'
+    //         keyAlias 'chatakbox'
+    //         keyPassword 'chatakbox'
+    //     }
+
+    // }
+
+        signingConfigs {
         debug {
             /*  storeFile file('debug.keystore')
               storePassword 'android'
@@ -104,18 +130,18 @@ android {
 
             //////
 
-            storeFile file('chatakbox.keystore')
-            storePassword 'chatakbox'
-            keyAlias 'chatakbox'
-            keyPassword 'chatakbox'
+            storeFile file('chana-jor.jks')
+            storePassword '123456'
+            keyAlias 'chana-jor'
+            keyPassword '123456'
 
 
         }
         release {
-            storeFile file('chatakbox.keystore')
-            storePassword 'chatakbox'
-            keyAlias 'chatakbox'
-            keyPassword 'chatakbox'
+            storeFile file('chana-jor.jks')
+            storePassword '123456'
+            keyAlias 'chana-jor'
+            keyPassword '123456'
         }
 
     }
