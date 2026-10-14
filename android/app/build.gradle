@@ -83,8 +83,8 @@ android {
         applicationId "com.chanajor.ott"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 13
-        versionName "1.0.12"
+        versionCode 105
+        versionName "1.185"
         missingDimensionStrategy "store", "play"
         resConfigs "en", "US"
     }

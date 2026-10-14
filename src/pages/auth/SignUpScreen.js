@@ -3848,8 +3848,13 @@ const SignUpScreen = () => {
       />
 
       {/* ---------- Content ---------- */}
+      {/* Android already resizes the window for the keyboard (adjustResize).
+          Adding keyboardHeight again lifts the form and leaves a blank gap. */}
       <View
-        style={[styles.contentWrap, { paddingBottom: keyboardHeight }]}
+        style={[
+          styles.contentWrap,
+          Platform.OS === "ios" ? { paddingBottom: keyboardHeight } : null,
+        ]}
         pointerEvents="box-none"
       >
         <ScrollView
@@ -4001,7 +4006,7 @@ const SignUpScreen = () => {
                   end={{ x: 1, y: 1 }}
                   style={styles.cta}
                 >
-                  <Text style={styles.ctaText}>Get OTP</Text>
+                  <Text style={styles.ctaText}>Continue</Text>
                   <Icon
                     name="arrow-forward"
                     type="material"
