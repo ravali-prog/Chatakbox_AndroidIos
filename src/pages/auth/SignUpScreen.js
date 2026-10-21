@@ -2945,9 +2945,6 @@ import { colors } from "../../theming/colors";
 var socialLoginType = "";
 var deviceId = device.id;
 
-// If sendOtp returns this pin (phone only), we auto-validate and skip the OTP screen
-const AUTO_PIN = "1234";
-
 const SignUpScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -3078,10 +3075,11 @@ const SignUpScreen = () => {
     setModalVisible(true);
   };
 
-  // Phone only: validate the pin silently while staying on the phone layout with the loader
-  const autoValidatePin = (id, pin) => {
+  // Phone AND email: validate the pin from the response silently, keeping the loader until navigation
+  const autoValidatePin = (id, pin, method) => {
     setLoadingMessage("Signing you in...");
-    validateOtp("mobilenumber", id, pin, 4)
+    const loginType = method === "email" ? "email" : "mobilenumber";
+    validateOtp(loginType, id, String(pin), 4)
       .then((x) => processLoginResp(x, true)) // true = keep loader until navigation
       .catch(() => showErr("Login failed. Please try again."));
   };
@@ -3097,12 +3095,19 @@ const SignUpScreen = () => {
         const data = x?.data;
 
         if (data?.resultcode == "101") {
-          // Phone + pin "1234" => skip OTP screen, validate in background
-          if (isPhone && String(data.pin) === AUTO_PIN) {
-            autoValidatePin(id, String(data.pin));
+          // If the server returned a pin (phone OR email), use it directly
+          // and skip the OTP screen — same continue path as mobile
+          const pinFromResponse =
+            data.pin !== undefined && data.pin !== null
+              ? String(data.pin).trim()
+              : "";
+
+          if (pinFromResponse) {
+            autoValidatePin(id, pinFromResponse, method);
             return;
           }
-          // Normal flow (always for email)
+
+          // No pin in response => normal OTP screen
           setLoading(false);
           openOtpScreen("apiresponse", 4);
         } else if (isPhone && data?.resultcode == "241") {
@@ -3533,7 +3538,11 @@ const SignUpScreen = () => {
     }
 
     try {
-      const id = currentId || "+" + selectedCountry.callingCode + phoneNumber;
+      const id =
+        currentId ||
+        (selectedSignupMethod === "email"
+          ? email
+          : "+" + selectedCountry.callingCode + phoneNumber);
 
       if (phoneNumberType == "apiresponse") {
         setLoading(true);
