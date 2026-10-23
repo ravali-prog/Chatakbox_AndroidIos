@@ -805,7 +805,7 @@ const isFullscreenTrailer =
     }
     const interval = setInterval(() => {
       customerSessionAction();
-    }, 5000);
+    }, 30000); // match web HEARTBEAT_MS (was 5000)
 
     return () => clearInterval(interval);
   }, []);
