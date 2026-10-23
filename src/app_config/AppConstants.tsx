@@ -29,7 +29,7 @@ export var global_content_group: string[] = [];
 export { images, icons, COLORS, FONT, SIZES, SHADOWS };
 
 // export const CONFIG_URL = "https://api.chatakbox.com/web/v3/proxy.php";
-export const CONFIG_URL = "https://api2.chatakbox.com/web/v3/proxy.php";
+export const CONFIG_URL = "https://api.chanajor.com/web/v3/proxy.php";
 export var API_URL = "";
 export var LOCALE_URL = "";
 export var USER_UUID = "";
