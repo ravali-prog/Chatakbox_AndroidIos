@@ -3002,7 +3002,9 @@ const SignUpScreen = () => {
 
   const insets = useSafeAreaInsets();
 
-  // Keyboard handling: only the content moves up, the background image stays fixed
+  // Keyboard handling: only the content moves up, the background image stays fixed.
+  // MainActivity uses adjustNothing so the OS won't resize — we pad in JS only.
+  // (adjustResize + JS pad caused a huge blank gap on some devices.)
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const scrollRef = useRef(null);
 
@@ -3013,8 +3015,11 @@ const SignUpScreen = () => {
       Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide";
 
     const showSub = Keyboard.addListener(showEvt, (e) => {
-      setKeyboardHeight(e.endCoordinates?.height || 0);
-      setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 50);
+      const kh = e?.endCoordinates?.height || 0;
+      // SafeAreaView already insets the bottom nav; don't double-count it
+      const pad = Math.max(0, kh - (Platform.OS === "android" ? insets.bottom : 0));
+      setKeyboardHeight(pad);
+      setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 60);
     });
     const hideSub = Keyboard.addListener(hideEvt, () => setKeyboardHeight(0));
 
@@ -3022,9 +3027,11 @@ const SignUpScreen = () => {
       showSub.remove();
       hideSub.remove();
     };
-  }, []);
+  }, [insets.bottom]);
 
-  const contentBottomPadding = keyboardHeight > 0 ? 24 : insets.bottom + 24;
+  // App.tsx SafeAreaView already applies bottom inset — keep a small extra buffer
+  // so Terms links aren't right against the soft nav keys (avoids mis-taps).
+  const contentBottomPadding = keyboardHeight > 0 ? 12 : 16;
 
   const getOtpLength = () => {
     // Firebase phone auth uses 6 digits, API OTP (phone or email) uses 4
@@ -3857,12 +3864,11 @@ const SignUpScreen = () => {
       />
 
       {/* ---------- Content ---------- */}
-      {/* Android already resizes the window for the keyboard (adjustResize).
-          Adding keyboardHeight again lifts the form and leaves a blank gap. */}
+      {/* iOS: always pad. Android: pad only when keyboard overlaps (see listener). */}
       <View
         style={[
           styles.contentWrap,
-          Platform.OS === "ios" ? { paddingBottom: keyboardHeight } : null,
+          keyboardHeight > 0 ? { paddingBottom: keyboardHeight } : null,
         ]}
         pointerEvents="box-none"
       >
@@ -4020,7 +4026,7 @@ const SignUpScreen = () => {
                     name="arrow-forward"
                     type="material"
                     size={20}
-                    color="#fff"
+                    color="rgba(255,255,255,0.92)"
                     containerStyle={styles.ctaIcon}
                   />
                 </LinearGradient>
@@ -4224,14 +4230,14 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   content: {
-     paddingHorizontal: 24,
-  paddingTop: 20,
-  backgroundColor: "rgba(0, 0, 0, 0.7)",   // dark transparent panel
-  borderTopLeftRadius: 28,
-  borderTopRightRadius: 28,
-  borderWidth: 1,
-  borderBottomWidth: 0,
-  borderColor: "rgba(255,255,255,0.08)", 
+    paddingHorizontal: 24,
+    paddingTop: 20,
+    backgroundColor: "#1A1A1A",
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
+    borderWidth: 1,
+    borderBottomWidth: 0,
+    borderColor: "rgba(255,255,255,0.08)",
   },
 
   eyebrow: {
@@ -4298,9 +4304,9 @@ const styles = StyleSheet.create({
   field: {
     flexDirection: "row",
     alignItems: "center",
-    height: 56,
+    height: 46,
     backgroundColor: "rgba(255,255,255,0.08)",
-    borderRadius: 12,
+    borderRadius: 10,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.18)",
     overflow: "hidden",
@@ -4309,13 +4315,13 @@ const styles = StyleSheet.create({
     borderColor: "#FF453A",
   },
   fieldIcon: {
-    marginLeft: 16,
+    marginLeft: 14,
   },
   fieldInput: {
     flex: 1,
     height: "100%",
-    paddingHorizontal: 14,
-    fontSize: 16,
+    paddingHorizontal: 12,
+    fontSize: 15,
     color: "#FFFFFF",
   },
   countryPickerContainer: {
@@ -4339,21 +4345,21 @@ const styles = StyleSheet.create({
 
   // ---------- CTA ----------
   ctaTouch: {
-    marginTop: 20,
-    borderRadius: 12,
+    marginTop: 16,
+    borderRadius: 10,
     overflow: "hidden",
   },
   cta: {
-    height: 56,
-    borderRadius: 12,
+    height: 46,
+    borderRadius: 10,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
   },
   ctaText: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: "rgba(255,255,255,0.92)",
     letterSpacing: 0.5,
   },
   ctaIcon: {
@@ -4403,8 +4409,8 @@ loadingText: {
   },
   socialButton: {
     flex: 1,
-    height: 52,
-    borderRadius: 12,
+    height: 46,
+    borderRadius: 10,
     backgroundColor: "rgba(255,255,255,0.1)",
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.22)",
@@ -4416,17 +4422,17 @@ loadingText: {
     marginLeft: 12,
   },
   socialIcon: {
-    width: 20,
-    height: 20,
-    marginRight: 10,
+    width: 18,
+    height: 18,
+    marginRight: 8,
   },
   socialIconApple: {
-    marginRight: 10,
+    marginRight: 8,
   },
   socialText: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: "700",
-    color: "#FFFFFF",
+    color: "rgba(255,255,255,0.5)",
   },
 
   termsLink: {
@@ -4436,7 +4442,8 @@ loadingText: {
   },
 
   termsText: {
-    marginTop: 20,
+    marginTop: 10,
+    marginBottom: 0,
     fontSize: 12,
     lineHeight: 18,
     textAlign: "center",
