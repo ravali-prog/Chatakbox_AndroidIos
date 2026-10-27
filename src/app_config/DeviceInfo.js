@@ -5,7 +5,7 @@
 
 
 // import all the components we are going to use
-import { ScrollView, StyleSheet, Text } from 'react-native';
+import { Platform, ScrollView, StyleSheet, Text } from 'react-native';
 
 import DeviceInfo from 'react-native-device-info';
 
@@ -28,21 +28,33 @@ export var device = {};
   "apptype": "Android"
 } */
 
+function safeUserAgent() {
+  try {
+    return DeviceInfo.getUserAgentSync() || '';
+  } catch (e) {
+    return Platform.OS === 'ios'
+      ? 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148'
+      : '';
+  }
+}
+
 export function initDeviceInfo() {
+  const isIOS = Platform.OS === 'ios';
 
   device = {
     "appvercode": DeviceInfo.getBuildNumber(),
     "appver": DeviceInfo.getVersion(),
-    "os": DeviceInfo.getSystemName(), //"android",
-    "ua": DeviceInfo.getUserAgentSync(), //"Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0",
+    "os": DeviceInfo.getSystemName(), // "Android" / "iOS"
+    "ua": safeUserAgent(),
     // "ip": "127.0.0.1",
     "cc": CountryCode,
     "make": DeviceInfo.getManufacturerSync() + "",
     "model": DeviceInfo.getModel() + "",
     "type": DeviceInfo.getDeviceType(), //"mobile",
-    "apptype": "Android",
+    // Was hardcoded Android — backend paywall 500'd on iOS with mismatched device meta.
+    "apptype": isIOS ? "iOS" : "Android",
     "id": DeviceInfo.getUniqueIdSync(),
-    "installMedium": "GooglePlayStore"
+    "installMedium": isIOS ? "AppStore" : "GooglePlayStore"
 
   }
 

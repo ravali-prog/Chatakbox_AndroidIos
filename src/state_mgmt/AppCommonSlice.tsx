@@ -22,8 +22,20 @@ export const getPaymentConfig = async (url: string, uuid: string, contentgroup: 
     const res = await axios.post(url, payload);
     // return res.data.data.paywall;
     return res.data?.data?.paywall || res.data?.paywall;
-  } catch (err) {
-    return { error: err.message };
+  } catch (err: any) {
+    // Include server body when available — helps diagnose iOS vs Android paywall 500s.
+    const serverMsg =
+      err?.response?.data &&
+      (typeof err.response.data === 'string'
+        ? err.response.data
+        : JSON.stringify(err.response.data));
+    return {
+      error: err?.message || 'paywall request failed',
+      status: err?.response?.status,
+      server: serverMsg || undefined,
+      deviceOs: device?.os,
+      apptype: device?.apptype,
+    };
   }
 };
 

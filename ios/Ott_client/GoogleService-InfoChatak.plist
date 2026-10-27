@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>705960357183-obcoa3tr5kbqtoh20hhp72lijs04shpd.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.705960357183-obcoa3tr5kbqtoh20hhp72lijs04shpd</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>705960357183-ajur5ilm6u96jmgmntuqpafav1lbmg1o.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCHjZV_VpwmdzxzCb0abGq9dVzw-Uv1BpU</string>
+	<key>GCM_SENDER_ID</key>
+	<string>705960357183</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.chatakbox.iapp</string>
+	<key>PROJECT_ID</key>
+	<string>chatakbox-69779</string>
+	<key>STORAGE_BUCKET</key>
+	<string>chatakbox-69779.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:705960357183:ios:ae33c614419e06163c378a</string>
+</dict>
+</plist>

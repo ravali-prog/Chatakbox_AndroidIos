@@ -3,23 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>705960357183-obcoa3tr5kbqtoh20hhp72lijs04shpd.apps.googleusercontent.com</string>
+	<string>1002364051184-8gfll0v5s13ehq8n1llbm4vpiakq6045.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.705960357183-obcoa3tr5kbqtoh20hhp72lijs04shpd</string>
+	<string>com.googleusercontent.apps.1002364051184-8gfll0v5s13ehq8n1llbm4vpiakq6045</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>705960357183-ajur5ilm6u96jmgmntuqpafav1lbmg1o.apps.googleusercontent.com</string>
+	<string>1002364051184-940fgqf2abvc2vj830csmenn1a4l5in4.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyCHjZV_VpwmdzxzCb0abGq9dVzw-Uv1BpU</string>
+	<string>AIzaSyATMosRqxRa1JcLz1DBg8JbCf0f07IaM7c</string>
 	<key>GCM_SENDER_ID</key>
-	<string>705960357183</string>
+	<string>1002364051184</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.chatakbox.iapp</string>
+	<string>com.chanajor.ott</string>
 	<key>PROJECT_ID</key>
-	<string>chatakbox-69779</string>
+	<string>chana-jor</string>
 	<key>STORAGE_BUCKET</key>
-	<string>chatakbox-69779.firebasestorage.app</string>
+	<string>chana-jor.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:705960357183:ios:ae33c614419e06163c378a</string>
+	<string>1:1002364051184:ios:b4f1658a44ca407801ac35</string>
 </dict>
 </plist>

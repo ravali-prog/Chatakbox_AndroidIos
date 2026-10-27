@@ -303,23 +303,37 @@ const isFullscreenTrailer =
         }
         if (API_MODE === "B") {
           try {
-            const timestamp = new Date().toISOString();
-            const payloadJson = JSON.stringify(request.data);
+            const reqUrl = String(request.url || "");
+            // gentoken must stay plain (no encrypted body) — needed for iOS video play.
+            // Everything else stays Mode B encrypted.
+            const isGentoken =
+              reqUrl.includes("/serve/gentoken") ||
+              reqUrl.includes("gentoken");
 
-            if (__DEV__) {
-              console.log(
-                "=== REQUEST undecc  ===>",payloadJson
-              )}
+            if (isGentoken) {
+              if (request.data !== undefined) {
+                delete request.data;
+              }
+            } else {
+              const timestamp = new Date().toISOString();
+              const payloadJson = JSON.stringify(request.data);
 
+              if (__DEV__) {
+                console.log("=== REQUEST undecc  ===>", payloadJson);
+              }
 
-            const encrypted = VEncrypt.encrypt(VEncrypt.apiSecret, payloadJson);
-            request.data = { data: encrypted };
-            request.headers["X-API-Key"] = API_KEY;
-            request.headers["X-API-Timestamp"] = timestamp;
-            request.headers["X-API-Signature"] = VEncrypt.signRequest(
-              JSON.stringify(request.data),
-              timestamp,
-            );
+              const encrypted = VEncrypt.encrypt(
+                VEncrypt.apiSecret,
+                payloadJson,
+              );
+              request.data = { data: encrypted };
+              request.headers["X-API-Key"] = API_KEY;
+              request.headers["X-API-Timestamp"] = timestamp;
+              request.headers["X-API-Signature"] = VEncrypt.signRequest(
+                JSON.stringify(request.data),
+                timestamp,
+              );
+            }
           } catch (error) {}
         }
         if (__DEV__) {
