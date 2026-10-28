@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   playButton: {
-    backgroundColor: colors.action_primary || '#ff0000',
+    backgroundColor: '#C62828',
     paddingVertical: 12,
     paddingHorizontal: 28,
     minWidth: 200,

@@ -39,6 +39,10 @@ import {
   LogoutDialog,
   LogoutDialogAll,
 } from '../../data_models/DialogData';
+import {
+  FLOATING_TAB_BAR_CLEARANCE,
+  USE_WEB_STYLE_TAB_BAR,
+} from '../../ui_components/navigation/FloatingPillTabBar';
 
 const { width } = Dimensions.get('window');
 
@@ -403,6 +407,11 @@ const Profile = () => {
 
       <ScrollView
         style={styles.scrollViewContainer}
+        contentContainerStyle={
+          USE_WEB_STYLE_TAB_BAR
+            ? { paddingBottom: FLOATING_TAB_BAR_CLEARANCE + 24 }
+            : undefined
+        }
         showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
           <View style={styles.headerCard}>

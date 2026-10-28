@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, TextInput, FlatList, TouchableOpacity, Image, ToastAndroid } from 'react-native';
+import { Text, View, StyleSheet, TextInput, FlatList, TouchableOpacity, Image, ToastAndroid, Platform } from 'react-native';
 import { ContentData } from '../../data_models/ContentDataTypes';
 import { getHomeContent, searchContent } from '../../state_mgmt/AppCommonSlice';
 import { useNavigation } from '@react-navigation/native';
 import { FlashList } from '@shopify/flash-list';
+import { Icon } from 'react-native-paper';
 import { LogError, USER_UUID, handleNavigation, selectedUserProfile } from '../../app_config/AppConstants';
 import LoadingModal from '../../data_models/LoadingStateTypes';
 import CustomModal from '../../data_models/CustomDialogTypes';
 import { APP_EVENTS_ } from '../../app_config/AnalyticsConfig';
+import { USE_WEB_STYLE_TAB_BAR } from '../navigation/FloatingPillTabBar';
 
 const SearchScreen = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -124,26 +126,61 @@ const SearchScreen = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity activeOpacity={0.9} onPress={handleBackPress} style={{
-          width: 50,
-          height: 50, justifyContent: 'center',
-          alignItems: 'center',
-          
-        }} >
-          <Image
-            source={require('../../../app_assets/symbols/sym_06.png')}
-            style={styles.backIcon}
-          />
-        </TouchableOpacity>
+      <View style={[styles.header, USE_WEB_STYLE_TAB_BAR && styles.headerWeb]}>
+        {!USE_WEB_STYLE_TAB_BAR && (
+          <TouchableOpacity activeOpacity={0.9} onPress={handleBackPress} style={{
+            width: 50,
+            height: 50, justifyContent: 'center',
+            alignItems: 'center',
+            
+          }} >
+            <Image
+              source={require('../../../app_assets/symbols/sym_06.png')}
+              style={styles.backIcon}
+            />
+          </TouchableOpacity>
+        )}
 
-        <TextInput
-          placeholderTextColor="#848a94"
-          style={styles.searchInput}
-          placeholder="Type something to search..."
-          value={searchQuery}
-          onChangeText={(text) => setSearchQuery(text)}
-        />
+        {USE_WEB_STYLE_TAB_BAR ? (
+          <View style={styles.searchPill}>
+            <Icon
+              source="magnify"
+              size={22}
+              color="#C62828"
+            />
+            <TextInput
+              placeholderTextColor="rgba(255,255,255,0.38)"
+              style={styles.searchInputPill}
+              placeholder="Search movies, shows and more"
+              value={searchQuery}
+              onChangeText={(text) => setSearchQuery(text)}
+              selectionColor="#C62828"
+              cursorColor="#C62828"
+              returnKeyType="search"
+            />
+            {searchQuery.length > 0 && (
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => {
+                  setSearchQuery("");
+                  setCombinedData([]);
+                }}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                style={styles.clearBtn}
+              >
+                <Icon source="close-circle" size={20} color="rgba(255,255,255,0.45)" />
+              </TouchableOpacity>
+            )}
+          </View>
+        ) : (
+          <TextInput
+            placeholderTextColor="#848a94"
+            style={styles.searchInput}
+            placeholder="Type something to search..."
+            value={searchQuery}
+            onChangeText={(text) => setSearchQuery(text)}
+          />
+        )}
 
       </View>
 
@@ -208,6 +245,40 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderBottomWidth: 2,
     borderBottomColor: 'rgba(255,255,255,0.1)',
+    width: '100%',
+  },
+  headerWeb: {
+    height: 'auto',
+    paddingHorizontal: 16,
+    paddingTop: 10,
+    paddingBottom: 14,
+    marginBottom: 4,
+    borderBottomWidth: 0,
+  },
+  searchPill: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: 52,
+    paddingHorizontal: 16,
+    borderRadius: 999,
+    backgroundColor: 'rgba(255,255,255,0.06)',
+    borderWidth: 1,
+    borderColor: 'rgba(198, 40, 40, 0.4)',
+    gap: 10,
+  },
+  searchInputPill: {
+    flex: 1,
+    height: '100%',
+    color: '#FFFFFF',
+    fontSize: 15,
+    fontWeight: '500',
+    paddingVertical: 0,
+  },
+  clearBtn: {
+    marginLeft: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   backIcon: {
     width: 20,

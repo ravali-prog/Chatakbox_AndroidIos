@@ -7,6 +7,10 @@ import { useNavigation } from '@react-navigation/native';
 import { getHomeContent, getTabs} from '../../state_mgmt/AppCommonSlice';
 import { ContentData, ContentResponse } from '../../data_models/ContentDataTypes';
 import { FlatList, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  FLOATING_TAB_BAR_CLEARANCE,
+  USE_WEB_STYLE_TAB_BAR,
+} from '../navigation/FloatingPillTabBar';
 import ContentScroller from '../widgets/ContentScroller';
 import { useDispatch, useSelector } from 'react-redux';
 //import { store } from '../../state_mgmt/ReduxStore';
@@ -392,6 +396,18 @@ const getlistrender =  ({ item ,index}: any) => {
          <LayoutVariantA  
          listIndex = {index}
           onClick = {handleContainerPress}
+          dataitem={{
+            title: item.title,
+            genre: item.genre,
+            lang: item.lang,
+            certificate: item.certificate,
+            rating: item.rating,
+            year: item.year,
+            release_date: item.release_date,
+            desc: item.desc,
+            ldesc: item.ldesc,
+            type: item.type,
+          }}
           image = {item.thumbnail}  imgratio = {{ imgper : item.imgper,imghratio : item.imghratio , imgwratio:item.imgwratio }}   />
     
           </View>
@@ -463,6 +479,11 @@ const onPress = (route: RouteProps) => {
           
         }
         initialNumToRender={5}
+        contentContainerStyle={
+          USE_WEB_STYLE_TAB_BAR
+            ? { paddingBottom: FLOATING_TAB_BAR_CLEARANCE }
+            : undefined
+        }
       />
       
       </SafeAreaView>

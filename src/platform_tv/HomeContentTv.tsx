@@ -87,6 +87,18 @@ function HomeContentTv(/*{navigation}: {navigation: any}*/) {
          <LayoutVariantA  
          listIndex = {index}
           onClick = {handleContainerPress}
+          dataitem={{
+            title: item.title,
+            genre: item.genre,
+            lang: item.lang,
+            certificate: item.certificate,
+            rating: item.rating,
+            year: item.year,
+            release_date: item.release_date,
+            desc: item.desc,
+            ldesc: item.ldesc,
+            type: item.type,
+          }}
           image = {item.thumbnail}  imgratio = {{ imgper : item.imgper,imghratio : item.imghratio , imgwratio:item.imgwratio }}   />
     
           </View>

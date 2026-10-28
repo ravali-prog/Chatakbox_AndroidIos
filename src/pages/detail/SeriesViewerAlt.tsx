@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import Orientation from 'react-native-orientation-locker';
 import { Clip, List } from '../../data_models/ContentDataTypes';
 import ModalComponent from '../../data_models/ModalComponentData';
-import { APP_NAME, USER_UUID, cacheData, handleTrailerVideoPlay, handleVideoPlay, selectedUserProfile, useractivityDetails, handleVideoPlayAsync, configData, setCurrentPlayingVideo , LogData, LogError, LOCAL_EVENTS, openResolvedVideoPlayer} from '../../app_config/AppConstants';
+import { APP_NAME, USER_UUID, cacheData, handleTrailerVideoPlay, handleVideoPlay, selectedUserProfile, useractivityDetails, handleVideoPlayAsync, configData, setCurrentPlayingVideo , LogData, LogError, LOCAL_EVENTS, openResolvedVideoPlayer, global_content_group, isUserSubscribed} from '../../app_config/AppConstants';
 import {  getSeriesDetails, doUserAction, createShareLink } from '../../state_mgmt/AppCommonSlice';
 import Share from 'react-native-share';
 import SeasonData from '../../data_models/SeasonData';
@@ -18,8 +18,7 @@ import { APP_EVENTS_ } from '../../app_config/AnalyticsConfig';
 import {EventRegister} from 'react-native-event-listeners';
 import { Animated } from 'react-native'; 
 import Loader from '../../ui_components/widgets/LoadingSpinner';
-import { colors } from '../../theming/colors';
-import LinearGradient from "react-native-linear-gradient";
+import DetailHeroActions from '../../ui_components/widgets/DetailHeroActions';
 
 
 
@@ -35,6 +34,8 @@ const SeriesViewerAlt = ({ route }: any) => {
   const [videoType, setVideoType] = useState("");
   const [thumbnail, setthumbnail] = useState("");
   const [videoID, setVideoID] = useState("");
+  const [contentLicense, setContentLicense] = useState<any>(null);
+  const [contentYear, setContentYear] = useState("");
   const [seasonTitle, setseasonTitle] = useState("");
   const [cast, setCast] = useState<string[]>([]);
   const [producers, setProducers] = useState<string[]>([]);
@@ -536,6 +537,8 @@ const SeriesViewerAlt = ({ route }: any) => {
     setepisodesList(info.clips || [])
     setVideoType(info.type || '')
     setVideoID(info.seriesId || '');
+    setContentLicense(info.license);
+    setContentYear(info.year ? String(info.year) : "");
 
     processSesaonsData(info.clips || [])
 
@@ -947,34 +950,25 @@ const SeriesViewerAlt = ({ route }: any) => {
          {getposter() } 
          
           <View style={styles.detailsContainer}>
+            {contentLicense == 1 &&
+              !isUserSubscribed(global_content_group) && (
+                <View style={styles.eyebrowRow}>
+                  <View style={styles.freeBadge}>
+                    <Text style={styles.freeBadgeText}>FREE</Text>
+                  </View>
+                </View>
+              )}
             <Text style={styles.title}>{title}</Text>
-            <Text style={styles.videoGenre}>{videoGenre}</Text>
-            {/* <TouchableOpacity
-            activeOpacity={0.9}
-              style={[styles.button, { backgroundColor: 'red' }]}
-              onPress={() =>{
-                const seriesdetails = {"seriestitle" : title}
-                // handleVideoPlay(navigation ,currentPLayingVideo ,seriesdetails )
-                handlePlayPress()
-              } }>
-              <Image
-                source={require('../../../app_assets/res_15.png')}
-                style={{ width: 15, height: 20, tintColor: 'white', marginEnd: 10 }}
-              />
-             {currentPLayingVideo &&  <Text style={styles.buttonText}> {watchResumeFlag +" S"+ currentPLayingVideo.season + ":" + "E"+currentPLayingVideo.episode }</Text> }
-            </TouchableOpacity> */}
-               <TouchableOpacity
+            {!!videoGenre && (
+              <Text style={styles.videoGenre}>{videoGenre}</Text>
+            )}
+            <TouchableOpacity
               activeOpacity={0.9}
               onPress={() => handlePlayPress()}
             >
-              <LinearGradient
-                colors={colors.gradients.primaryButton}
-                start={{x: 0, y: 0}}
-                end={{x: 1, y: 0}}
-                style={[styles.button, { borderRadius: 8 }]} // or whatever borderRadius your styles.button uses
-              >
+              <View style={styles.watchNowButton}>
                 <Image
-                  source={require("../../../app_assets/res_15.png")}
+                  source={require('../../../app_assets/res_15.png')}
                   style={{
                     width: 15,
                     height: 20,
@@ -983,93 +977,35 @@ const SeriesViewerAlt = ({ route }: any) => {
                   }}
                 />
                 <Text style={styles.buttonText}>
-             {currentPLayingVideo &&  <Text style={styles.buttonText}> {watchResumeFlag +" S"+ currentPLayingVideo.season + ":" + "E"+currentPLayingVideo.episode }</Text> }
+                  {currentPLayingVideo
+                    ? `${watchResumeFlag === "Resume" ? "Resume" : "Watch now"} S${currentPLayingVideo.season}:E${currentPLayingVideo.episode}`
+                    : watchResumeFlag === "Resume"
+                      ? "Resume"
+                      : "Watch now"}
                 </Text>
-              </LinearGradient>
+              </View>
             </TouchableOpacity>
-            {/* {currentPLayingVideo && <Text style={styles.seasonTitle}>  {"S"+ currentPLayingVideo.season + ":" + "E"+currentPLayingVideo.episode  + " - "+ currentPLayingVideo.title}</Text> } */}
-            {/* <Text style={styles.seasonTitle}>HIII</Text> */}
             <Text style={styles.description}>{description}</Text>
             {renderCast()}
             <View style={styles.directorContainer}>
               <Text style={styles.directorHeading}>Director: </Text>
               <Text style={styles.directorText}>{DirectorName}</Text>
             </View>
-  
-            <View style={styles.videoIconsContainer}>
-            <View>
-                <TouchableOpacity activeOpacity={0.9} onPress={() => handleLikeAPI(isLiked ? 'unlike' : 'like')}>
-                {isLiked ? (
-                    <Image
-                      source={require('../../../app_assets/symbols/sym_86.png')}
-                      style={styles.imageIconsStyle}
-                    />
 
-                  ) : (
-
-                    <Image
-                      source={require('../../../app_assets/symbols/sym_85.png')}
-                      style={styles.imageIconsStyle}
-                    />
-                  )}
-                </TouchableOpacity>
-              </View>
-              <View>
-                <TouchableOpacity activeOpacity={0.9} onPress={() => handleLikeAPI(isDisliked ? 'rmdislike' : 'dislike')}>
-                  {isDisliked ? (
-                    <Image
-                      source={require('../../../app_assets/symbols/sym_84.png')}
-                      style={styles.imageIconsStyle}
-                    />
-                  ) : (
-                    <Image
-                      source={require('../../../app_assets/symbols/sym_83.png')}
-                      style={styles.imageIconsStyle}
-                    />
-                  )}
-                </TouchableOpacity>
-              </View>
-              <View>
-                <View>
-                  <TouchableOpacity activeOpacity={0.9} onPress={() => handleWishlistAPI(isWishlist? 'removewishlist' : 'addwishlist')}>
-                    {(isWishlist ) ? (
-                      <Image
-                        source={require('../../../app_assets/symbols/sym_82.png')}
-                        style={[styles.imageIconsStyleShare, { tintColor: 'white' }]}
-  
-                      />
-                    ):(<Image
-                      source={require('../../../app_assets/symbols/sym_81.png')}
-                      style={styles.imageIconsStyleShare}
-                    />)}
-                  </TouchableOpacity>
-  
-          
-                </View>
-  
-  
-              </View>
-  
-              {/* <View>
-                <TouchableOpacity activeOpacity={0.9} onPress={handleShare}>
-                  <Image
-                    source={require('../../../app_assets/symbols/sym_80.png')}
-                    style={styles.imageIconsStyleShare}
-                    resizeMode='contain'
-                  />
-                </TouchableOpacity>
-              </View> */}
-              {/*<View>
-                <TouchableOpacity activeOpacity={0.9} onPress={handleShare}>
-                  <Image
-                    source={require('../../../app_assets/symbols/download-circular-button.png')}
-                    style={styles.imageIconsStyle}
-                    resizeMode='contain'
-                  />
-                </TouchableOpacity>
-                    </View> */}
-  
-            </View>
+            <DetailHeroActions
+              isWishlist={isWishlist}
+              isLiked={isLiked}
+              isDisliked={isDisliked}
+              onWishlist={() =>
+                handleWishlistAPI(
+                  isWishlist ? "removewishlist" : "addwishlist"
+                )
+              }
+              onLike={() => handleLikeAPI(isLiked ? "unlike" : "like")}
+              onDislike={() =>
+                handleLikeAPI(isDisliked ? "rmdislike" : "dislike")
+              }
+            />
             <Text style={{ color: 'white', fontSize: 15, fontWeight: 'bold',marginVertical: 10 }}>Episodes</Text>
             <View>
             <TouchableOpacity activeOpacity={0.9} style={styles.dropDownStyle} onPress={toggleSeasonModal}>
@@ -1215,17 +1151,44 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15
 
   },
+  eyebrowRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginTop: 12,
+  },
+  eyebrowText: {
+    color: 'rgba(255,255,255,0.55)',
+    fontSize: 12,
+    fontWeight: '600',
+    letterSpacing: 0.4,
+    textTransform: 'uppercase',
+  },
+  freeBadge: {
+    backgroundColor: '#C62828',
+    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+  },
+  freeBadgeText: {
+    color: '#FFFFFF',
+    fontSize: 10,
+    fontWeight: '700',
+    letterSpacing: 1.2,
+  },
   title: {
-    fontSize: 25,
+    fontSize: 28,
     color: 'white',
-    fontWeight: '500',
-    marginTop: 20,
-    marginBottom: 8,
+    fontWeight: '800',
+    marginTop: 6,
+    marginBottom: 6,
+    letterSpacing: -0.3,
   },
   videoGenre: {
-    fontSize: 11,
-    color: 'white',
-    marginBottom: 8,
+    fontSize: 13,
+    color: 'rgba(255,255,255,0.65)',
+    marginBottom: 12,
+    fontWeight: '600',
   },
   videoIconsContainer: {
     marginVertical: 12,
@@ -1256,6 +1219,15 @@ const styles = StyleSheet.create({
     marginTop: -2,
     marginHorizontal: 7,
     flexDirection: 'row',
+  },
+  watchNowButton: {
+    height: 46,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 12,
+    backgroundColor: '#C62828',
+    marginBottom: 4,
   },
   seasonTitle: {
     fontSize: 13,
@@ -1293,7 +1265,8 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   buttonText: {
-    fontSize: 14,
+    fontSize: 15,
+    fontWeight: '700',
     color: 'white',
   },
   directorContainer: {

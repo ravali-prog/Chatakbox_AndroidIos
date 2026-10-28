@@ -19,7 +19,10 @@ const DetailLayout = ({ param, seriesDetails, playVideoCallBack }) => {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    setDuration(toHHMMSS(param.dur) + '');
+    const durSec = Number(param?.dur);
+    setDuration(
+      Number.isFinite(durSec) && durSec > 0 ? toHHMMSS(durSec) + '' : ''
+    );
     setDesc(param.desc);
   }, [param]);
 
@@ -75,15 +78,17 @@ const DetailLayout = ({ param, seriesDetails, playVideoCallBack }) => {
             <View style={styles.meta}>
   <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
     <Text style={styles.episodeNum}>Episode {param.episode}</Text>
-    <View style={styles.durationRow}>
-      <Image
-        source={require('../../../app_assets/res_14.png')}
-        style={styles.clockIcon}
-        tintColor="#666"
-        resizeMode="contain"
-      />
-      <Text style={styles.duration}>{duration}</Text>
-    </View>
+    {!!duration && (
+      <View style={styles.durationRow}>
+        <Image
+          source={require('../../../app_assets/res_14.png')}
+          style={styles.clockIcon}
+          tintColor="#666"
+          resizeMode="contain"
+        />
+        <Text style={styles.duration}>{duration}</Text>
+      </View>
+    )}
   </View>
   <Text style={styles.title} numberOfLines={2}>
     {param.title}

@@ -9,6 +9,7 @@ import {
 } from "../../app_config/AppConstants";
 import { colors } from "../../theming/colors";
 import LinearGradient from 'react-native-linear-gradient';
+import { USE_WEB_STYLE_TAB_BAR } from "./FloatingPillTabBar";
 
 
 function HomeHeader() {
@@ -61,7 +62,7 @@ function HomeHeader() {
             }}
             style={{
               position: "absolute",
-              right: 60,
+              right: USE_WEB_STYLE_TAB_BAR ? 12 : 60,
             }}
           >
             <LinearGradient
@@ -88,25 +89,27 @@ function HomeHeader() {
           </TouchableOpacity>
         )}
 
-        <TouchableOpacity
-          style={{
-            marginLeft: "auto",
-            justifyContent: "center",
-            width: 45,
-            height: 45,
-          }}
-          onPress={onSearch}
-        >
-          <Image
-            source={require("../../../app_assets/symbols/sym_64.png")}
+        {!USE_WEB_STYLE_TAB_BAR && (
+          <TouchableOpacity
             style={{
-              alignSelf: "center",
-              width: 25,
-              height: 25,
-              tintColor: "#ffffff",
+              marginLeft: "auto",
+              justifyContent: "center",
+              width: 45,
+              height: 45,
             }}
-          />
-        </TouchableOpacity>
+            onPress={onSearch}
+          >
+            <Image
+              source={require("../../../app_assets/symbols/sym_64.png")}
+              style={{
+                alignSelf: "center",
+                width: 25,
+                height: 25,
+                tintColor: "#ffffff",
+              }}
+            />
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );

@@ -32,7 +32,8 @@ import {
   LOCAL_EVENTS,
   LogError,
   openResolvedVideoPlayer,
-
+  global_content_group,
+  isUserSubscribed,
 } from "../../app_config/AppConstants";
 import {
   createShareLink,
@@ -52,8 +53,7 @@ import LoadingSpinner from "../../ui_components/widgets/LoadingSpinner";
 import { APP_EVENTS_ } from "../../app_config/AnalyticsConfig";
 import { EventRegister } from "react-native-event-listeners";
 import Loader from "../../ui_components/widgets/LoadingSpinner";
-import LinearGradient from "react-native-linear-gradient";
-import { colors } from "../../theming/colors";
+import DetailHeroActions from "../../ui_components/widgets/DetailHeroActions";
 
 
 const PlaylistViewer = ({ route }: any) => {
@@ -874,34 +874,37 @@ const PlaylistViewer = ({ route }: any) => {
         {getposter()}
 
         <View style={styles.detailsContainer}>
+          {currentClip?.license == 1 &&
+            !isUserSubscribed(global_content_group) && (
+              <View style={styles.eyebrowRow}>
+                <View style={styles.freeBadge}>
+                  <Text style={styles.freeBadgeText}>FREE</Text>
+                </View>
+              </View>
+            )}
           <Text style={styles.title}>{title}</Text>
-          <Text style={styles.videoGenre}>{videoGenre}</Text>
-            <TouchableOpacity
-              activeOpacity={0.9}
-              onPress={() => handlePlayPress()}
-              // Keep other props if any
-            >
-              <LinearGradient
-                colors={colors.gradients.primaryButton}
-                start={{x: 0, y: 0}}
-                end={{x: 1, y: 0}}
-                style={[styles.button, { borderRadius: 8 }]} // or whatever borderRadius your styles.button uses
-              >
-                <Image
-                  source={require("../../../app_assets/res_15.png")}
-                  style={{
-                    width: 15,
-                    height: 20,
-                    tintColor: "white",
-                    marginEnd: 10,
-                  }}
-                />
-                <Text style={styles.buttonText}>
-                  {watchResumeFlag}
-                  {/* For SeriesViewerAlt, keep the season/episode text concatenation as is */}
-                </Text>
-              </LinearGradient>
-            </TouchableOpacity>
+          {!!videoGenre && (
+            <Text style={styles.videoGenre}>{videoGenre}</Text>
+          )}
+          <TouchableOpacity
+            activeOpacity={0.9}
+            onPress={() => handlePlayPress()}
+          >
+            <View style={styles.watchNowButton}>
+              <Image
+                source={require("../../../app_assets/res_15.png")}
+                style={{
+                  width: 15,
+                  height: 20,
+                  tintColor: "white",
+                  marginEnd: 10,
+                }}
+              />
+              <Text style={styles.buttonText}>
+                {watchResumeFlag === "Resume" ? "Resume" : "Watch now"}
+              </Text>
+            </View>
+          </TouchableOpacity>
           <Text style={styles.description}>{description}</Text>
           {renderCast()}
           <View style={styles.directorContainer}>
@@ -909,80 +912,20 @@ const PlaylistViewer = ({ route }: any) => {
             <Text style={styles.directorText}>{DirectorName}</Text>
           </View>
 
-          <View style={styles.videoIconsContainer}>
-            <View>
-              <TouchableOpacity
-              activeOpacity={0.9}
-                onPress={() => handleLikeAPI(isLiked ? "unlike" : "like")}
-              >
-                {isLiked ? (
-                  <Image
-                    source={require("../../../app_assets/symbols/sym_86.png")}
-                    style={styles.imageIconsStyle}
-                  />
-                ) : (
-                  <Image
-                    source={require("../../../app_assets/symbols/sym_85.png")}
-                    style={styles.imageIconsStyle}
-                  />
-                )}
-              </TouchableOpacity>
-            </View>
-            <View>
-              <TouchableOpacity
-              activeOpacity={0.9}
-                onPress={() =>
-                  handleLikeAPI(isDisliked ? "rmdislike" : "dislike")
-                }
-              >
-                {isDisliked ? (
-                  <Image
-                    source={require("../../../app_assets/symbols/sym_84.png")}
-                    style={styles.imageIconsStyle}
-                  />
-                ) : (
-                  <Image
-                    source={require("../../../app_assets/symbols/sym_83.png")}
-                    style={styles.imageIconsStyle}
-                  />
-                )}
-              </TouchableOpacity>
-            </View>
-            <View>
-              <View>
-                <TouchableOpacity
-                activeOpacity={0.9}
-                  onPress={() =>
-                    handleWishlistAPI(
-                      isWishlist ? "removewishlist" : "addwishlist"
-                    )
-                  }
-                >
-                  {isWishlist ? (
-                    <Image
-                      source={require("../../../app_assets/symbols/sym_82.png")}
-                      style={[styles.imageIconsStyleShare, { tintColor: "white" }]}
-                    />
-                  ) : (
-                    <Image
-                      source={require("../../../app_assets/symbols/sym_81.png")}
-                      style={styles.imageIconsStyleShare}
-                    />
-                  )}
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            {/* <View>
-              <TouchableOpacity activeOpacity={0.9} onPress={handleShare}>
-                <Image
-                  source={require("../../../app_assets/symbols/sym_80.png")}
-                  style={styles.imageIconsStyleShare}
-                  resizeMode="contain"
-                />
-              </TouchableOpacity>
-            </View> */}
-          </View>
+          <DetailHeroActions
+            isWishlist={isWishlist}
+            isLiked={isLiked}
+            isDisliked={isDisliked}
+            onWishlist={() =>
+              handleWishlistAPI(
+                isWishlist ? "removewishlist" : "addwishlist"
+              )
+            }
+            onLike={() => handleLikeAPI(isLiked ? "unlike" : "like")}
+            onDislike={() =>
+              handleLikeAPI(isDisliked ? "rmdislike" : "dislike")
+            }
+          />
           <Text style={{ color: "white", fontSize: 15, fontWeight: "bold", marginBottom: 5 }}>
             {similarVideoTitle}
           </Text>
@@ -1042,17 +985,44 @@ const styles = StyleSheet.create({
   detailsContainer: {
     paddingHorizontal: 15,
   },
+  eyebrowRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    marginTop: 12,
+  },
+  eyebrowText: {
+    color: "rgba(255,255,255,0.55)",
+    fontSize: 12,
+    fontWeight: "600",
+    letterSpacing: 0.4,
+    textTransform: "uppercase",
+  },
+  freeBadge: {
+    backgroundColor: "#C62828",
+    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+  },
+  freeBadgeText: {
+    color: "#FFFFFF",
+    fontSize: 10,
+    fontWeight: "700",
+    letterSpacing: 1.2,
+  },
   title: {
-    fontSize: 25,
+    fontSize: 28,
     color: "white",
-    fontWeight: "500",
-    marginTop: 10,
-    marginBottom: 8,
+    fontWeight: "800",
+    marginTop: 6,
+    marginBottom: 6,
+    letterSpacing: -0.3,
   },
   videoGenre: {
-    fontSize: 11,
-    color: "white",
-    marginBottom: 8,
+    fontSize: 13,
+    color: "rgba(255,255,255,0.65)",
+    marginBottom: 12,
+    fontWeight: "600",
   },
   videoIconsContainer: {
     marginVertical: 12,
@@ -1092,17 +1062,13 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   description: {
-    // fontSize: 12,
-    // fontWeight:'100',
-    // color: 'white',
-    // fontFamily:'Times New Roman',
-    // fontSize: 13,
     letterSpacing: 0.5,
-    color: "#fff",
+    color: "rgba(255,255,255,0.75)",
     marginVertical: 11,
     fontWeight: "300",
     fontFamily: "Rokkitt-Medium",
-
+    fontSize: 14,
+    lineHeight: 20,
   },
   button: {
     height: 45,
@@ -1111,11 +1077,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 8
   },
+  watchNowButton: {
+    height: 46,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 12,
+    backgroundColor: "#C62828",
+    marginBottom: 4,
+  },
   playIcon: {
     marginRight: 8,
   },
   buttonText: {
-    fontSize: 18,
+    fontSize: 15,
+    fontWeight: "700",
     color: "white",
   },
   directorContainer: {

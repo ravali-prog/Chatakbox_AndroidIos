@@ -10,6 +10,10 @@ import ReelsSection from '../../ui_components/sections/ReelsSection';
 import HomeHeader from '../../ui_components/navigation/AppHeader';
 import HomeItem from '../../ui_components/content/HomeItemCard';
 import Profile from '../../pages/user/UserProfile';
+import SearchScreen from '../../ui_components/content/SearchInterface';
+import FloatingPillTabBar, {
+  USE_WEB_STYLE_TAB_BAR,
+} from '../../ui_components/navigation/FloatingPillTabBar';
 import WebViewExample from '../../examples/WebViewExample';
 import { EventRegister } from 'react-native-event-listeners';
 import { accountUpdate } from "../../state_mgmt/AppCommonSlice";
@@ -220,30 +224,33 @@ const handleSubmit = async () => {
     <HomeHeader />
   </View>
     <Tab.Navigator
+    tabBar={USE_WEB_STYLE_TAB_BAR ? (props) => <FloatingPillTabBar {...props} /> : undefined}
     screenOptions={{
       headerShown: false,
-      tabBarStyle: {
-        paddingHorizontal: 5,
-
-        paddingTop: 0,
-
-        backgroundColor: 'rgb(0, 0, 0)',
-        borderTopWidth: 0,
-        marginBottom: -insets.bottom,
-        
-      },
-
+      tabBarStyle: USE_WEB_STYLE_TAB_BAR
+        ? {
+            position: 'absolute',
+            backgroundColor: 'transparent',
+            borderTopWidth: 0,
+            elevation: 0,
+            height: 58 + Math.max(insets.bottom * 0.15, 2),
+          }
+        : {
+            paddingHorizontal: 5,
+            paddingTop: 0,
+            backgroundColor: 'rgb(0, 0, 0)',
+            borderTopWidth: 0,
+            marginBottom: -insets.bottom,
+          },
       tabBarActiveTintColor: '#ff0000',
-      tabBarInactiveTintColor: 'white', 
-      
+      tabBarInactiveTintColor: 'white',
     }}>
       <Tab.Screen
         name="Home"
         component={HomeItem}
         options={{
-          tabBarLabel: () => {
-            return null;
-          },
+          title: 'Home',
+          tabBarLabel: USE_WEB_STYLE_TAB_BAR ? 'Home' : () => null,
           tabBarIcon: ({color, size}) => {
             return <Icon source="home" size={size} color={color} />;
           },
@@ -254,6 +261,19 @@ const handleSubmit = async () => {
           ),
         }}
       />
+      {USE_WEB_STYLE_TAB_BAR && (
+        <Tab.Screen
+          name="Search"
+          component={SearchScreen}
+          options={{
+            title: 'Search',
+            tabBarLabel: 'Search',
+            tabBarIcon: ({color, size}) => {
+              return <Icon source="magnify" size={size} color={color} />;
+            },
+          }}
+        />
+      )}
       {/* <Tab.Screen
         name="Reels"
         component={ReelsSection}
@@ -275,9 +295,8 @@ const handleSubmit = async () => {
         name="Profile"
         component={Profile}
         options={{
-          tabBarLabel: () => {
-            return null;
-          },
+          title: 'Profile',
+          tabBarLabel: USE_WEB_STYLE_TAB_BAR ? 'Profile' : () => null,
           tabBarIcon: ({color, size}) => {
             return <Icon source="account" size={size} color={color} />;
           },
