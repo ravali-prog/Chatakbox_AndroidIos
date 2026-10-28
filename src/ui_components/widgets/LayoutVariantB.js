@@ -1,6 +1,8 @@
 import React from "react";
 import { TouchableOpacity, Image, View, StyleSheet, Text, Dimensions } from "react-native";
-import { LogData } from "../../app_config/AppConstants";
+import { Icon } from "react-native-elements";
+import LinearGradient from "react-native-linear-gradient";
+import { colors } from "../../theming/colors";
 
 
 const Layout38 =  (propdata )=> {
@@ -48,16 +50,25 @@ const Layout38 =  (propdata )=> {
             style={styles.image}
             resizeMode="cover"
           />
+          <LinearGradient
+            colors={["transparent", "rgba(0,0,0,0.55)", "rgba(0,0,0,0.92)"]}
+            locations={[0, 0.45, 1]}
+            style={styles.bottomGradient}
+            pointerEvents="none"
+          />
           <View style={styles.overlay}>
             <Text style={styles.overlayText}>
               {desc}
             </Text>
-            <View
-              style={styles.playButton}
-              onPress={() => 
-                LogData('Play button pressed')}
-            >
-              <Text style={styles.playButtonText}>Play</Text>
+            <View style={styles.playButton}>
+              <Icon
+                name="play-arrow"
+                type="material"
+                size={22}
+                color="#FFFFFF"
+                style={styles.playIcon}
+              />
+              <Text style={styles.playButtonText}>Start watching</Text>
             </View>
           </View>
         </TouchableOpacity>
@@ -82,6 +93,13 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  bottomGradient: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: '48%',
+  },
   overlay: {
     position: 'absolute',
     bottom: 0,
@@ -95,17 +113,27 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   playButton: {
-    backgroundColor: '#fff',
-    padding: 15,
-    width: 100,
+    backgroundColor: colors.action_primary || '#ff0000',
+    paddingVertical: 12,
+    paddingHorizontal: 28,
+    minWidth: 200,
+    maxWidth: '78%',
     alignSelf: 'center',
-    borderRadius: 10,
-    marginTop: 10,
+    borderRadius: 999,
+    marginTop: 14,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  playIcon: {
+    marginRight: 2,
   },
   playButtonText: {
-    color: '#000',
+    color: '#FFFFFF',
     textAlign: 'center',
-    fontWeight:'700'
+    fontWeight: '700',
+    fontSize: 15,
+    marginLeft: 4,
   },
 });
 

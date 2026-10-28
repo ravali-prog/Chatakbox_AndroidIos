@@ -546,11 +546,11 @@ return (
                   colors={colors.gradients.primaryButton}
                   start={{x: 0, y: 0}}
                   end={{x: 1, y: 0}}
-                  style={[styles.tabText, { borderRadius: 6 }]}
+                  style={[styles.tabText, { borderRadius: 20 }]}
                 >
                   <Text
                     key={index+item.key}
-                    style={{ color: '#fff', paddingHorizontal: 14, paddingVertical: 8 }}
+                    style={{ color: '#fff', paddingHorizontal: 20, paddingVertical: 8 }}
                     onPress={() => handleTabPress(index)}
                   >
                     {item.name}
@@ -566,7 +566,7 @@ return (
                 >
                   <Text
                     key={index+item.key}
-                    style={{ color: '#fff', paddingHorizontal: 14, paddingVertical: 8 }}
+                    style={{ color: '#fff', paddingHorizontal: 20, paddingVertical: 8 }}
                     onPress={() => handleTabPress(index)}
                   >
                     {item.name}
@@ -632,7 +632,7 @@ const styles = StyleSheet.create ({
     justifyContent: 'center',
     alignItems: 'center',
     
-    borderRadius: 6,
+    borderRadius: 20,
 
   }
 });

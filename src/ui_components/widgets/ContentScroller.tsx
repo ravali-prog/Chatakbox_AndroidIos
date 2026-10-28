@@ -150,13 +150,9 @@ const Scroller = (propdata: any) => {
               )}
               {item.license == 1 && !isSubscribed && (
                 <View style={styles.freeImageContainer}>
-                  {/* <Image source={require('../../../app_assets/IconAssetsTv/free.png')} style={styles.freeImage}/> */}
-                  <Text style={styles.freeImage}>Free</Text>
+                  <Text style={styles.freeImage}>FREE</Text>
                 </View>
               )}
-              {/* <View style={styles.freeContent}>
-              <Text style={styles.freeText}>FREE</Text>
-            </View>  */}
             </View>
           }
         </TouchableOpacity>
@@ -193,17 +189,20 @@ const styles = StyleSheet.create({
   },
   freeImageContainer: {
     position: "absolute",
+    top: 8,
+    left: 14,
     backgroundColor: colors.action_primary,
-    width: "30%", // Set the width to 50%
-    marginHorizontal: 6,
-    borderTopEndRadius: 5,
-    right: 0,
+    borderRadius: 999,
+    paddingVertical: 3,
+    paddingHorizontal: 12,
   },
 
   freeImage: {
-    fontSize: 14,
+    fontSize: 11,
+    fontWeight: "700",
     color: "white",
     textAlign: "center",
+    letterSpacing: 0.4,
   },
 });
 

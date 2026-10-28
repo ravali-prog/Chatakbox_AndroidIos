@@ -70,11 +70,18 @@ function HomeHeader() {
               end={{x: 1, y: 0}}
               style={{
                 paddingVertical: 3,
-                paddingHorizontal: 8,
-                borderRadius: 6,
+                paddingHorizontal: 18,
+                borderRadius: 20,
               }}
             >
-              <Text style={{ fontSize: 15, fontFamily: "bold", color: "white" }}>
+              <Text
+                style={{
+                  fontSize: 15,
+                  fontWeight: "400",
+                  color: "white",
+                  textTransform: "uppercase",
+                }}
+              >
                 Subscribe
               </Text>
             </LinearGradient>
