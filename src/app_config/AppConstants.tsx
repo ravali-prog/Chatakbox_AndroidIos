@@ -710,22 +710,76 @@ export function isUserSubscribed(contentgrp: any) {
 }
 
 
+/**
+ * Parse share / deep-link URLs into { id, type, groupid }.
+ * Supports:
+ *   - New web: /details/show|movie/{id}/{slug}
+ *   - Legacy:  /{lang}/shows|videos/{name}/{id}/{groupid}
+ */
+export function parseContentDeepLink(url: string | null | undefined) {
+    if (!url || typeof url !== "string") return null;
+
+    try {
+        const parsed = new URL(url);
+        const parts = parsed.pathname.split("/").filter(Boolean);
+        if (parts.length < 2) return null;
+
+        // /details/show/{id}/{slug} or /details/movie/{id}/{slug}
+        if (parts[0] === "details") {
+            const routeType = String(parts[1] || "").toLowerCase();
+            const id = parts[2];
+            if (!id) return null;
+
+            if (routeType === "show" || routeType === "shows" || routeType === "series") {
+                return { id, type: "shows", groupid: "0" };
+            }
+            if (routeType === "movie" || routeType === "movies" || routeType === "videos" || routeType === "video" || routeType === "clip") {
+                return { id, type: "videos", groupid: "0" };
+            }
+            return null;
+        }
+
+        // Legacy: /en/shows/Name/3/0/
+        // parts: [lang, type, name, id, groupid]
+        if (parts.length >= 4) {
+            const type = String(parts[1] || "").toLowerCase();
+            const id = parts[3];
+            const groupid = parts[4] || "0";
+            if (!id) return null;
+
+            if (type === "shows" || type === "show" || type === "series") {
+                return { id, type: "shows", groupid };
+            }
+            if (type === "videos" || type === "video" || type === "movie" || type === "clip") {
+                return { id, type: "videos", groupid };
+            }
+        }
+    } catch (error) {
+        return null;
+    }
+
+    return null;
+}
+
 export function handleDeeplinkNavigation(navobj: any) {
     try {
         if (currDeeplinkParam) {
             const deeplinkparam = currDeeplinkParam
             setCurrDeeplinkParam(null)
             if (deeplinkparam)
-            var temp = {}
+            var temp: any = {}
 
             if (deeplinkparam.type == "auth") {
                 return null;
             } 
-            if (deeplinkparam.type == "shows") {
+            const linkType = String(deeplinkparam.type || "").toLowerCase();
+            if (linkType === "shows" || linkType === "show" || linkType === "series") {
                 temp.seriesId = deeplinkparam.id
+                temp.contenttype = "series"
             } else {
                 temp.seriesId = "0"
                 temp.ext_contentid = deeplinkparam.id
+                temp.contenttype = "videos"
             }
             handleNavigation(navobj, temp)
         }

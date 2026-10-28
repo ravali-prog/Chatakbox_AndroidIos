@@ -514,7 +514,16 @@ export const similarVideos = async (id: string, groupId: string) => {
 
 export const createShareLink = async (id: string, type: string, name: string) => {
   try {
-    const payload = { action: "share", device: device, uuid: USER_UUID, id: id, type: type, name: name }
+    // Backend builds the final URL from partner shareurl + opaque id + slug.
+    // Client must use response.data.url as-is (no rewriting).
+    const payload = {
+      action: "share",
+      device: device,
+      uuid: USER_UUID,
+      id: id,
+      type: type,
+      name: name,
+    };
     const res = await axios.post(CONFIG_URL, payload);
     const configresp = res.data;
     return configresp;

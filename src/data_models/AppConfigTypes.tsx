@@ -28,6 +28,7 @@ export interface ConfigClass {
     googlesync:string;
     facebook : FacebookConfig;
     gentokenurl: string;
+    shareurl?: string;
      trigger?: Trigger; 
 
 }
@@ -47,7 +48,7 @@ export interface Weburls {
     contentcomplaints:  string;
     refund:  string;
     disclaimer: string;
-    
+    share?: string;
 }
 
 export interface FacebookConfig {

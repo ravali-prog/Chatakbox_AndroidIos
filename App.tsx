@@ -64,6 +64,7 @@ import {
   isTvPlatform,
   selectedUserProfile,
   setCurrDeeplinkParam,
+  parseContentDeepLink,
   setSelectedUserProfile,
   setUserProfiles,
   setUseractivityDetails,
@@ -608,23 +609,26 @@ const isFullscreenTrailer =
     } catch (error) {}
   }
 
+  const applyContentDeepLink = (url: string | null | undefined) => {
+    try {
+      const deeplink = parseContentDeepLink(url);
+      if (!deeplink?.id) return false;
+
+      setCurrDeeplinkParam(deeplink);
+      EventRegister.emitEvent(LOCAL_EVENTS.EVENT_HANDLE_DEEPLINK, null);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
   const handleDynamicLink = async (link: any) => {
     try {
       // Check and handle if the link is a email login link
       if (firebaseLoginParams && firebaseLoginParams.email) {
-        processLogin(link.url);
+        processLogin(link?.url);
       } else {
-        // navigate to specific screen
-        try {
-          const urll = new URL(link.url);
-          const myArray = urll.pathname.split("/");
-          const type = myArray[2];
-          const id = myArray[4];
-          const groupid = myArray[5];
-
-          setCurrDeeplinkParam({ id: id, type: type, groupid: groupid });
-          EventRegister.emitEvent(LOCAL_EVENTS.EVENT_HANDLE_DEEPLINK, null);
-        } catch (error) {}
+        applyContentDeepLink(link?.url);
       }
     } catch (error) {}
   };
@@ -723,7 +727,7 @@ const isFullscreenTrailer =
     const initialUrl = await Linking.getInitialURL();
 
     processLogin(initialUrl);
-    // The setTimeout is just for testing purpose
+    applyContentDeepLink(initialUrl);
   };
 
   // deeplink procesing
@@ -767,11 +771,8 @@ const isFullscreenTrailer =
       });
 
       Linking.addEventListener("url", (param) => {
-        if (!USER_UUID) {
-          processLogin(param.url);
-        } else {
-          LogData("USER_UUID", USER_UUID);
-        }
+        processLogin(param.url);
+        applyContentDeepLink(param.url);
       });
 
       getUrlAsync();
@@ -781,11 +782,7 @@ const isFullscreenTrailer =
         .then(
           (link) => {
             try {
-              if (!USER_UUID) {
-                handleDynamicLink(link);
-              } else {
-                LogData("USER_UUID", USER_UUID);
-              }
+              handleDynamicLink(link);
             } catch (error) {}
           },
           (isRejected) => {},
