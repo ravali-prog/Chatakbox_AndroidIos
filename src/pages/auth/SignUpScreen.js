@@ -4171,10 +4171,12 @@ const SignUpScreen = () => {
       </View>
       {loading && (
   <View style={styles.loadingOverlay} pointerEvents="auto">
-    <ActivityIndicator size="large" color={colors.action_primary} />
-    {loadingMessage ? (
-      <Text style={styles.loadingText}>{loadingMessage}</Text>
-    ) : null}
+    <View style={styles.loadingCard}>
+      <ActivityIndicator size="large" color={colors.action_primary} />
+      {loadingMessage ? (
+        <Text style={styles.loadingText}>{loadingMessage}</Text>
+      ) : null}
+    </View>
   </View>
 )}
     </View>
@@ -4369,11 +4371,23 @@ const styles = StyleSheet.create({
 
   loadingOverlay: {
   ...StyleSheet.absoluteFillObject,
-  backgroundColor: "transparent",
+  backgroundColor: "rgba(0,0,0,0.45)",
   alignItems: "center",
   justifyContent: "center",
   zIndex: 999,
   elevation: 999,
+},
+loadingCard: {
+  minWidth: 160,
+  maxWidth: "78%",
+  paddingVertical: 22,
+  paddingHorizontal: 28,
+  borderRadius: 16,
+  backgroundColor: "rgba(22, 22, 26, 0.94)",
+  borderWidth: 1,
+  borderColor: "rgba(255,255,255,0.1)",
+  alignItems: "center",
+  justifyContent: "center",
 },
 loadingText: {
   marginTop: 14,
@@ -4381,7 +4395,7 @@ loadingText: {
   fontWeight: "600",
   color: "#FFFFFF",
   textAlign: "center",
-  paddingHorizontal: 30,
+  lineHeight: 20,
 },
 
   dividerRow: {

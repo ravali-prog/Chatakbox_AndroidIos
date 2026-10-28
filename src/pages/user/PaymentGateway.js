@@ -872,7 +872,8 @@ onShouldStartLoadWithRequest={(request) => {
       <ConfirmModal
         visible={exitmodalvisibility}
         loading={false}
-        message={"Are you sure you want to go back?"}
+        message={"Are you sure you want to exit?"}
+        subtitle={"Your plan is just a step away. Stay and continue watching."}
         error={""}
         onConfirm={handleModalConfirm}
         onDismiss={handleModalClose}
