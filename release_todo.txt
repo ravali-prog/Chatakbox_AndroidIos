@@ -80,7 +80,7 @@ have to check with our App manifest file
 
 9) encryption and decryption in mobile and TV 
 
-10) Navnit content flow 
+10) vhunt content flow 
 
 11) pass firebase token to Sai
 
