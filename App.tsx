@@ -493,6 +493,7 @@ const isFullscreenTrailer =
             }
           } catch (error) {}
 
+          let forceUpgradeRequired = false;
           try {
             const { upgradeValue, dlink } = checkAppUpgrade(configResp);
 
@@ -500,7 +501,16 @@ const isFullscreenTrailer =
             }
             setUpgradeValue(upgradeValue);
             setUpgradeDlink(dlink);
+            // Force update: stay on splash and do not enter the app.
+            if (upgradeValue === 2) {
+              forceUpgradeRequired = true;
+              setStatus("force_upgrade");
+            }
           } catch (error) {}
+
+          if (forceUpgradeRequired) {
+            return;
+          }
 
           const userprofiles = getData(CONST_ALL_PROFILES);
           userprofiles.then((usrProfilesLocal) => {
@@ -894,11 +904,12 @@ const isFullscreenTrailer =
           </Modal>
         ) : upgradeValue === 2 ? (
           <Modal
-            visible={upgradeModalVisible}
+            // Force update cannot be dismissed (back button or after Play Store).
+            visible={true}
             animationType="fade"
             transparent={true}
             statusBarTranslucent
-            onRequestClose={() => setUpgradeModalVisible(false)}
+            onRequestClose={() => {}}
           >
             <View style={styles.modalOverlay}>
               <View style={styles.modalCard}>
@@ -911,8 +922,9 @@ const isFullscreenTrailer =
                 <TouchableOpacity
                   style={{ width: "100%" }}
                   onPress={() => {
-                    setUpgradeModalVisible(false);
-                    Linking.openURL(upgradeDlink);
+                    if (upgradeDlink) {
+                      Linking.openURL(upgradeDlink);
+                    }
                   }}
                   activeOpacity={0.8}
                 >
@@ -1144,7 +1156,9 @@ const isFullscreenTrailer =
 
           <>
             {status === "loading" && <LoadingSpinner />}
-            {status === "splash" && <SplashImage />}
+            {(status === "splash" || status === "force_upgrade") && (
+              <SplashImage />
+            )}
             {status === "failed" && <EmptyState />}
             {status === "successful" &&
               //isTvPlatform() ? navigationuiTV() :

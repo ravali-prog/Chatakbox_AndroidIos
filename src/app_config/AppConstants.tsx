@@ -998,13 +998,24 @@ export function setCacheData(contentData: any) {
 
 export function checkAppUpgrade(configResp: any) {
     try {
-        const upgradeValue = configResp?.data?.upgrade;
-        const dlink = configResp?.data?.dlink;
+        // Accept top-level or nested data; coerce so "2" still matches === 2 in UI.
+        const rawUpgrade =
+            configResp?.data?.upgrade ??
+            configResp?.upgrade ??
+            0;
+        const upgradeValue = Number(rawUpgrade) || 0;
+        const dlink =
+            configResp?.data?.dlink ||
+            configResp?.dlink ||
+            "";
 
-        EventRegister.emitEvent(LOCAL_EVENTS.EVENT_UPGRADE_AVAILABLE, {})
+        if (upgradeValue === 1 || upgradeValue === 2) {
+            EventRegister.emitEvent(LOCAL_EVENTS.EVENT_UPGRADE_AVAILABLE, {});
+        }
         return { upgradeValue, dlink };
 
     } catch (error) {
+        return { upgradeValue: 0, dlink: "" };
     }
 }
 
