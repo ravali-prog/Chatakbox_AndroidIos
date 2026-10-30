@@ -494,7 +494,7 @@ navigation.replace("HomeScreen")
 
 
   function onMessage(data) {
-    console.log("RAZORPAY_DEBUG :: onMessage called :: " + JSON.stringify(data?.nativeEvent?.data));
+    LogData("Paywall onMessage", data?.nativeEvent?.data);
 
     try {
       if (data && data.nativeEvent && data.nativeEvent.data) {

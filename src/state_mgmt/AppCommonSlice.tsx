@@ -445,7 +445,7 @@ export const getTabs = async (uuid: string, profileid: string) => {
     // const payload = { uuid, device: device, action: "tabs", profileid: profileid , storeid: 100, storever: "staging-1.0"}
     const payload = { uuid, device: device, action: "tabs", profileid: profileid}
     const res = await axios.post(CONFIG_URL, payload);
-    console.log("pages : ", JSON.stringify(res.data))
+    LogData("getTabs pages", res.data)
     return res.data;
   } catch (err) {
     return { error: err.message };

@@ -308,11 +308,7 @@ const isFullscreenTrailer =
             const timestamp = new Date().toISOString();
             const payloadJson = JSON.stringify(request.data);
 
-            if (__DEV__) {
-              console.log(
-                "=== REQUEST undecc  ===>",payloadJson
-              )}
-
+            LogData("=== REQUEST undecc  ===>", payloadJson);
 
             const encrypted = VEncrypt.encrypt(VEncrypt.apiSecret, payloadJson);
             request.data = { data: encrypted };
@@ -324,21 +320,12 @@ const isFullscreenTrailer =
             );
           } catch (error) {}
         }
-        if (__DEV__) {
-          console.log(
-            "=== REQUEST ===>",
-            JSON.stringify(
-              {
-                url: request.url,
-                method: request.method,
-                headers: request.headers,
-                data: request.data,
-              },
-              null,
-              2,
-            ),
-          );
-        }
+        LogData("=== REQUEST ===>", {
+          url: request.url,
+          method: request.method,
+          headers: request.headers,
+          data: request.data,
+        });
         return request;
       },
       (error) => {
@@ -374,43 +361,25 @@ const isFullscreenTrailer =
           }
         } catch (error) {}
 
-        if (__DEV__) {
-          const started = (response.config as any)?.meta?.start;
-          const durationMs = started ? Date.now() - started : undefined;
-          console.log(
-            "<=== RESPONSE ===",
-            JSON.stringify(
-              {
-                url: response.config?.url,
-                status: response.status,
-                durationMs,
-                data: response.data,
-              },
-              null,
-              2,
-            ),
-          );
-        }
+        const started = (response.config as any)?.meta?.start;
+        const durationMs = started ? Date.now() - started : undefined;
+        LogData("<=== RESPONSE ===", {
+          url: response.config?.url,
+          status: response.status,
+          durationMs,
+          data: response.data,
+        });
         return response;
       },
       (error) => {
-        if (__DEV__) {
-          const started = error?.config?.meta?.start;
-          const durationMs = started ? Date.now() - started : undefined;
-          console.log(
-            "<=== RESPONSE ERROR ===",
-            JSON.stringify(
-              {
-                url: error?.config?.url,
-                status: error?.response?.status,
-                durationMs,
-                message: error?.message,
-              },
-              null,
-              2,
-            ),
-          );
-        }
+        const started = error?.config?.meta?.start;
+        const durationMs = started ? Date.now() - started : undefined;
+        LogError("<=== RESPONSE ERROR ===", {
+          url: error?.config?.url,
+          status: error?.response?.status,
+          durationMs,
+          message: error?.message,
+        });
         return Promise.reject(error);
       },
     );
@@ -1110,42 +1079,39 @@ const isFullscreenTrailer =
         (installReferrerInfo, error) => {
           if (!error) {
             if (installReferrerInfo != null) {
-              console.log(
-                "Install_referrer = " + installReferrerInfo.installReferrer
+              LogData("Install_referrer", installReferrerInfo.installReferrer);
+              LogData(
+                "Referrer timestamp seconds",
+                installReferrerInfo.referrerClickTimestampSeconds
               );
-              console.log(
-                "Referrer timestamp seconds = " +
-                  installReferrerInfo.referrerClickTimestampSeconds
+              LogData(
+                "Install begin timestamp",
+                installReferrerInfo.installBeginTimestampSeconds
               );
-              console.log(
-                "Install begin timestamp= " +
-                  installReferrerInfo.installBeginTimestampSeconds
+              LogData(
+                "Referrer timestamp server",
+                installReferrerInfo.referrerClickTimestampServerSeconds
               );
-              console.log(
-                "Referrer timestamp server= " +
-                  installReferrerInfo.referrerClickTimestampServerSeconds
+              LogData(
+                "Install begin timestamp server",
+                installReferrerInfo.installBeginTimestampServerSeconds
               );
-              console.log(
-                "Install begin timestamp server= " +
-                  installReferrerInfo.installBeginTimestampServerSeconds
-              );
-              console.log(
-                "version = " + installReferrerInfo.installVersion
-              );
-              console.log(
-                "Google Play instant = " + installReferrerInfo.googlePlayInstant
+              LogData("version", installReferrerInfo.installVersion);
+              LogData(
+                "Google Play instant",
+                installReferrerInfo.googlePlayInstant
               );
               fireInstallReferer(installReferrerInfo);
             }
           } else {
-            console.log("Failed to get install referrer info!");
-            console.log("Response code: " + error.responseCode);
-            console.log("Message: " + error.message);
+            LogData("Failed to get install referrer info!", null);
+            LogData("Response code", error.responseCode);
+            LogData("Message", error.message);
           }
         }
       );
     } catch (error) {
-      console.log(error);
+      LogData("fetchIstallReferrer", error);
     }
   }
 
