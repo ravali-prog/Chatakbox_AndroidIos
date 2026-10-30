@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
   freeImage: {
     fontSize: 11,
     fontWeight: "700",
-    color: "white",
+    color: "#FFFFFF",
     textAlign: "center",
     letterSpacing: 0.4,
   },

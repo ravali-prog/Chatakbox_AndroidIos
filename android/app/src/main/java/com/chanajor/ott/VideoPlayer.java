@@ -72,6 +72,8 @@ public class VideoPlayer extends ReactActivity {
     // private String mediaParams.getVideoTrackingLink() = "";
     private int totalWatchedTime = 0;
     private String sessionID = "";
+    /** Avoid duplicate timeupdate posts while playhead sits on the same 6s mark. */
+    private long lastSentAnalyticsSecond = -1;
 
     private MediaParams mediaParams = null;
 
@@ -318,6 +320,10 @@ muteButton = findViewById(R.id.muteButton);
         Intent intent = getIntent();
         mediaParams = (MediaParams) intent.getSerializableExtra("mediaparams");
 
+        // Set before media attach so early loadstart beacons include session.
+        sessionID = System.currentTimeMillis() + "";
+        lastSentAnalyticsSecond = -1;
+
         if (mediaParams != null) {
             String title = mediaParams.getVideoTitle();
 
@@ -327,7 +333,6 @@ muteButton = findViewById(R.id.muteButton);
         } else {
             finish();
         }
-        sessionID = System.currentTimeMillis() + "";
         startAnalyticsTimer();
 
     }
@@ -715,19 +720,25 @@ public void onIsPlayingChanged(boolean isPlaying) {
 
     }
 
-    private void vidoeeventfire(String url) {
+    private void vidoeeventfire(JSONObject payload) {
         try {
-            if (player == null) {
+            if (player == null || payload == null) {
                 return;
             }
 
-            long videoLength = (long) player.getDuration();
-            url = url + "&videoLength=" + videoLength + "&did=" + mediaParams.downloadID + "&session=" + sessionID;
+            if (sessionID == null || sessionID.isEmpty()) {
+                sessionID = System.currentTimeMillis() + "";
+            }
 
-            logMessage("VideoEventFire", url);
+            long durationMs = player.getDuration();
+            // ExoPlayer TIME_UNSET before metadata — never send the sentinel as videoLength.
+            long videoLength = (durationMs > 0) ? durationMs : 0;
+            payload.put("videoLength", videoLength);
+            payload.put("did", mediaParams.downloadID);
+            payload.put("session", sessionID);
 
-            // Assuming fireVideoTracking is your method to send the URL request
-            fireVideoTracking(url);
+            logMessage("VideoEventFire", payload.toString());
+            fireVideoTracking(payload);
         } catch (Exception e) {
             logMessage("VideoEventFire", "Event error: " + e.getMessage());
         }
@@ -743,24 +754,21 @@ public void onIsPlayingChanged(boolean isPlaying) {
         }
     }
 
-    private void fireVideoTracking(String url) {
-
+    /** Emit JSON beacon payload to RN; JS posts encrypted body via Mode B axios. */
+    private void fireVideoTracking(JSONObject payload) {
         try {
-
             WritableMap map = Arguments.createMap();
-            map.putString("key1", url);
+            map.putString("key1", payload.toString());
             try {
                 getReactInstanceManager().getCurrentReactContext()
                         .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                         .emit("fun1", map);
-
             } catch (Exception e) {
                 Log.e("ReactNative", "Caught Exception: " + e.getMessage());
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     String resumePos = "0";
@@ -775,17 +783,24 @@ public void onIsPlayingChanged(boolean isPlaying) {
 
             long currentTime = player.getCurrentPosition() / 1000;
 
-            if (currentTime % 6 == 0) {
+            // Once per distinct second that is a multiple of 6 (matches web lastSentSecondRef).
+            if (currentTime % 6 == 0 && currentTime != lastSentAnalyticsSecond) {
+                lastSentAnalyticsSecond = currentTime;
                 if (currentTime > maxWatchedTime) {
                     maxWatchedTime = currentTime;
                 }
-                String videoCurrentPlayingTime = currentTime + "";
-                resumePos = videoCurrentPlayingTime;
-                // setCurrentPlayingResumeVal(videoCurrentPlayingTime);
+                resumePos = currentTime + "";
 
-                String url = mediaParams.getVideoTrackingLink() + "&timeupdate=" + videoCurrentPlayingTime +
-                        "&videoevent=timeupdate&maxWatchedTime=" + maxWatchedTime + "&totalWatchedTime=" + elapsedTime;
-                vidoeeventfire(url);
+                try {
+                    JSONObject payload = new JSONObject();
+                    payload.put("videoevent", "timeupdate");
+                    payload.put("timeupdate", currentTime);
+                    payload.put("maxWatchedTime", maxWatchedTime);
+                    payload.put("totalWatchedTime", elapsedTime);
+                    vidoeeventfire(payload);
+                } catch (Exception je) {
+                    logMessage("VideoEventFire", "timeupdate payload error: " + je.getMessage());
+                }
             }
 
             long videoLength = player.getDuration() / 1000;
@@ -837,25 +852,27 @@ public void onIsPlayingChanged(boolean isPlaying) {
 
     private void fireVideoEvents(String action) {
         try {
-
-            String url = "";
-
+            JSONObject payload = new JSONObject();
             if (action.equals("ended")) {
-                url = mediaParams.getVideoTrackingLink() + "&videoevent=ended&ended=1";
-                vidoeeventfire(url);
+                payload.put("videoevent", "ended");
+                payload.put("ended", 1);
+                vidoeeventfire(payload);
                 sendAnalytics("video_event", "action", "ended");
             } else if (action.equals("loadstart")) {
-                url = mediaParams.getVideoTrackingLink() + "&videoevent=loadstart&loadstart=1";
-                vidoeeventfire(url);
+                payload.put("videoevent", "loadstart");
+                payload.put("loadstart", 1);
+                vidoeeventfire(payload);
                 sendAnalytics("video_event", "action", "loadstart");
             } else if (action.equals("play")) {
-                url = mediaParams.getVideoTrackingLink() + "&videoevent=play&play=1";
-                vidoeeventfire(url);
+                payload.put("videoevent", "play");
+                payload.put("play", 1);
+                vidoeeventfire(payload);
                 startAnalyticsTimer();
                 sendAnalytics("video_event", "action", "videoplay");
             } else if (action.equals("pause")) {
-                url = mediaParams.getVideoTrackingLink() + "&videoevent=pause&pause=1";
-                vidoeeventfire(url);
+                payload.put("videoevent", "pause");
+                payload.put("pause", 1);
+                vidoeeventfire(payload);
                 pauseTimer();
                 sendAnalytics("video_event", "action", "videopause");
             }

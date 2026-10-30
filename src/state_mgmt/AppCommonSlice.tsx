@@ -532,19 +532,57 @@ export const createShareLink = async (id: string, type: string, name: string) =>
   }
 };
 
-// export const fireVideoTracking = async (url: string) => {
-//   try {
-//     const res = await axios.post(url);
-//     const configresp = res.data;
-//     return configresp;
-//   } catch (err) {
-//     return { error: err.message };
-//   }
-// };
+/** Strip query string so encrypted beacon fields live in the POST body only. */
+export function analyticsBaseUrl(url?: string | null): string {
+  const raw = (url && String(url).trim()) || VIDEO_EVENTS_URL || "";
+  if (!raw) return "";
+  try {
+    const parsed = new URL(raw);
+    parsed.search = "";
+    parsed.hash = "";
+    return parsed.toString();
+  } catch {
+    return String(raw).split("?")[0];
+  }
+}
 
-export const fireVideoTracking = async (url: string) => {
-  const res = await axios.post(url);
-  return res.data;
+/**
+ * Player beacon: POST JSON body; Mode B axios interceptor encrypts + signs.
+ * Matches web postVideoBeacon / OttVideoPlayer encrypted analytics.
+ */
+export const postVideoBeacon = async (
+  baseUrl: string | null | undefined,
+  payload: Record<string, any>,
+) => {
+  const url = analyticsBaseUrl(baseUrl);
+  if (!url) return { error: "videoanalytics URL not set" };
+  try {
+    const res = await axios.post(url, payload);
+    return res.data;
+  } catch (err: any) {
+    return { error: err?.message || "beacon failed" };
+  }
+};
+
+/** @deprecated Prefer postVideoBeacon. Accepts JSON payload string or plain object. */
+export const fireVideoTracking = async (keyOrPayload: string | Record<string, any>) => {
+  try {
+    let payload: Record<string, any> | null = null;
+    if (typeof keyOrPayload === "object" && keyOrPayload !== null) {
+      payload = keyOrPayload;
+    } else if (typeof keyOrPayload === "string") {
+      const trimmed = keyOrPayload.trim();
+      if (trimmed.startsWith("{")) {
+        payload = JSON.parse(trimmed);
+      }
+    }
+    if (!payload || !payload.videoevent) {
+      return { error: "invalid video beacon payload" };
+    }
+    return postVideoBeacon(VIDEO_EVENTS_URL, payload);
+  } catch (err: any) {
+    return { error: err?.message || "beacon failed" };
+  }
 };
 
 export const getSimilarContent = async (body: any): Promise<any> => {

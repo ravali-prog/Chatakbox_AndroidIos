@@ -198,6 +198,7 @@ const isFullscreenTrailer =
 
         try {
           if (data && data.key1) {
+            // Native player emits JSON beacon payload string (encrypted POST via Mode B).
             fireVideoTracking(data.key1);
           } else if (data && data.key2) {
             setCurrentPlayingResumeVal(data.key2);

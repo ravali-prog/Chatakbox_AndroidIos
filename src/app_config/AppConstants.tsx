@@ -503,7 +503,8 @@ export const openResolvedVideoPlayer = (
         String(dwnid),
         String(resume),
         subtitleArray,
-        analyticsBase + "?"
+        // Base videoanalytics URL only — beacon fields go in encrypted POST body.
+        analyticsBase
       );
       return;
     }

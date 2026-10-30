@@ -130,14 +130,6 @@ const Layout37 = (propdata) => {
               onPress={open}
               style={styles.circleBtn}
             >
-              <Text style={styles.plusText}>+</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              activeOpacity={0.85}
-              onPress={open}
-              style={styles.circleBtn}
-            >
               <Text style={styles.infoText}>𝒊</Text>
             </TouchableOpacity>
           </View>
@@ -181,7 +173,7 @@ const styles = StyleSheet.create({
     paddingBottom: 22,
   },
   spotlight: {
-    color: "#C62828",
+    color: "rgba(198,40,40,0.85)",
     fontSize: 11,
     fontWeight: "700",
     letterSpacing: 1.6,
@@ -213,7 +205,7 @@ const styles = StyleSheet.create({
     borderColor: "rgba(255,255,255,0.25)",
   },
   pillStar: {
-    color: "#FACC15",
+    color: "rgba(232,210,140,0.9)",
     fontSize: 12,
     fontWeight: "700",
   },
@@ -256,12 +248,6 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255,255,255,0.1)",
     alignItems: "center",
     justifyContent: "center",
-  },
-  plusText: {
-    color: "#FFFFFF",
-    fontSize: 26,
-    fontWeight: "300",
-    marginTop: -2,
   },
   infoText: {
     color: "#FFFFFF",

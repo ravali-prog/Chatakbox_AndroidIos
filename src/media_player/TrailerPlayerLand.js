@@ -25,7 +25,7 @@ import ModalDropdown from 'react-native-modal-dropdown';
 
 import { Title } from 'react-native-paper';
 import { LogData, LogError, configData, currentPlayingResumeVal, getCurrentPlayingVideo, setCurrentPlayingResumeVal } from '../app_config/AppConstants';
-import { fireVideoTracking } from '../state_mgmt/AppCommonSlice';
+import { postVideoBeacon } from '../state_mgmt/AppCommonSlice';
 import Loader from '../ui_components/widgets/LoadingSpinner';
 
 // import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -39,6 +39,7 @@ var onVideoEnd = false
 let VideoEventLink = ""
 let totalWatchedTime = 0;
 let sessionID = ""
+let lastSentAnalyticsSecond = -1
 //let lastResumeTime = ""
 
 const TrailerPlayerLandscape = ({ showfullscreenicon, mediaUrl, videoTitle, downloadID, resume, subtitlesParam, player }) => {
@@ -93,9 +94,11 @@ const TrailerPlayerLandscape = ({ showfullscreenicon, mediaUrl, videoTitle, down
   }, [paused])
 
   useEffect(() => {
-    VideoEventLink = configData.data.config.videoanalytics + "?" //"http://192.168.1.16/tt.php?" //
+    // Base URL only — event fields are sent as encrypted POST JSON body.
+    VideoEventLink = (configData?.data?.config?.videoanalytics || "").split("?")[0];
     const d = new Date();
     sessionID = d.valueOf();
+    lastSentAnalyticsSecond = -1;
 
     // Fullscreen main player: stay landscape; do not toggle orientation (parent owns lock)
     if (player === 'videoplayer') {
@@ -114,6 +117,7 @@ const TrailerPlayerLandscape = ({ showfullscreenicon, mediaUrl, videoTitle, down
       progressRef = null
       maxWatchedTime = 0;
       elapsedTime = 0;
+      lastSentAnalyticsSecond = -1;
     };
   }, []);
 
@@ -322,35 +326,21 @@ const TrailerPlayerLandscape = ({ showfullscreenicon, mediaUrl, videoTitle, down
 
   function fireVideoEvents(action) {
     try {
-
-
       if (action == "ended") {
-
-        url = VideoEventLink + "&videoevent=ended&ended=1";
-        vidoeeventfire(url);
+        vidoeeventfire({ videoevent: "ended", ended: 1 });
         sendAnalytics("video_event", { "action": "ended" });
-
-      }
-
-      else if (action == "loadstart") {
-
-        url = VideoEventLink + "&videoevent=loadstart&loadstart=1";
-        vidoeeventfire(url);
+      } else if (action == "loadstart") {
+        vidoeeventfire({ videoevent: "loadstart", loadstart: 1 });
         sendAnalytics("video_event", { "action": "loadstart" });
-
       } else if (action == "play") {
-        url = VideoEventLink + "&videoevent=play&play=1";
-        vidoeeventfire(url);
+        vidoeeventfire({ videoevent: "play", play: 1 });
         startAnalyticsTimer()
         sendAnalytics("video_event", { "action": "videoplay" });
-      }
-      else if (action == "pause") {
-        url = VideoEventLink + "&videoevent=pause&pause=1";
-        vidoeeventfire(url);
+      } else if (action == "pause") {
+        vidoeeventfire({ videoevent: "pause", pause: 1 });
         pauseTimer();
         sendAnalytics("video_event", { "action": "videopause" });
       }
-
     } catch (error) {
     }
   }
@@ -363,14 +353,20 @@ const TrailerPlayerLandscape = ({ showfullscreenicon, mediaUrl, videoTitle, down
     elapsedTime++;
 
     let currentTime = progressRef.currentTime;
-    if (Math.floor(currentTime) % 6 == 0) {
-      if (currentTime > maxWatchedTime) {
-        maxWatchedTime = Math.floor(currentTime);
+    const VideoCurrentPlayingTime = Math.floor(currentTime);
+    // Once per distinct second that is a multiple of 6 (matches web lastSentSecondRef).
+    if (VideoCurrentPlayingTime % 6 == 0 && VideoCurrentPlayingTime !== lastSentAnalyticsSecond) {
+      lastSentAnalyticsSecond = VideoCurrentPlayingTime;
+      if (VideoCurrentPlayingTime > maxWatchedTime) {
+        maxWatchedTime = VideoCurrentPlayingTime;
       }
-      const VideoCurrentPlayingTime = Math.floor(currentTime);
       setCurrentPlayingResumeVal(VideoCurrentPlayingTime + "");
-      url = VideoEventLink + "&timeupdate=" + VideoCurrentPlayingTime + "&videoevent=timeupdate&maxWatchedTime=" + maxWatchedTime + "&totalWatchedTime=" + elapsedTime;
-      vidoeeventfire(url);
+      vidoeeventfire({
+        videoevent: "timeupdate",
+        timeupdate: VideoCurrentPlayingTime,
+        maxWatchedTime: maxWatchedTime,
+        totalWatchedTime: elapsedTime,
+      });
     }
     var VideoLength = progressRef.seekableDuration;
     if (currentTime >= Math.floor((0.25 * VideoLength)) && currentTime <= Math.ceil((0.25 * VideoLength))) {
@@ -394,19 +390,25 @@ const TrailerPlayerLandscape = ({ showfullscreenicon, mediaUrl, videoTitle, down
 
   }
 
-  function vidoeeventfire(Url) {
+  function vidoeeventfire(payload) {
     try {
-      if (progressRef == null) {
+      if (progressRef == null || !payload) {
         return;
       }
+      if (!sessionID) {
+        sessionID = Date.now();
+      }
       var VideoLength = progressRef.seekableDuration;
-      Url = Url + "&videoLength=" + VideoLength + "&did=" + downloadID + "&session=" + sessionID;
-
-
-      fireVideoTracking(Url)
-      // var request = new XMLHttpRequest();
-      // request.open("GET", Url);
-      // request.send();
+      // Unknown duration before metadata — send 0, not NaN/negative.
+      if (!VideoLength || VideoLength < 0 || !isFinite(VideoLength)) {
+        VideoLength = 0;
+      }
+      postVideoBeacon(VideoEventLink, {
+        ...payload,
+        videoLength: VideoLength,
+        did: downloadID,
+        session: sessionID,
+      });
     } catch (error) {
     }
 

@@ -265,17 +265,17 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   itemActive: {
-    backgroundColor: colors.action_primary || "#D6111E",
+    backgroundColor: colors.action_primary || "#C62828",
     paddingHorizontal: 22,
     ...Platform.select({
       ios: {
-        shadowColor: colors.action_primary || "#D6111E",
-        shadowOpacity: 0.55,
-        shadowRadius: 10,
-        shadowOffset: { width: 0, height: 4 },
+        shadowColor: colors.action_primary || "#C62828",
+        shadowOpacity: 0.35,
+        shadowRadius: 8,
+        shadowOffset: { width: 0, height: 3 },
       },
       android: {
-        elevation: 6,
+        elevation: 4,
       },
     }),
   },

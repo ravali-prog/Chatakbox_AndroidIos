@@ -242,7 +242,7 @@ const handleSubmit = async () => {
             borderTopWidth: 0,
             marginBottom: -insets.bottom,
           },
-      tabBarActiveTintColor: '#ff0000',
+      tabBarActiveTintColor: '#C62828',
       tabBarInactiveTintColor: 'white',
     }}>
       <Tab.Screen
