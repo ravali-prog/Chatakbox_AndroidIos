@@ -194,6 +194,8 @@ const LandScapeVideoplayer = ({ route }) => {
         }
         setShowLoading(false)
       } else if (clipDetails && clipDetails.media && clipDetails.media.video && clipDetails.media.video[0] && clipDetails.media.video[0].url) {
+        // @deprecated Legacy fallback: getContentToken / {accesstoken} URL rewrite.
+        // Primary path is resolvedUrl from CMS gentoken (handleVideoPlayAsync).
         const mediaurlrespone = getContentToken(USER_UUID, id, selectedUserProfile.profileid, cid)
 
         if (mediaurlrespone) {

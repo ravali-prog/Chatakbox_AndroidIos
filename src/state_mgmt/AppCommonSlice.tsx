@@ -163,6 +163,11 @@ export const passwordLogin = async (id: string, logintype: string, pwd: string) 
   }
 };
 
+/**
+ * @deprecated Legacy Ott_content_api `getaccesstoken` / ContentAccessToken path.
+ * Playback uses CMS `config.gentokenurl` → serve/gentoken → masterPlaylistUrl
+ * (see AppConstants.handleVideoPlayAsync). Do not use for new play flows.
+ */
 export const getContentToken = async (uuid: string, contentid: string, profileid: string, cid: string) => {
   try {
     const payload = { uuid, id: contentid, device: device, action: 'getaccesstoken', profileid, cid }
