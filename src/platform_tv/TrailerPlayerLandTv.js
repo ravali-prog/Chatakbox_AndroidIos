@@ -27,7 +27,10 @@ import ModalDropdown from 'react-native-modal-dropdown';
 
 import { Title } from 'react-native-paper';
 // import styles from '../theming/SearchStyles';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  LOCAL_STORAGE_LAST_SELECTED_OPTION,
+  storeValue,
+} from '../persistence/AsyncStorage';
 import { LogData, LogError } from '../app_config/AppConstants';
 
 
@@ -235,8 +238,8 @@ const TrailerPlayerLandscapeTv = ({ showfullscreenicon }) => {
   const closeSettings = () => {
     setShowSettings(false);
     // Save last selected option to AsyncStorage
-    AsyncStorage.setItem('lastSelectedOption', lastSelectedOption)
-      .then(() => 
+    storeValue(LOCAL_STORAGE_LAST_SELECTED_OPTION, lastSelectedOption)
+      .then(() =>
         LogData('Last selected option saved to AsyncStorage'))
       .catch((error) => LogError('Error saving last selected option to AsyncStorage:', error));
   };

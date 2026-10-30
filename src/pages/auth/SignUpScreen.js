@@ -16,7 +16,7 @@
 // } from '../../state_mgmt/AppCommonSlice';
 // import CustomModal from "../../data_models/CustomDialogTypes";
 // import LoadingModal from "../../data_models/LoadingStateTypes";
-// import { storeData, CONST_ALL_PROFILES, getData } from "../../persistence/AsyncStorage"
+// import { storeData, LOCAL_STORAGE_ALL_PROFILES, getData } from "../../persistence/AsyncStorage"
 // import {
 //   API_URL, LOCAL_EVENTS, LogData, LogError, PAYWALL_URL, TOKEN_EXPIRY, USER_UUID, configData, firebaseLoginParams, getTokenExpiry, logoutCurrentProfile, removeEventListener, setFirebaseLoginParams, setSelectedUserProfile, setTokenExpiry, setUserProfiles, shouldShowPaywall,
 //   setUseractivityDetails,
@@ -1060,7 +1060,7 @@
 
 //   function dofinalNavigation(x) {
 //     try {
-//       storeData(CONST_ALL_PROFILES, x.data);
+//       storeData(LOCAL_STORAGE_ALL_PROFILES, x.data);
 //       setUserProfiles(x.data);
 
 //       // NEW LOGIC: Auto-select first profile and navigate to Dashboard
@@ -1538,7 +1538,7 @@
 // } from '../../state_mgmt/AppCommonSlice';
 // import CustomModal from "../../data_models/CustomDialogTypes";
 // import LoadingModal from "../../data_models/LoadingStateTypes";
-// import { storeData, CONST_ALL_PROFILES } from "../../persistence/AsyncStorage"
+// import { storeData, LOCAL_STORAGE_ALL_PROFILES } from "../../persistence/AsyncStorage"
 // import {
 //   LOCAL_EVENTS, LogData, LogError, USER_UUID, configData, firebaseLoginParams, getTokenExpiry, removeEventListener, setFirebaseLoginParams, setSelectedUserProfile, setTokenExpiry, setUserProfiles, shouldShowPaywall,
 //   setUseractivityDetails,
@@ -2218,7 +2218,7 @@
 
 //   function dofinalNavigation(x) {
 //     try {
-//       storeData(CONST_ALL_PROFILES, x.data);
+//       storeData(LOCAL_STORAGE_ALL_PROFILES, x.data);
 //       setUserProfiles(x.data);
 
 //       // Auto-select first profile and navigate to Dashboard
@@ -2915,7 +2915,7 @@ import {
 } from "../../state_mgmt/AppCommonSlice";
 import CustomModal from "../../data_models/CustomDialogTypes";
 import LoadingModal from "../../data_models/LoadingStateTypes";
-import { storeData, CONST_ALL_PROFILES } from "../../persistence/AsyncStorage";
+import { storeData, LOCAL_STORAGE_ALL_PROFILES } from "../../persistence/AsyncStorage";
 import {
   LOCAL_EVENTS,
   LogData,
@@ -3682,7 +3682,7 @@ const SignUpScreen = () => {
 
   function dofinalNavigation(x) {
     try {
-      storeData(CONST_ALL_PROFILES, x.data);
+      storeData(LOCAL_STORAGE_ALL_PROFILES, x.data);
       setUserProfiles(x.data);
 
       // Auto-select first profile and navigate to Dashboard

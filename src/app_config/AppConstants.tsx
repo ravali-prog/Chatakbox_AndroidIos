@@ -7,7 +7,17 @@ import { UserProfile, UserprofileData } from "../data_models/UserProfileTypes";
 import { UserPrivilage } from "../data_models/UserPrivilegeTypes";
 import { NativeModules, Platform } from "react-native";
 import { CountryCode, device, setCountryCode } from "./DeviceInfo"; 
-import { CONST_ALL_PROFILES, CONST_SELECTED_PROFILE, getData, getSelectedProfile, storeData } from "../persistence/AsyncStorage";
+import {
+  LOCAL_STORAGE_ALL_PROFILES,
+  LOCAL_STORAGE_SELECTED_PROFILE,
+  LOCAL_STORAGE_TOKEN_EXPIRED_EVENT,
+  getData,
+  getSelectedProfile,
+  getValue,
+  removeData,
+  storeData,
+  storeValue,
+} from "../persistence/AsyncStorage";
 //import {DeviceEventEmitter} from "react-native"
 
 import { EventRegister } from 'react-native-event-listeners'
@@ -15,7 +25,6 @@ import type from 'type-detect'
 import { APP_EVENTS_ } from "./AnalyticsConfig";
 import axios from "axios";
 import { customerUsage } from "../state_mgmt/AppCommonSlice";
-import AsyncStorage from "@react-native-async-storage/async-storage"; 
 import { useState } from "react";
 import { StackActions } from '@react-navigation/native';
 
@@ -190,7 +199,7 @@ export function logoutCurrentProfile() {
         userProfiles = {} as UserprofileData
         useractivityDetails = null;
         USER_UUID = ""
-        storeData(CONST_ALL_PROFILES, {})
+        storeData(LOCAL_STORAGE_ALL_PROFILES, {})
         setSelectedUserProfile({} as UserProfile)
         setUserPrivilages({})
     } catch (error) {
@@ -220,7 +229,7 @@ export function updateSelectedProfile(profiles: []) {
 export function setSelectedUserProfile(profile: UserProfile) {
     selectedUserProfile = profile
 
-    storeData(CONST_SELECTED_PROFILE, profile)
+    storeData(LOCAL_STORAGE_SELECTED_PROFILE, profile)
 }
 
 export const handleTrailerVideoPlay = (navobj: any, params: any) => {
@@ -1130,17 +1139,17 @@ export const generateSessionId = (): string => {
     const daysLeft = Math.floor((tokenExpiry - currentTime) / (60 * 60 * 24));
 
 
-    const alreadyEmitted = await AsyncStorage.getItem("tokenExpiredEvent") === "true";
+    const alreadyEmitted = (await getValue(LOCAL_STORAGE_TOKEN_EXPIRED_EVENT)) === "true";
 
     if (daysLeft <= 0) {
         if (!alreadyEmitted) {
             EventRegister.emitEvent(LOCAL_EVENTS.EVENT_CHANGE_SCREEN, {});
-            AsyncStorage.setItem("tokenExpiredEvent", "true"); 
+            storeValue(LOCAL_STORAGE_TOKEN_EXPIRED_EVENT, "true");
         }
         return false;
     }
 
-    AsyncStorage.removeItem("tokenExpiredEvent"); 
+    removeData(LOCAL_STORAGE_TOKEN_EXPIRED_EVENT);
     return true;
 }
 

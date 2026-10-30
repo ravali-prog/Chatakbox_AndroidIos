@@ -23,7 +23,7 @@ import ConfirmModal from '../../data_models/ConfirmationTypes';
 //import LoadingSpinner from '../../ui_components/widgets/LoadingSpinner';
 import { EventRegister } from 'react-native-event-listeners';
 import { APP_EVENTS_, recordEvent } from '../../app_config/AnalyticsConfig';
-import { getData, removeData, storeData, TRANSACTION_HISTORY } from '../../persistence/AsyncStorage';
+import { getData, removeData, storeData, LOCAL_STORAGE_TRANSACTION_HISTORY } from '../../persistence/AsyncStorage';
 import Razorpay from "react-native-customui";
 import { Linking } from 'react-native';
 import SendIntentAndroid from 'react-native-send-intent';
@@ -104,7 +104,7 @@ const PayWall = ({ route }) => {
   useEffect(() => {
 
     try {
-      getData(TRANSACTION_HISTORY).then((history) => {
+      getData(LOCAL_STORAGE_TRANSACTION_HISTORY).then((history) => {
         try {
           if (history && history.length > 0) {
             setModalVisible(true);
@@ -115,11 +115,11 @@ const PayWall = ({ route }) => {
             getPaywallUrl()
           }
         } catch (error) {
-        LogError("Paywall getData TRANSACTION_HISTORY catch inside",error)          
+        LogError("Paywall getData LOCAL_STORAGE_TRANSACTION_HISTORY catch inside",error)          
         }
       });
     } catch (error) {
-      LogError("Paywall getData TRANSACTION_HISTORY catch outside",error)          
+      LogError("Paywall getData LOCAL_STORAGE_TRANSACTION_HISTORY catch outside",error)          
     }
   }, [route]);
 
@@ -188,7 +188,7 @@ const PayWall = ({ route }) => {
             setModalVisible(false); // Close the modal
     
             // Use removeData from AsyncStore.js
-            removeData(TRANSACTION_HISTORY)
+            removeData(LOCAL_STORAGE_TRANSACTION_HISTORY)
               .then(() => {
                 setTxnHistory(true); // Show the WebView
                 getPaywallUrl(); // Proceed to display the WebView
@@ -429,7 +429,7 @@ setShowPaymentText(true);
   function storeFailedTransaction(notifyurl, resultfromrazor) {
     // Get the existing transaction history
     try {
-      getData(TRANSACTION_HISTORY)
+      getData(LOCAL_STORAGE_TRANSACTION_HISTORY)
         .then((currentHistory) => {
           try {
             let transactionHistory = currentHistory ? currentHistory : [];
@@ -443,25 +443,25 @@ setShowPaymentText(true);
             transactionHistory.push(newTransaction);
     
             // Store the updated transaction history
-            storeData(TRANSACTION_HISTORY, transactionHistory)
+            storeData(LOCAL_STORAGE_TRANSACTION_HISTORY, transactionHistory)
               .then(() => {
                 try {
                   
                 } catch (error) {
-                  LogError("Paywall storeFailedTransaction storeData TRANSACTION_HISTORY catch inside",error)                         
+                  LogError("Paywall storeFailedTransaction storeData LOCAL_STORAGE_TRANSACTION_HISTORY catch inside",error)                         
                 }
               })
               .catch((error) => {
               });
             
           } catch (error) {
-            LogError("Paywall storeFailedTransaction getData TRANSACTION_HISTORY catch inside",error)                     
+            LogError("Paywall storeFailedTransaction getData LOCAL_STORAGE_TRANSACTION_HISTORY catch inside",error)                     
           }
         })
         .catch((error) => {
         });
     } catch (error) {
-      LogError("Paywall storeFailedTransaction getData TRANSACTION_HISTORY catch outside",error)                     
+      LogError("Paywall storeFailedTransaction getData LOCAL_STORAGE_TRANSACTION_HISTORY catch outside",error)                     
 
     }
   }
@@ -1005,7 +1005,7 @@ export default PayWall;
 // //import LoadingSpinner from '../../ui_components/widgets/LoadingSpinner';
 // import { EventRegister } from 'react-native-event-listeners';
 // import { APP_EVENTS_, recordEvent } from '../../app_config/AnalyticsConfig';
-// import { getData, removeData, storeData, TRANSACTION_HISTORY } from '../../persistence/AsyncStorage';
+// import { getData, removeData, storeData, LOCAL_STORAGE_TRANSACTION_HISTORY } from '../../persistence/AsyncStorage';
 // import Razorpay from "react-native-customui";
 // import { Linking } from 'react-native';
 // import SendIntentAndroid from 'react-native-send-intent';
@@ -1093,7 +1093,7 @@ export default PayWall;
 //   useEffect(() => {
 
 //     try {
-//       getData(TRANSACTION_HISTORY).then((history) => {
+//       getData(LOCAL_STORAGE_TRANSACTION_HISTORY).then((history) => {
 //         try {
 //           if (history && history.length > 0) {
 //             setModalVisible(true);
@@ -1104,11 +1104,11 @@ export default PayWall;
 //             getPaywallUrl()
 //           }
 //         } catch (error) {
-//         LogError("Paywall getData TRANSACTION_HISTORY catch inside",error)          
+//         LogError("Paywall getData LOCAL_STORAGE_TRANSACTION_HISTORY catch inside",error)          
 //         }
 //       });
 //     } catch (error) {
-//       LogError("Paywall getData TRANSACTION_HISTORY catch outside",error)          
+//       LogError("Paywall getData LOCAL_STORAGE_TRANSACTION_HISTORY catch outside",error)          
 //     }
 //   }, [route]);
 
@@ -1152,7 +1152,7 @@ export default PayWall;
 //             setModalVisible(false); // Close the modal
     
 //             // Use removeData from AsyncStore.js
-//             removeData(TRANSACTION_HISTORY)
+//             removeData(LOCAL_STORAGE_TRANSACTION_HISTORY)
 //               .then(() => {
 //                 setTxnHistory(true); // Show the WebView
 //                 getPaywallUrl(); // Proceed to display the WebView
@@ -1337,7 +1337,7 @@ export default PayWall;
 //   function storeFailedTransaction(notifyurl, resultfromrazor) {
 //     // Get the existing transaction history
 //     try {
-//       getData(TRANSACTION_HISTORY)
+//       getData(LOCAL_STORAGE_TRANSACTION_HISTORY)
 //         .then((currentHistory) => {
 //           try {
 //             let transactionHistory = currentHistory ? currentHistory : [];
@@ -1351,25 +1351,25 @@ export default PayWall;
 //             transactionHistory.push(newTransaction);
     
 //             // Store the updated transaction history
-//             storeData(TRANSACTION_HISTORY, transactionHistory)
+//             storeData(LOCAL_STORAGE_TRANSACTION_HISTORY, transactionHistory)
 //               .then(() => {
 //                 try {
                   
 //                 } catch (error) {
-//                   LogError("Paywall storeFailedTransaction storeData TRANSACTION_HISTORY catch inside",error)                         
+//                   LogError("Paywall storeFailedTransaction storeData LOCAL_STORAGE_TRANSACTION_HISTORY catch inside",error)                         
 //                 }
 //               })
 //               .catch((error) => {
 //               });
             
 //           } catch (error) {
-//             LogError("Paywall storeFailedTransaction getData TRANSACTION_HISTORY catch inside",error)                     
+//             LogError("Paywall storeFailedTransaction getData LOCAL_STORAGE_TRANSACTION_HISTORY catch inside",error)                     
 //           }
 //         })
 //         .catch((error) => {
 //         });
 //     } catch (error) {
-//       LogError("Paywall storeFailedTransaction getData TRANSACTION_HISTORY catch outside",error)                     
+//       LogError("Paywall storeFailedTransaction getData LOCAL_STORAGE_TRANSACTION_HISTORY catch outside",error)                     
 
 //     }
 //   }

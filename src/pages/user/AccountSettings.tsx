@@ -8,7 +8,11 @@ import Dialog from 'react-native-dialog';
 import RNPickerSelect from 'react-native-picker-select';
 import { accountUpdate, getAccountDetails } from '../../state_mgmt/AppCommonSlice';
 import { USER_UUID, selectedUserProfile } from '../../app_config/AppConstants';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  LOCAL_STORAGE_SELECTED_GENDER,
+  getValue,
+  storeValue,
+} from '../../persistence/AsyncStorage';
 import LoadingSpinner from '../../ui_components/widgets/LoadingSpinner';
 import { APP_EVENTS_ } from '../../app_config/AnalyticsConfig';
 import { AccountDialog } from '../../data_models/AccountData';
@@ -65,7 +69,7 @@ const [showPasswordDialog, setShowPasswordDialog] = useState(false);
   useEffect(() => {
     getDetails();
     // Retrieve the initial gender from AsyncStorage
-    AsyncStorage.getItem('selectedGender').then((storedGender) => {
+    getValue(LOCAL_STORAGE_SELECTED_GENDER).then((storedGender) => {
       try {
         if (storedGender) {
           setSelectedGender(storedGender as 'male' | 'female' | 'other');
@@ -240,7 +244,7 @@ const [showPasswordDialog, setShowPasswordDialog] = useState(false);
         LogData("response accountUpdate",response)
         setSelectedGender(gender as 'male' | 'female' | 'other');
         // Store the selected gender in AsyncStorage for persistence
-        await AsyncStorage.setItem('selectedGender', gender);
+        await storeValue(LOCAL_STORAGE_SELECTED_GENDER, gender);
 
         // Update the radio button images based on the selected gender
         updateRadioButtons(gender);

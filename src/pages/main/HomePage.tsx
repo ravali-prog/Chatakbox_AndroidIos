@@ -23,7 +23,7 @@ import type from 'type-detect'
 import { APP_EVENTS_ } from '../../app_config/AnalyticsConfig';
 import RNExitApp from 'react-native-exit-app';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import { CONST_ALL_PROFILES, storeData } from '../../persistence/AsyncStorage';
+import { LOCAL_STORAGE_ALL_PROFILES, storeData } from '../../persistence/AsyncStorage';
 
 
 const Tab = createBottomTabNavigator();
@@ -71,7 +71,7 @@ const handleSubmit = async () => {
     const response = await accountUpdate("accountupdate", USER_UUID, selectedUserProfile.profileid, "pwd", password);
     if (response.data.resultcode === "101") {
       userProfiles.setpassword = false;
-      await storeData(CONST_ALL_PROFILES, userProfiles);
+      await storeData(LOCAL_STORAGE_ALL_PROFILES, userProfiles);
       // setShowPasswordModal(false);
          EventRegister.emit(
               LOCAL_EVENTS.EVENT_HANDLE_SHOWTOASTMESSAGE,

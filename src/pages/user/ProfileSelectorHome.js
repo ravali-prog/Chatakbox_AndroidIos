@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import { doProfileAction, getPrivileges, getUserActivity, profileLoginPIN } from "../../state_mgmt/AppCommonSlice";
 import { LOCAL_EVENTS, LogError, USER_UUID, configData, global_content_group, isInActiveUser, isUserSubscribed, removeExtension, selectedUserProfile, setSelectedUserProfile, setUseractivityDetails, shouldShowPaywall } from '../../app_config/AppConstants';
-import { CONST_SELECTED_PROFILE, storeData } from '../../persistence/AsyncStorage';
+import { LOCAL_STORAGE_SELECTED_PROFILE, storeData } from '../../persistence/AsyncStorage';
 import { useNavigation } from '@react-navigation/native';
 import { APP_EVENTS_ } from '../../app_config/AnalyticsConfig';
 import addIcon from '../../../app_assets/symbols/sym_53.png';
@@ -290,7 +290,7 @@ export default function HomeWhosWatching() {
         setSelectedUserProfile(item)
         setSelectedProfileName(selectedProfileName);
         setSelectedProfileID(selectedProfileId);
-        storeData(CONST_SELECTED_PROFILE, item) // added later 
+        storeData(LOCAL_STORAGE_SELECTED_PROFILE, item) // added later 
         if (item.protected) {
           setPinModalVisible(true);
         }

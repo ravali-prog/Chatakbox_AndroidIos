@@ -48,8 +48,8 @@ import OttWebView from "./src/pages/user/ExternalWebView";
 import PayWall from "./src/pages/user/PaymentGateway";
 import LandScapeVideoplayer from "./src/pages/VideoPlayerFullscreen";
 import {
-  CONST_ALL_PROFILES,
-  CONST_SELECTED_PROFILE,
+  LOCAL_STORAGE_ALL_PROFILES,
+  LOCAL_STORAGE_SELECTED_PROFILE,
   getData,
   storeData,
 } from "./src/persistence/AsyncStorage";
@@ -482,7 +482,7 @@ const isFullscreenTrailer =
             return;
           }
 
-          const userprofiles = getData(CONST_ALL_PROFILES);
+          const userprofiles = getData(LOCAL_STORAGE_ALL_PROFILES);
           userprofiles.then((usrProfilesLocal) => {
             try {
               if (
@@ -494,7 +494,7 @@ const isFullscreenTrailer =
                 if (Object.keys(usrProfilesLocal).length !== 0) {
                   setUserProfiles(usrProfilesLocal);
 
-                  const selectedProfile = getData(CONST_SELECTED_PROFILE);
+                  const selectedProfile = getData(LOCAL_STORAGE_SELECTED_PROFILE);
                   selectedProfile.then((selProfile) => {
                     try {
                       if (
@@ -550,7 +550,7 @@ const isFullscreenTrailer =
                       }
                     } catch (error) {
                       LogError(
-                        "App initApp getData CONST_SELECTED_PROFILE catch error",
+                        "App initApp getData LOCAL_STORAGE_SELECTED_PROFILE catch error",
                         error,
                       );
                     }
@@ -565,7 +565,7 @@ const isFullscreenTrailer =
               }
             } catch (error) {
               LogError(
-                "App initApp getData CONST_ALL_PROFILES catch error",
+                "App initApp getData LOCAL_STORAGE_ALL_PROFILES catch error",
                 error,
               );
             }
