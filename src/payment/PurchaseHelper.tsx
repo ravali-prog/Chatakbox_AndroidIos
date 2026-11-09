@@ -302,6 +302,7 @@ export const subscribewithsku = async (subDetails, resultCallback) => {
     onGoogleBillingResult = resultCallback;
     googleSubDetails = subDetails;
 
+    LogData('GP_GET_SUBS_START', { sku: subDetails?.sku });
     const products = await getSubscriptions({
       skus: [subDetails.sku],
     });
@@ -317,8 +318,26 @@ export const subscribewithsku = async (subDetails, resultCallback) => {
       offerToken = products[0].subscriptionOfferDetails[0].offerToken;
     }
 
+    LogData('GP_GET_SUBS_RESULT', {
+      sku: subDetails?.sku,
+      count: Array.isArray(products) ? products.length : -1,
+      productId: products?.[0]?.productId,
+      offers: products?.[0]?.subscriptionOfferDetails?.length ?? 0,
+      hasOfferToken: !!offerToken,
+      // full Play response helps diagnose missing SKU / offer
+      products,
+    });
+
+    LogData('GP_REQUEST_SUB', {
+      sku: subDetails?.sku,
+      hasOfferToken: !!offerToken,
+    });
     await subscribe(subDetails.sku, offerToken);
   } catch (err) {
+    LogError('GP_SUBSCRIBEWITHSKU_FAIL', {
+      sku: subDetails?.sku,
+      error: err,
+    });
     if (onGoogleBillingResult) {
       onGoogleBillingResult(
         googleSubDetails,
@@ -346,13 +365,19 @@ export const subscribewithsku = async (subDetails, resultCallback) => {
 
 export const subscribe = async (sku, offerToken) => {
   try {
+    LogData('GP_REQUEST_SUBSCRIPTION_CALL', {
+      sku,
+      hasOfferToken: !!offerToken,
+    });
     await requestSubscription({
       sku,
       ...(offerToken && {
         subscriptionOffers: [{ sku, offerToken }],
       }),
     });
+    LogData('GP_REQUEST_SUBSCRIPTION_RETURNED', { sku });
   } catch (err) {
+    LogError('GP_REQUEST_SUBSCRIPTION_FAIL', { sku, error: err });
     if (onGoogleBillingResult) {
       onGoogleBillingResult(
         googleSubDetails,
@@ -459,6 +484,7 @@ export function initIap() {
 
     initConnection().then(() => {
       try {
+        LogData('GP_IAP_CONNECTED', { platform: Platform.OS });
         const availpush = getAvailablePurchases({
           alsoPublishToEventListener: false,
           automaticallyFinishRestoredTransactions: false,
@@ -481,12 +507,18 @@ export function initIap() {
         });
 
         flushFailedPurchasesCachedAsPendingAndroid()
-          .catch((reason) => {})
+          .catch((reason) => {
+            LogError('GP_FLUSH_PENDING_FAIL', reason);
+          })
           .then((onstatus) => {
             try {
               purchaseUpdateSubscription = purchaseUpdatedListener(
                 (purchase: SubscriptionPurchase | ProductPurchase) => {
                   const receipt = purchase.transactionReceipt;
+                  LogData('GP_PURCHASE_UPDATED', {
+                    productId: (purchase as any)?.productId,
+                    hasReceipt: !!receipt,
+                  });
                   if (receipt) {
                     if (onGoogleBillingResult) {
                       const receiptDownloadcalback = async (
@@ -566,6 +598,13 @@ export function initIap() {
               purchaseErrorSubscription = purchaseErrorListener(
   (error) => {
     try {
+      LogError('GP_PURCHASE_ERROR', {
+        code: error?.code,
+        message: error?.message,
+        responseCode: error?.responseCode,
+        debugMessage: (error as any)?.debugMessage,
+        error,
+      });
       if (onGoogleBillingResult) {
         onGoogleBillingResult(
           googleSubDetails,
@@ -607,8 +646,12 @@ export function initIap() {
       } catch (error) {
         LogError("IAPHelper initIap initConnection inside catch error", error);
       }
+    }).catch((error) => {
+      LogError('GP_IAP_CONNECT_FAIL', error);
     });
-  } catch (error) {}
+  } catch (error) {
+    LogError('GP_INIT_IAP_OUTER_FAIL', error);
+  }
 }
 
 // export function invokeRazorpay(paymentConfig: any, resultCalback: any) {

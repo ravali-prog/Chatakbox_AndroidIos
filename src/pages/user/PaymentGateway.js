@@ -576,7 +576,13 @@ if (paramData.action == "events") {
                 // invokeRazorpay(paramData.options, callback)
               }
 
-            } else if (paramData.mode == 'GOOGLEPLAY') { 
+            } else if (paramData.mode == 'GOOGLEPLAY') {
+              LogData('GP_ENTER', {
+                partnerpagecalled,
+                sku: paramData.sku,
+                recurring: paramData.recurring,
+                planid: paramData.planid,
+              });
               if (partnerpagecalled) {
                 partnerpagecalled = false
 
@@ -591,11 +597,20 @@ if (paramData.action == "events") {
 ) => {
 
   if (receipt?.success === false) {
+    LogError('GP_BILLING_CALLBACK_FAIL', {
+      sku: googleSubDetails?.sku,
+      cancelled: receipt?.cancelled,
+      error: receipt?.error,
+    });
     setshowLoading(false);
     setShowPaymentText(false);
     return;
   }
 
+  LogData('GP_BILLING_CALLBACK_OK', {
+    sku: googleSubDetails?.sku,
+    hasReceipt: !!receipt,
+  });
   notifyGooglePLayTxn(
     googleSubDetails,
     receipt,
@@ -603,7 +618,13 @@ if (paramData.action == "events") {
   );
 };
 
+                LogData('GP_CALL_SUBSCRIBE', paramData.sku);
                 subscribewithsku(paramData, billingCallback)
+              } else {
+                LogData('GP_SKIPPED_PARTNER_FLAG', {
+                  sku: paramData.sku,
+                  reason: 'partnerpagecalled already false',
+                });
               }
 
             } else if (paramData.mode == 'APPLEPAY') { 
