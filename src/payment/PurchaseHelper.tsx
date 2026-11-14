@@ -267,6 +267,7 @@ var onGoogleBillingResult: any = null;
 var googleSubDetails: any = null;
 var onIOSBillingResult: any = null;
 var IOSSubDetails: any = null;
+var lastHandledPurchaseKey: string | null = null;
 
 const purchase = async (sku: string) => {
   try {
@@ -367,20 +368,151 @@ export const subscribe = async (sku, offerToken) => {
   }
 };
 
+const createReceiptFinishCallback = (purchase: SubscriptionPurchase | ProductPurchase) => {
+  return async (status: number, isConsumable: boolean) => {
+    try {
+      if (status == 1) {
+        await finishTransaction({
+          purchase: purchase,
+          isConsumable: isConsumable,
+        });
+      }
+    } catch (error) {}
+  };
+};
+
+const handlePurchaseUpdate = (purchase: SubscriptionPurchase | ProductPurchase) => {
+  try {
+    const receipt = purchase?.transactionReceipt;
+    // StoreKit 2 / hybrid mode can return an empty transactionReceipt; still notify with the purchase object.
+    const hasUsablePurchase =
+      !!receipt ||
+      !!(purchase as any)?.transactionId ||
+      !!(purchase as any)?.id ||
+      !!(purchase as any)?.productId;
+
+    if (!hasUsablePurchase) {
+      LogData("IAPHelper handlePurchaseUpdate skipped empty purchase", purchase);
+      return;
+    }
+
+    const purchaseKey =
+      String((purchase as any)?.transactionId || "") ||
+      String((purchase as any)?.id || "") ||
+      String(receipt || "") ||
+      JSON.stringify(purchase);
+
+    if (purchaseKey && purchaseKey === lastHandledPurchaseKey) {
+      LogData("IAPHelper handlePurchaseUpdate skipped duplicate", purchaseKey);
+      return;
+    }
+    lastHandledPurchaseKey = purchaseKey;
+
+    if (onGoogleBillingResult) {
+      onGoogleBillingResult(
+        googleSubDetails,
+        receipt || JSON.stringify(purchase),
+        createReceiptFinishCallback(purchase),
+      );
+    }
+
+    if (Platform.OS === "ios" && onIOSBillingResult) {
+      LogData("IAPHelper iOS purchase update received, notifying backend");
+      onIOSBillingResult(
+        IOSSubDetails,
+        JSON.stringify(purchase),
+        createReceiptFinishCallback(purchase),
+      );
+    }
+  } catch (error) {
+    LogError("IAPHelper handlePurchaseUpdate", error);
+  }
+};
+
+const registerPurchaseListeners = () => {
+  try {
+    if (purchaseUpdateSubscription && typeof (purchaseUpdateSubscription as any).remove === "function") {
+      (purchaseUpdateSubscription as any).remove();
+    }
+    if (purchaseErrorSubscription && typeof (purchaseErrorSubscription as any).remove === "function") {
+      (purchaseErrorSubscription as any).remove();
+    }
+
+    purchaseUpdateSubscription = purchaseUpdatedListener(
+      (purchase: SubscriptionPurchase | ProductPurchase) => {
+        handlePurchaseUpdate(purchase);
+      },
+    );
+
+    purchaseErrorSubscription = purchaseErrorListener((error) => {
+      try {
+        if (onGoogleBillingResult) {
+          onGoogleBillingResult(
+            googleSubDetails,
+            {
+              success: false,
+              cancelled:
+                error?.code === "E_USER_CANCELLED" || error?.responseCode === 1,
+              error,
+            },
+            null,
+          );
+        }
+        if (Platform.OS === "ios" && onIOSBillingResult) {
+          onIOSBillingResult(
+            IOSSubDetails,
+            {
+              success: false,
+              cancelled:
+                error?.code === "E_USER_CANCELLED" || error?.responseCode === 1,
+              error,
+            },
+            null,
+          );
+        }
+      } catch (e) {
+        LogError("IAPHelper purchaseErrorListener", e);
+      }
+    });
+
+    LogData("IAPHelper purchase listeners registered");
+  } catch (error) {
+    LogError("IAPHelper registerPurchaseListeners", error);
+  }
+};
+
 export const purchaseIOS = async (paramData: any, resultCallback: any) => {
   try {
     onIOSBillingResult = resultCallback;
     IOSSubDetails = paramData;
 
+    // Ensure listeners exist before requesting purchase (initIap may still be pending).
+    if (!purchaseUpdateSubscription) {
+      registerPurchaseListeners();
+    }
+
     const skuss = [paramData.sku];
     const products = await getSubscriptions({
       skus: skuss,
     });
+    LogData("IAPHelper purchaseIOS products", products);
 
-    await requestSubscription({
+    const purchaseResult = await requestSubscription({
       sku: paramData.sku,
       andDangerouslyFinishTransactionAutomaticallyIOS: false,
     });
+
+    // Fallback if the event emitter missed the update but requestSubscription returned a purchase.
+    if (purchaseResult) {
+      const purchases = Array.isArray(purchaseResult)
+        ? purchaseResult
+        : [purchaseResult];
+      purchases.forEach((purchase) => {
+        if (purchase) {
+          handlePurchaseUpdate(purchase as SubscriptionPurchase | ProductPurchase);
+        }
+      });
+    }
   } catch (error) {
     if (onIOSBillingResult) {
       onIOSBillingResult(
@@ -453,21 +585,24 @@ export function getActiveGooglePurchases(callback: any) {
 
 export function initIap() {
   try {
-   if (Platform.OS === 'ios') {
-      setup({ storekitMode: 'STOREKIT_HYBRID_MODE' });
+    if (Platform.OS === "ios") {
+      setup({ storekitMode: "STOREKIT_HYBRID_MODE" });
     }
 
     initConnection().then(() => {
       try {
+        // Register listeners immediately after connection — do not wait on Android flush.
+        registerPurchaseListeners();
+
         const availpush = getAvailablePurchases({
           alsoPublishToEventListener: false,
           automaticallyFinishRestoredTransactions: false,
           onlyIncludeActiveItems: true,
         });
-  
+
         availpush.then((repp) => {
           try {
-            if (Platform.OS === 'ios') {
+            if (Platform.OS === "ios") {
               notifyTransactionIOS(API_IOS_SUB_SYNC, repp);
             } else {
               notifyTransactionGoogle(API_GOOGLE_SUB_SYNC, repp);
@@ -480,130 +615,9 @@ export function initIap() {
           }
         });
 
-        flushFailedPurchasesCachedAsPendingAndroid()
-          .catch((reason) => {})
-          .then((onstatus) => {
-            try {
-              purchaseUpdateSubscription = purchaseUpdatedListener(
-                (purchase: SubscriptionPurchase | ProductPurchase) => {
-                  const receipt = purchase.transactionReceipt;
-                  if (receipt) {
-                    if (onGoogleBillingResult) {
-                      const receiptDownloadcalback = async (
-                        status: number,
-                        isConsumable: boolean,
-                      ) => {
-                        try {
-                          if (status == 1) {
-                            const result = await finishTransaction({
-                              purchase: purchase,
-                              isConsumable: isConsumable,
-                            });
-                          } else if (status == 0) {
-                          }
-                        } catch (error) {}
-                      };
-
-                      onGoogleBillingResult(
-                        googleSubDetails,
-                        receipt,
-                        receiptDownloadcalback,
-                      );
-                    }
-
-                    if (Platform.OS === 'ios' && onIOSBillingResult) {
-                      const receiptDownloadcalback = async (
-                        status: number,
-                        isConsumable: boolean,
-                      ) => {
-                        try {
-                          if (status == 1) {
-                            const result = await finishTransaction({
-                              purchase: purchase,
-                              isConsumable: isConsumable,
-                            });
-                          } else if (status == 0) {
-                          }
-                        } catch (error) {}
-                      };
-
-                      onIOSBillingResult(
-                        IOSSubDetails,
-                        JSON.stringify(purchase),
-                        receiptDownloadcalback,
-                      );
-                    }
-                  }
-                },
-              );
-
-              // purchaseErrorSubscription = purchaseErrorListener(
-              //   (error: PurchaseError) => {
-              //     try {
-              //       if (onGoogleBillingResult) {
-              //         if (error) {
-              //           onGoogleBillingResult(
-              //             googleSubDetails,
-              //             JSON.stringify(error),
-              //             null,
-              //           );
-              //         } else {
-              //           const failed = { error: "Something Went Wrong!" };
-              //           onGoogleBillingResult(
-              //             googleSubDetails,
-              //             JSON.stringify(failed),
-              //             null,
-              //           );
-              //         }
-              //       }
-              //     } catch (error) {
-              //       LogError("IAPHelper", error);
-              //     }
-
-              //     // {"code": "E_ALREADY_OWNED", "debugMessage": "", "message": "You already own this item.", "responseCode": 7}
-              //   },
-              // );
-              purchaseErrorSubscription = purchaseErrorListener(
-  (error) => {
-    try {
-      if (onGoogleBillingResult) {
-        onGoogleBillingResult(
-          googleSubDetails,
-          {
-            success: false,
-            cancelled:
-              error?.code === "E_USER_CANCELLED" ||
-              error?.responseCode === 1,
-            error,
-          },
-          null
-        );
-      }
-      if (Platform.OS === 'ios' && onIOSBillingResult) {
-        onIOSBillingResult(
-          IOSSubDetails,
-          {
-            success: false,
-            cancelled:
-              error?.code === "E_USER_CANCELLED" ||
-              error?.responseCode === 1,
-            error,
-          },
-          null
-        );
-      }
-    } catch (e) {
-      LogError("IAPHelper purchaseErrorListener", e);
-    }
-  }
-);
-            } catch (error) {
-              LogError(
-                "IAPHelper initIap flushFailedPurchasesCachedAsPendingAndroid catch error",
-                error,
-              );
-            }
-          });
+        if (Platform.OS === "android") {
+          flushFailedPurchasesCachedAsPendingAndroid().catch(() => {});
+        }
       } catch (error) {
         LogError("IAPHelper initIap initConnection inside catch error", error);
       }
