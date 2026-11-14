@@ -381,6 +381,38 @@ const createReceiptFinishCallback = (purchase: SubscriptionPurchase | ProductPur
   };
 };
 
+/** Apple ordersync: json_decode(txninfo.result)['verificationResultIOS'] must be the StoreKit JWS. */
+const buildAppleOrdersyncResult = (purchase: any): string => {
+  const p = typeof purchase === "string" ? (() => {
+    try {
+      return JSON.parse(purchase);
+    } catch {
+      return null;
+    }
+  })() : purchase;
+
+  const jws =
+    (p && (p.verificationResultIOS || p.transactionJwsIOS || p.purchaseToken)) ||
+    "";
+
+  if (typeof jws === "string" && jws.includes(".")) {
+    return JSON.stringify({ verificationResultIOS: jws });
+  }
+
+  // Last resort: if the purchase object already has verificationResultIOS nested, keep shape.
+  if (p && p.verificationResultIOS) {
+    return JSON.stringify({ verificationResultIOS: p.verificationResultIOS });
+  }
+
+  LogData("IAPHelper buildAppleOrdersyncResult missing JWS", {
+    keys: p && typeof p === "object" ? Object.keys(p) : typeof purchase,
+  });
+  return JSON.stringify({
+    verificationResultIOS: jws || "",
+    error: "missing_ios_jws",
+  });
+};
+
 const handlePurchaseUpdate = (purchase: SubscriptionPurchase | ProductPurchase) => {
   try {
     const receipt = purchase?.transactionReceipt;
@@ -389,7 +421,10 @@ const handlePurchaseUpdate = (purchase: SubscriptionPurchase | ProductPurchase) 
       !!receipt ||
       !!(purchase as any)?.transactionId ||
       !!(purchase as any)?.id ||
-      !!(purchase as any)?.productId;
+      !!(purchase as any)?.productId ||
+      !!(purchase as any)?.verificationResultIOS ||
+      !!(purchase as any)?.transactionJwsIOS ||
+      !!(purchase as any)?.purchaseToken;
 
     if (!hasUsablePurchase) {
       LogData("IAPHelper handlePurchaseUpdate skipped empty purchase", purchase);
@@ -420,7 +455,7 @@ const handlePurchaseUpdate = (purchase: SubscriptionPurchase | ProductPurchase) 
       LogData("IAPHelper iOS purchase update received, notifying backend");
       onIOSBillingResult(
         IOSSubDetails,
-        JSON.stringify(purchase),
+        buildAppleOrdersyncResult(purchase),
         createReceiptFinishCallback(purchase),
       );
     }

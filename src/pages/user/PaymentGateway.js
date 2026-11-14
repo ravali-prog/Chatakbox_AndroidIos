@@ -384,12 +384,19 @@ setShowPaymentText(true);
         return;
       }
 
+      // result must be a JSON string: {"verificationResultIOS":"<JWS>"}
+      // (built in PurchaseHelper.buildAppleOrdersyncResult)
       const resultfromrazor = {
         "mode": subDetails.mode,
-        "result": result || { error: "invalid apple result" }
+        "result": result || JSON.stringify({ error: "invalid apple result" })
       };
 
-      const notifyresp = notifyTransaction(notifyurl, USER_UUID, resultfromrazor);
+      const notifyresp = notifyTransaction(
+        notifyurl,
+        USER_UUID,
+        resultfromrazor,
+        { "X-API-Key": API_KEY },
+      );
       notifyresp.then(x => {
         try {
           setshowLoading(false);
@@ -403,9 +410,9 @@ setShowPaymentText(true);
               }
               sendDataToWebView(1);
             } else if (result && result.resultcode == 102) {
-              if (receiptDownloadcalback) {
-                receiptDownloadcalback(1, false);
-              }
+              // Do NOT finishTransaction on failure — keep purchase for retry.
+              LogData("Paywall notifyIOSPLayTxn failed 102", result);
+              storeFailedTransaction(notifyurl, resultfromrazor);
               sendDataToWebView(0);
             } else {
               sendDataToWebView(0);

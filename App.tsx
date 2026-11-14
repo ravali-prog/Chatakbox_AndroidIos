@@ -305,15 +305,26 @@ const isFullscreenTrailer =
           try {
             const reqUrl = String(request.url || "");
             // gentoken must stay plain (no encrypted body) — needed for iOS video play.
-            // Everything else stays Mode B encrypted.
+            // Apple ordersync/restore do NOT decrypt Mode B bodies (unlike Google) —
+            // encrypted {data:"..."} becomes Missing Payload / resultcode 102.
             const isGentoken =
               reqUrl.includes("/serve/gentoken") ||
               reqUrl.includes("gentoken");
+            const isAppleBilling =
+              (request as any).skipBodyEncrypt === true ||
+              reqUrl.includes("/apple/ordersync") ||
+              reqUrl.includes("/apple/restore") ||
+              reqUrl.includes("apple/ordersync") ||
+              reqUrl.includes("apple/restore") ||
+              reqUrl.includes("applesync");
 
             if (isGentoken) {
               if (request.data !== undefined) {
                 delete request.data;
               }
+            } else if (isAppleBilling) {
+              // Leave request.data as plain JSON (already nested under data by notify helpers).
+              request.headers["X-API-Key"] = API_KEY;
             } else {
               const timestamp = new Date().toISOString();
               const payloadJson = JSON.stringify(request.data);

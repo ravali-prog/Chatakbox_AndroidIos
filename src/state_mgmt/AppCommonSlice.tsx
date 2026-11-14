@@ -49,14 +49,30 @@ export const getPaymentConfig = async (url: string, uuid: string, contentgroup: 
 //   }
 // };
 
+const isAppleBillingUrl = (url: string) => {
+  const u = String(url || '');
+  return (
+    u.includes('/apple/ordersync') ||
+    u.includes('/apple/restore') ||
+    u.includes('apple/ordersync') ||
+    u.includes('apple/restore') ||
+    u.includes('applesync')
+  );
+};
+
 export const notifyTransaction = async (url: string, uuid: string, txninfoparam: any, extraHeaders?: Record<string, string>) => {
   try {
-    const payload = { uuid, device: device, txninfo: txninfoparam }
+    // Apple ordersync/restore read php://input → $json['data'].txninfo (object).
+    // Google/Razorpay accept top-level {uuid,device,txninfo} (and Mode B encrypt).
+    const apple = isAppleBillingUrl(url);
+    const inner = { uuid, device: device, txninfo: txninfoparam };
+    const payload = apple ? { data: inner } : inner;
     const res = await axios.post(url, payload, {
       headers: {
         ...extraHeaders
-      }
-    });
+      },
+      ...(apple ? { skipBodyEncrypt: true } : {}),
+    } as any);
     return res.data;
   } catch (err) {
     return { error: err };
@@ -89,12 +105,16 @@ export const notifyTransactionGoogle = async (url: string, purchases: any) => {
 
 export const notifyTransactionIOS = async (url: string, purchases: any) => {
   try {
-    const payload = { uuid: USER_UUID, device: device, txninfo: purchases }
+    // Same nested shape Apple PHP expects: { data: { uuid, device, txninfo } }
+    const payload = {
+      data: { uuid: USER_UUID, device: device, txninfo: purchases },
+    };
     const res = await axios.post(url, payload, {
       headers: { 
         "X-API-Key": API_KEY
-      }
-    });
+      },
+      skipBodyEncrypt: true,
+    } as any);
     return res.data;
   } catch (err) {
     return getErrorCode(err)
