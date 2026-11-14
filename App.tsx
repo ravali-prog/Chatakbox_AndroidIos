@@ -322,9 +322,7 @@ const isFullscreenTrailer =
                 console.log("=== REQUEST undecc  ===>", payloadJson);
               }
 
-              const encrypted = VEncrypt.encrypt(
-                VEncrypt.apiSecret,
-                payloadJson,
+              const encrypted = VEncrypt.encrypt(VEncrypt.apiSecret, payloadJson,
               );
               request.data = { data: encrypted };
               request.headers["X-API-Key"] = API_KEY;
