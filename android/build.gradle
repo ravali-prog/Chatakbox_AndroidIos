@@ -46,6 +46,9 @@ allprojects {
             force "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.25"
             force "org.jetbrains.kotlin:kotlin-stdlib-common:1.9.25"
             force "com.google.android.gms:play-services-cast-framework:21.4.0"
+            // Pin Razorpay Custom UI: `3.10.+` forces Maven metadata fetch which
+            // often 403s from repo.maven.apache.org; use cached exact version.
+            force "com.razorpay:customui-core:3.10.20"
         }
     }
 }
