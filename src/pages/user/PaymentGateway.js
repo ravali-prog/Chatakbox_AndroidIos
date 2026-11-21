@@ -24,12 +24,15 @@ import ConfirmModal from '../../data_models/ConfirmationTypes';
 import { EventRegister } from 'react-native-event-listeners';
 import { APP_EVENTS_, recordEvent } from '../../app_config/AnalyticsConfig';
 import { getData, removeData, storeData, LOCAL_STORAGE_TRANSACTION_HISTORY } from '../../persistence/AsyncStorage';
-import Razorpay from "react-native-customui";
 import { Linking } from 'react-native';
 import SendIntentAndroid from 'react-native-send-intent';
 import Loader from '../../ui_components/widgets/LoadingSpinner';
 
-
+// CustomUI only on Android (UPI intent). Standard Checkout is used when no UPI apps.
+let Razorpay;
+if (Platform.OS === 'android') {
+  Razorpay = require('react-native-customui').default;
+}
 
 const PayWall = ({ route }) => {
 
@@ -539,7 +542,6 @@ if (paramData.action == "events") {
                 partnerpagecalled = false
                     const options = paramData.options;
                         const transformed = transformRazorpayOptions(options);
-                        const upiindependent = transformRazorpayOptionsWithoutUpi(options);
 
                 const callback = (result) => {
 
@@ -555,7 +557,8 @@ if (paramData.action == "events") {
 
 
                hasUpiApps().then((upiAvailable) => {
-                 if (upiAvailable) {
+                 // UPI apps → CustomUI intent; no UPI → native Standard Checkout
+                 if (upiAvailable && Razorpay) {
                    LogData("Razorpay.open CALLLED");
 
                    Razorpay.open(transformed)
@@ -568,14 +571,10 @@ if (paramData.action == "events") {
                        callback({ error });
                      });
                  } else {
-                   LogData("nvokeRazorpay CALLLED");
-
-                  //  invokeRazorpay(options, callback);
-                  invokeRazorpay(upiindependent, callback);
+                   LogData("invokeRazorpay CALLLED");
+                   invokeRazorpay(options, callback);
                  }
                });
-
-                // invokeRazorpay(paramData.options, callback)
               }
 
             } else if (paramData.mode == 'GOOGLEPLAY') {
@@ -719,30 +718,6 @@ function transformRazorpayOptions(original) {
   }
   return result;
 }
-
-// CustomUI options when device has no UPI apps.
-// Same CustomUI SDK (react-native-razorpay Standard Checkout crashes with customui).
-// Use UPI collect (enter VPA) — do NOT set _[flow]=intent (that needs a UPI app).
-function transformRazorpayOptionsWithoutUpi(original) {
-  const result = {
-    currency: original.currency,
-    amount: original.amount,
-    key_id: original.key,
-    description: original.description ? original.description.toString() : '',
-    contact: original?.prefill?.contact || '',
-    email: original?.prefill?.email || '',
-    notes: original.notes
-  };
-  if (original.subscription_id) {
-    result.subscription_id = original.subscription_id;
-    result.method = 'upi';
-  } else if (original.order_id) {
-    result.order_id = original.order_id;
-    result.method = 'upi';
-  }
-  return result;
-}
-
 
   function sendDataToWebView(status) {
     const syncdata = { "action": "synctxn", "status": status }

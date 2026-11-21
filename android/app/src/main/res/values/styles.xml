@@ -7,6 +7,22 @@
         <item name="android:windowBackground">@drawable/background_dummy</item>
     </style>
 
+    <!-- Required by com.razorpay.CheckoutActivity (Standard Checkout).
+         Use full-screen (not Theme.Dialog) — Dialog + windowIsFloating causes
+         left/right black gutters on phones. -->
+    <style name="CheckoutTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:statusBarColor">#99000000</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+    </style>
+
 
     <style name="TrackSelectionDialogThemeOverlay" parent="ThemeOverlay.AppCompat.Dialog.Alert">
         <item name="windowNoTitle">true</item>

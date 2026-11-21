@@ -244,9 +244,7 @@ import {
   getAvailablePurchases,
   setup,
 } from '@iaptic/react-native-iap';
-// Do NOT import react-native-razorpay here — it conflicts with react-native-customui
-// (NativeEventEmitter / RNRazorpayCheckout) and crashes the app on load.
-import Razorpay from 'react-native-customui';
+import RazorpayCheckout from "react-native-razorpay";
 import { notifyTransactionGoogle, notifyTransactionIOS } from "../state_mgmt/AppCommonSlice";
 import {
   API_GOOGLE_SUB_SYNC,
@@ -679,22 +677,27 @@ export function initIap() {
 // }
 
 
-// Used when device has no UPI apps — CustomUI collect flow (same SDK as UPI intent path).
-export function invokeRazorpay(transformedOptions: any, resultCalback: any) {
+// Native Standard Checkout (no-UPI path).
+export function invokeRazorpay(paymentConfig: any, resultCalback: any) {
   try {
-    Razorpay.open(transformedOptions)
+    LogData("invokeRazorpay open", {
+      hasKey: !!(paymentConfig && paymentConfig.key),
+      hasSub: !!(paymentConfig && paymentConfig.subscription_id),
+      hasOrder: !!(paymentConfig && paymentConfig.order_id),
+    });
+    RazorpayCheckout.open(paymentConfig)
       .then((data) => {
         try {
           resultCalback(data);
         } catch (error) {
-          LogError("IAPHelper invokeRazorpay Razorpay.open inside catch error", error);
+          LogError("IAPHelper invokeRazorpay RazorpayCheckout inside catch error", error);
         }
       })
       .catch((error) => {
         resultCalback(error?.error ? { error: error.error } : { error });
       });
   } catch (error) {
-    LogError("IAPHelper invokeRazorpay outer catch error", error);
+    LogError("IAPHelper invokeRazorpay RazorpayCheckout outside catch error", error);
     resultCalback({ error });
   }
 }

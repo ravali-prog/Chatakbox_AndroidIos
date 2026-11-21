@@ -46,9 +46,13 @@ allprojects {
             force "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.25"
             force "org.jetbrains.kotlin:kotlin-stdlib-common:1.9.25"
             force "com.google.android.gms:play-services-cast-framework:21.4.0"
-            // Pin Razorpay Custom UI: `3.10.+` forces Maven metadata fetch which
-            // often 403s from repo.maven.apache.org; use cached exact version.
+            // Dual SDK alignment (fixes NoSuchMethodError BaseConfig.fetchConfig):
+            // customui-core 3.10.20 and standard-core 1.7.22 both use com.razorpay:core:1.0.22.
+            // react-native-razorpay still declares standard-core:1.7.1 (core 1.0.1) which
+            // crashes CheckoutActivity when CustomUI upgrades core on the classpath.
             force "com.razorpay:customui-core:3.10.20"
+            force "com.razorpay:standard-core:1.7.22"
+            force "com.razorpay:core:1.0.22"
         }
     }
 }
