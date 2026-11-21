@@ -3,18 +3,119 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
+    <!-- Razorpay UPI Intent: Android 11+ package visibility.
+         Packages from https://razorpay.com/docs/payments/payment-methods/upi/supported-apps (Android SDK) -->
     <queries>
         <intent>
             <action android:name="android.intent.action.VIEW" />
             <data android:scheme="upi" />
         </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="upi" android:host="pay" />
+        </intent>
 
-        <package android:name="com.google.android.apps.nbu.paisa.user" />
-        <package android:name="com.phonepe.app" />
-        <package android:name="net.one97.paytm" />
-        <package android:name="in.org.npci.upiapp" />
-        <package android:name="com.amazon.mShop.android.shopping" />
-        <package android:name="com.whatsapp" />
+        <!-- Primary PSPs -->
+        <package android:name="com.google.android.apps.nbu.paisa.user" /> <!-- Google Pay -->
+        <package android:name="com.phonepe.app" /> <!-- PhonePe -->
+        <package android:name="net.one97.paytm" /> <!-- Paytm -->
+        <package android:name="com.dreamplug.androidapp" /> <!-- CRED -->
+        <package android:name="in.org.npci.upiapp" /> <!-- BHIM -->
+        <package android:name="com.tatadigital.tcp" /> <!-- Tata Neu -->
+        <package android:name="com.csam.icici.bank.imobile" /> <!-- iMobile by ICICI -->
+        <package android:name="in.amazon.mShop.android.shopping" /> <!-- Amazon Pay -->
+        <package android:name="com.samsung.android.spay" /> <!-- Samsung Wallet -->
+        <package android:name="com.mobikwik_new" /> <!-- MobiKwik -->
+        <package android:name="in.gokiwi.kiwitpap" /> <!-- Kiwi -->
+        <package android:name="com.naviapp" /> <!-- Navi -->
+        <package android:name="money.super.payments" /> <!-- Super.Money -->
+        <package android:name="com.shriram.one" /> <!-- Shriram One -->
+        <package android:name="com.kotak811mobilebankingapp.instantsavingsupiscanandpayrecharge" /> <!-- Kotak811 -->
+        <package android:name="indwin.c3.shareapp" /> <!-- slice -->
+        <package android:name="com.hdfcbank.payzapp" /> <!-- PayZapp -->
+        <package android:name="com.epifi.paisa" /> <!-- Fi Money -->
+        <package android:name="com.popclub.android" /> <!-- POP UPI -->
+        <package android:name="org.altruist.BajajExperia" /> <!-- Bajaj Pay -->
+        <package android:name="com.postpe.app" /> <!-- BharatPe -->
+        <package android:name="com.whizdm.moneyview.loans" /> <!-- MoneyView -->
+        <package android:name="com.whatsapp" /> <!-- WhatsApp -->
+        <package android:name="com.kreditpe.android.app" /> <!-- Kredit.pe -->
+        <package android:name="com.fampay.in" /> <!-- FamApp -->
+        <package android:name="com.lxme" /> <!-- Lxme -->
+        <package android:name="cards.scapia.android" /> <!-- Scapia -->
+        <package android:name="com.snapmint.customerapp" /> <!-- Snapmint -->
+        <package android:name="in.magnetapp" /> <!-- ZET -->
+
+        <!-- Banks / wallets -->
+        <package android:name="com.olive.kotak.upi" /> <!-- Kotak UPI -->
+        <package android:name="com.msf.kbank.mobile" /> <!-- Kotak Mobile Banking -->
+        <package android:name="com.sbi.upi" /> <!-- BHIM SBI Pay -->
+        <package android:name="com.sbi.lotusintouch" /> <!-- YONO SBI -->
+        <package android:name="com.snapwork.hdfc" /> <!-- HDFC Bank -->
+        <package android:name="com.upi.axispay" /> <!-- Axis Pay -->
+        <package android:name="com.axis.mobile" /> <!-- Axis Mobile -->
+        <package android:name="money.jupiter" /> <!-- Jupiter -->
+        <package android:name="com.idfcfirstbank.optimus" /> <!-- IDFC First -->
+        <package android:name="com.canarabank.mobility" /> <!-- Canara Bank -->
+        <package android:name="in.bajajfinservmarkets.app" /> <!-- Bajaj Finserv -->
+        <package android:name="com.bankofbaroda.upi" /> <!-- BoB World -->
+        <package android:name="com.fss.pnbpsp" /> <!-- PNB Bank -->
+        <package android:name="com.mgs.pnbupi" /> <!-- PNB Bank (alt) -->
+        <package android:name="com.fedmobile" /> <!-- Fed Mobile -->
+        <package android:name="com.iexceed.appzillon.ippbMB" /> <!-- India Post -->
+        <package android:name="com.jio.myjio" /> <!-- MyJio -->
+        <package android:name="com.infrasoft.uboi" /> <!-- Vyom -->
+        <package android:name="com.freecharge.android" /> <!-- Freecharge -->
+        <package android:name="com.SIBMobile" /> <!-- SIB Mirror+ -->
+        <package android:name="com.eroute.omnicard" /> <!-- OmniCard -->
+        <package android:name="com.nextbillion.groww" /> <!-- Groww -->
+        <package android:name="com.dbs.in.digitalbank" /> <!-- Digibank -->
+        <package android:name="com.IndianBank.IndOASIS" /> <!-- IndOASIS -->
+        <package android:name="com.ausmallfinancebank.amb" /> <!-- AU0101 -->
+        <package android:name="com.infrasofttech.CentralBank" /> <!-- Cent Mobile -->
+        <package android:name="com.rblbank.mobank" /> <!-- RBL MoBank -->
+        <package android:name="com.fss.indus" /> <!-- IndusInd Mobile -->
+        <package android:name="com.indusind.indie" /> <!-- Indus Indie -->
+        <package android:name="com.paypointz.wallet" /> <!-- Digi Khata -->
+        <package android:name="com.lcode.ucoupi" /> <!-- BHIM UCO -->
+        <package android:name="in.irisbyyes.app" /> <!-- YesBank Iris -->
+        <package android:name="com.YesBank" /> <!-- Yes Bank -->
+        <package android:name="com.whatsapp.w4b" /> <!-- WhatsApp Business -->
+        <package android:name="com.icicibank.pockets" /> <!-- ICICI Pockets -->
+        <package android:name="com.fss.unbipsp" /> <!-- United UPI -->
+        <package android:name="com.mycompany.kvb" /> <!-- KVB -->
+        <package android:name="com.fss.vijayapsp" /> <!-- Vijaya Bank -->
+        <package android:name="com.dena.upi.gui" /> <!-- Dena Bank -->
+        <package android:name="com.fss.jnkpsp" /> <!-- JK UPI -->
+        <package android:name="com.bsb.hike" /> <!-- Hike -->
+        <package android:name="com.fss.idfcpsp" /> <!-- IDFC -->
+        <package android:name="com.abipbl.upi" /> <!-- Aditya Birla Payments Bank -->
+        <package android:name="com.microsoft.mobile.polymer" /> <!-- Microsoft Kaizala -->
+        <package android:name="com.finopaytech.bpayfino" /> <!-- Fino Payments Bank -->
+        <package android:name="com.mgs.obcbank" /> <!-- Oriental Bank of Commerce -->
+        <package android:name="com.upi.federalbank.org.lotza" /> <!-- Lotza -->
+        <package android:name="com.mgs.induspsp" /> <!-- IndusInd Pay -->
+        <package android:name="ai.wizely.android" /> <!-- Wizely -->
+        <package android:name="com.olive.dcb.upi" /> <!-- DCB Bank -->
+        <package android:name="com.mgs.yesmerchantnative.prod" /> <!-- Yes Bank Merchant -->
+        <package android:name="in.chillr" /> <!-- Chillr -->
+        <package android:name="money.bullet" /> <!-- Bullet -->
+        <package android:name="com.mipay.in.wallet" /> <!-- Mi Pay -->
+        <package android:name="com.mipay.wallet.in" /> <!-- Mi Pay (alt) -->
+        <package android:name="com.pinelabs.fave" /> <!-- Fave -->
+        <package android:name="com.ultracash.payment.customer" /> <!-- Ultracash -->
+        <package android:name="com.npst.timepay.society" /> <!-- TimePay -->
+        <package android:name="com.goibibo" /> <!-- Goibibo -->
+        <package android:name="com.fss.ippbpsp" /> <!-- DakPay -->
+        <package android:name="com.euronet.iobupi" /> <!-- BHIM IOB -->
+        <package android:name="com.lcode.csbupi" /> <!-- BHIM CSB -->
+        <package android:name="com.atyati.tvamapp" /> <!-- Tvam -->
+        <package android:name="com.Version1" /> <!-- PNB One -->
+        <package android:name="com.flipkart.android" /> <!-- Flipkart -->
+        <package android:name="com.moneytap.bnpl.app" /> <!-- Freo Pay -->
+        <package android:name="com.salaryse.android" /> <!-- SalarySe -->
+        <package android:name="com.yield.curie_money" /> <!-- Curie -->
+        <package android:name="com.mswipe.mswipeppiwallet" /> <!-- CTRLPay -->
     </queries>
 
     <!-- Singular  -->
