@@ -91,11 +91,12 @@ const PayWall = ({ route }) => {
   useEffect(() => {
     if (razorpayTransactionResponse != undefined) {
       setshowLoading(true)
-      let timer = setTimeout(() => {
-        notifyRazorpayTxn(razorpayTransactionResponse)
-      }, 60000);
+      notifyRazorpayTxn(razorpayTransactionResponse)
+     // let timer = setTimeout(() => {
+    //    notifyRazorpayTxn(razorpayTransactionResponse)
+   //   }, 60000);
       return () => {
-        clearTimeout(timer);
+       // clearTimeout(timer);
       };
     }
   }, [razorpayTransactionResponse]);
@@ -538,6 +539,7 @@ if (paramData.action == "events") {
                 partnerpagecalled = false
                     const options = paramData.options;
                         const transformed = transformRazorpayOptions(options);
+                        const upiindependent = transformRazorpayOptionsWithoutUpi(options);
 
                 const callback = (result) => {
 
@@ -569,7 +571,7 @@ if (paramData.action == "events") {
                    LogData("nvokeRazorpay CALLLED");
 
                   //  invokeRazorpay(options, callback);
-                  invokeRazorpay(transformed, callback);
+                  invokeRazorpay(upiindependent, callback);
                  }
                });
 
@@ -714,6 +716,29 @@ function transformRazorpayOptions(original) {
     result["_[flow]"] = "intent";
   } else if (original.order_id) {
     result.order_id = original.order_id;
+  }
+  return result;
+}
+
+// CustomUI options when device has no UPI apps.
+// Same CustomUI SDK (react-native-razorpay Standard Checkout crashes with customui).
+// Use UPI collect (enter VPA) — do NOT set _[flow]=intent (that needs a UPI app).
+function transformRazorpayOptionsWithoutUpi(original) {
+  const result = {
+    currency: original.currency,
+    amount: original.amount,
+    key_id: original.key,
+    description: original.description ? original.description.toString() : '',
+    contact: original?.prefill?.contact || '',
+    email: original?.prefill?.email || '',
+    notes: original.notes
+  };
+  if (original.subscription_id) {
+    result.subscription_id = original.subscription_id;
+    result.method = 'upi';
+  } else if (original.order_id) {
+    result.order_id = original.order_id;
+    result.method = 'upi';
   }
   return result;
 }
